@@ -14,6 +14,12 @@
 
 <br/>
 
+
+# 🏗️ 시스템 구조
+![시스템 구조](doc/system_architecture.jpg)
+
+<br />
+
 # 🔥 기술적 이슈 해결 과정
 
 - #6 CI/CD 파이프라인 구축
@@ -22,6 +28,7 @@
     - [CI/CD 파이프라인 구축(3) - 배포 자동화](https://cookie-dev.tistory.com/21)
 
 <br/>
+
 
 # 🔀 브랜치 관리 전략
 
