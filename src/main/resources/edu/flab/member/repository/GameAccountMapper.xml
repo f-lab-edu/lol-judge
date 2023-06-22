@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.flab.member.repository.GameAccountMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into game_account (login_id, nickname, rank_tier_group, rank_tier_level)
+        values (#{loginId}, #{nickname}, #{rankTier.group}, #{rankTier.level})
+    </insert>
+
+    <update id="update">
+        update game_account
+        set login_id=#{updateParam.loginId},
+            nickname=#{updateParam.nickname},
+            rank_tier_group=#{updateParam.rankTier.group},
+            rank_tier_level=#{updateParam.rankTier.level}
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultMap="toEntity">
+        select *
+        from game_account
+        where id = #{id}
+    </select>
+
+    <resultMap id="toEntity" type="GameAccount">
+        <result column="id" property="id"/>
+        <result column="login_id" property="loginId"/>
+        <result column="nickname" property="nickname"/>
+        <association property="rankTier" javaType="RankTier">
+            <result column="rank_tier_group" property="group"/>
+            <result column="rank_tier_level" property="level"/>
+        </association>
+    </resultMap>
+
+    <select id="isDuplicated" resultType="boolean">
+        select exists(select 1 from game_account where login_id = #{loginId});
+    </select>
+</mapper>

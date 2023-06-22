@@ -3,6 +3,7 @@ plugins {
     id 'jacoco'
     id 'org.springframework.boot' version '3.1.0'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'io.freefair.lombok' version '8.0.1'
 }
 
 group 'edu.flab'
@@ -16,10 +17,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.h2database:h2'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'com.h2database:h2:2.1.214'
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
