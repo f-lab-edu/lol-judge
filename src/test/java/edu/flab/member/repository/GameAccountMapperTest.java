@@ -18,9 +18,8 @@ class GameAccountMapperTest {
 	private GameAccountMapper sut;
 
 	@Test
-	@DisplayName("데이터베이스에 GameAccount 저장을 요청하면 데이터베이스에 보관되고, ID 값을 통해 조회할 수 있다")
-	void 저장_조회() {
-
+	@DisplayName("데이터베이스에 저장된 GameAccount 정보를 ID 값을 통해 조회할 수 있다")
+	void 아이디_조회() {
 		// given
 		GameAccount gameAccount = GameAccount.builder()
 			.loginId("login12345")
@@ -30,14 +29,32 @@ class GameAccountMapperTest {
 
 		// when
 		sut.save(gameAccount);
+		GameAccount findGameAccount = sut.findById(gameAccount.getId()).orElseThrow();
 
 		// then
-		GameAccount findGameAccount = sut.findById(gameAccount.getId()).orElseThrow();
 		assertThat(findGameAccount).isEqualTo(gameAccount);
 	}
 
 	@Test
-	@DisplayName("데이터베이스에 GameAccount 수정을 요청하면 튜플 데이터가 변경된다")
+	@DisplayName("데이터베이스에 저장된 GameAccount 정보를 롤계정 아이디를 통해 조회할 수 있다")
+	void 롤계정_조회() {
+		// given
+		GameAccount gameAccount = GameAccount.builder()
+			.loginId("login1234")
+			.nickname("hide on bush")
+			.rankTier(RankTier.CHALLENGER)
+			.build();
+
+		// when
+		sut.save(gameAccount);
+		GameAccount findGameAccount = sut.findByLoginId(gameAccount.getLoginId()).orElseThrow();
+
+		// then
+		assertThat(findGameAccount).isEqualTo(gameAccount);
+	}
+
+	@Test
+	@DisplayName("데이터베이스에 GameAccount 정보의 닉네임, 계정 아이디 변경을 요청하면 데이터가 변경된다")
 	void 수정() {
 
 		// given
@@ -51,39 +68,16 @@ class GameAccountMapperTest {
 
 		// when
 		GameAccountUpdateDto dto = GameAccountUpdateDto.builder()
+			.id(gameAccount.getId())
 			.loginId("newLogin1234")
 			.nickname("show maker")
 			.rankTier(RankTier.CHALLENGER)
 			.build();
 
-		Long id = gameAccount.getId();
-
-		sut.update(id, dto);
+		sut.update(dto);
 
 		// // then
-		GameAccount findGameAccount = sut.findById(id).orElseThrow();
+		GameAccount findGameAccount = sut.findById(gameAccount.getId()).orElseThrow();
 		assertThat(dto).usingRecursiveComparison().isEqualTo(findGameAccount);
-	}
-
-	@Test
-	@DisplayName("데이터베이스에 loginId 중복 검사를 요청했을 때, 중복된 loginId 가 있다면 true 를, 없다면 false 를 반환한다")
-	void 중복체크() {
-
-		// given
-		GameAccount gameAccount = GameAccount.builder()
-			.loginId("login1234")
-			.nickname("hide on bush")
-			.rankTier(RankTier.CHALLENGER)
-			.build();
-
-		sut.save(gameAccount);
-
-		// when
-		boolean duplicated1 = sut.isDuplicated("login1234");
-		boolean duplicated2 = sut.isDuplicated("no1234");
-
-		// then
-		assertThat(duplicated1).isTrue();
-		assertThat(duplicated2).isFalse();
 	}
 }
