@@ -10,45 +10,57 @@ CREATE TABLE game_account
     PRIMARY KEY (id)
 );
 
--- 네이버클라우드 버킷 데이터 테이블
-CREATE TABLE bucket_data
-(
-    id BIGINT NOT NULL AUTO_INCREMENT,
-
-    PRIMARY KEY (id)
-);
-
 -- 회원 테이블
 CREATE TABLE member
 (
-    id               BIGINT NOT NULL AUTO_INCREMENT,
-    game_account_id  BIGINT,
-    profile_image_id BIGINT,
-    email            VARCHAR(320),
-    pwd              VARCHAR(32),
-    judge_point      INT,
+    id              BIGINT NOT NULL AUTO_INCREMENT,
+    game_account_id BIGINT,
+    profile_url     VARCHAR(200),
+    email           VARCHAR(320),
+    `password`      VARCHAR(32),
+    judge_point     INT        DEFAULT 0,
+    deleted         TINYINT(1) DEFAULT 0,
 
     PRIMARY KEY (id),
 
     FOREIGN KEY (game_account_id)
-        REFERENCES game_account (id),
-    FOREIGN KEY (profile_image_id)
-        REFERENCES bucket_data (id)
+        REFERENCES game_account (id)
+);
+
+-- 인게임 정보 테이블
+CREATE TABLE game_info
+(
+    id        BIGINT NOT NULL AUTO_INCREMENT,
+
+    team      VARCHAR(8),
+    position  VARCHAR(16),
+    nickname  VARCHAR(16),
+    champion  VARCHAR(8),
+    `kill`    TINYINT,
+    death     TINYINT,
+    assist    TINYINT,
+    played_at TIMESTAMP,
+
+    PRIMARY KEY (id)
 );
 
 -- 논쟁거리 재판(선거) 테이블
 CREATE TABLE election
 (
     id               BIGINT NOT NULL AUTO_INCREMENT,
+    game_info_id     BIGINT,
     election_no      VARCHAR(64),
-    status           VARCHAR(8),
+    `status`         VARCHAR(8),
     contents         VARCHAR(1000),
     cost             INT,
-    youtube_share_id VARCHAR(11),
+    youtube_share_id VARCHAR(20),
     modified_at      TIMESTAMP,
     ended_at         TIMESTAMP,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+
+    FOREIGN KEY (game_info_id)
+        REFERENCES game_info (id)
 );
 
 -- 논쟁거리 재판(선거) 후보자 테이블
@@ -68,21 +80,6 @@ CREATE TABLE candidate
         REFERENCES member (id)
 );
 
--- 인게임 정보 테이블
-CREATE TABLE game_info
-(
-    id       BIGINT NOT NULL AUTO_INCREMENT,
-
-    team     ENUM ('RED', 'BLUE'),
-    position ENUM ('TOP', 'JUNGLE', 'MID', 'ADC', 'SUPPORT'),
-    champion VARCHAR(8),
-    `kill`   TINYINT,
-    death    TINYINT,
-    assist   TINYINT,
-
-    PRIMARY KEY (id)
-);
-
 -- 논쟁거리 재판(선거) 후보자 의견 테이블
 CREATE TABLE opinion
 (
@@ -95,8 +92,6 @@ CREATE TABLE opinion
 
     FOREIGN KEY (candidate_id)
         REFERENCES candidate (id),
-    FOREIGN KEY (game_info_id)
-        REFERENCES game_info (id),
 
     PRIMARY KEY (id)
 );
