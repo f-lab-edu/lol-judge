@@ -8,3 +8,8 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: edu.flab.member, edu.flab.global
