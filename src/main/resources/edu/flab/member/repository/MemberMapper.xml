@@ -8,6 +8,13 @@
         VALUES (#{email}, #{password});
     </insert>
 
+    <update id="updatePassword">
+        UPDATE member
+        SET password=#{password}
+        WHERE id = #{id}
+          AND deleted = FALSE
+    </update>
+
     <select id="findById" resultMap="memberResultMap">
         SELECT m.id              AS memberId,
                m.email           AS email,
