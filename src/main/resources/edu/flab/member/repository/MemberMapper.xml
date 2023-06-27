@@ -22,6 +22,13 @@
           AND deleted = FALSE
     </update>
 
+    <update id="delete">
+        UPDATE member
+        SET deleted= TRUE
+        WHERE id = #{id}
+          AND deleted = FALSE
+    </update>
+
     <select id="findById" resultMap="memberResultMap">
         SELECT m.id              AS memberId,
                m.email           AS email,
