@@ -15,6 +15,13 @@
           AND deleted = FALSE
     </update>
 
+    <update id="updateJudgePoint">
+        UPDATE member
+        SET judge_point=#{judgePoint}
+        WHERE id = #{id}
+          AND deleted = FALSE
+    </update>
+
     <select id="findById" resultMap="memberResultMap">
         SELECT m.id              AS memberId,
                m.email           AS email,
