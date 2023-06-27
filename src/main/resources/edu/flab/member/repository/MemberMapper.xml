@@ -7,4 +7,72 @@
         INSERT INTO member (email, password)
         VALUES (#{email}, #{password});
     </insert>
+
+    <select id="findById" resultMap="memberResultMap">
+        SELECT m.id              AS memberId,
+               m.email           AS email,
+               m.password        AS password,
+               m.profile_url     AS profileUrl,
+               m.deleted         As deleted,
+               m.judge_point     As judgePoint,
+               g.id              AS gameAccountId,
+               g.nickname        AS nickname,
+               g.login_id        AS loginId,
+               g.rank_tier_group AS rankTierGroup,
+               g.rank_tier_level AS rankTierLevel
+        FROM member m
+                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+        WHERE m.id = #{id}
+          AND m.deleted = FALSE
+    </select>
+
+    <select id="findByEmail" resultMap="memberResultMap">
+        SELECT m.id              AS memberId,
+               m.email           AS email,
+               m.password        AS password,
+               m.profile_url     AS profileUrl,
+               m.deleted         As deleted,
+               m.judge_point     As judgePoint,
+               g.id              AS gameAccountId,
+               g.nickname        AS nickname,
+               g.login_id        AS loginId,
+               g.rank_tier_group AS rankTierGroup,
+               g.rank_tier_level AS rankTierLevel
+        FROM member m
+                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+        WHERE m.email = #{email}
+          AND m.deleted = FALSE
+    </select>
+
+    <select id="findAll" resultMap="memberResultMap">
+        SELECT m.id              AS memberId,
+               m.email           AS email,
+               m.password        AS password,
+               m.profile_url     AS profileUrl,
+               m.deleted         As deleted,
+               m.judge_point     As judgePoint,
+               g.id              AS gameAccountId,
+               g.nickname        AS nickname,
+               g.login_id        AS loginId,
+               g.rank_tier_group AS rankTierGroup,
+               g.rank_tier_level AS rankTierLevel
+        FROM member m
+                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+        WHERE m.deleted = FALSE
+    </select>
+
+    <resultMap id="memberResultMap" type="Member">
+        <constructor>
+            <idArg column="memberId" javaType="Long"/>
+            <arg column="email" javaType="String"/>
+            <arg column="password" javaType="String"/>
+            <arg column="profileUrl" javaType="String"/>
+            <arg column="deleted" javaType="Boolean"/>
+        </constructor>
+        <association property="judgePoint" javaType="JudgePoint">
+            <result property="point" column="judgePoint"/>
+        </association>
+        <association property="gameAccount" javaType="GameAccount" fetchType="lazy"
+                     resultMap="edu.flab.member.repository.GameAccountMapper.gameAccountResultMap"/>
+    </resultMap>
 </mapper>
