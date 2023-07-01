@@ -1,9 +1,10 @@
 -- 회원 테이블
+-- 패스워드 길이는 BcryptEncoder의 인코딩 값인 60글자로 설정
 CREATE TABLE member
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
     email       VARCHAR(320) UNIQUE,
-    `password`  VARCHAR(32),
+    `password`  VARCHAR(60),
     profile_url VARCHAR(200),
     judge_point INT     DEFAULT 0,
     deleted     BOOLEAN DEFAULT FALSE,
