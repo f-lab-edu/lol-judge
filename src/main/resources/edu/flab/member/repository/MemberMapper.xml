@@ -82,6 +82,46 @@
         WHERE m.deleted = FALSE
     </select>
 
+    <!--    고민한 점-->
+    <!--    1. 다음 SELECT 쿼리를 커버링 인덱스로 처리할 수 있는가?-->
+    <!--    - 커버링 인덱스로 쿼리를 처리할 수 있다면 클러스터 인덱스를 타지 않아서 쿼리 실행 속도가 빨라질 것 같다.-->
+    <!--    - profile_url 같은 정보는 랭킹 목록 페이지에 보여줘야하는 정보이지만 정렬 기준과 무관한 값이다. 커버링 인덱스를 사용하기 위해서 이것을 인덱스에 포함시켜도될까?-->
+
+    <!--    2. OFFSET, LIMIT 방식은 속도가 느리다.-->
+    <!--    - OFFSET 값이 커질수록 점점 느려진다. OFFSET 값이 커질수록 읽어야하는 레코드의 개수가 많아지기 때문이다.-->
+    <!--    - OFFSET 값이 커져서 전체 레코드의 20~25% 수준에 달하는 레코드를 읽게 되면 인덱스를 타지 않는다.-->
+    <!--    - 데이터 페이지를 풀 스캔하는 것은 순차 I/O라고 부르고, 인덱스를 통한 레코드 접근은 랜덤 I/O 라고 부른다.-->
+    <!--    - 랜덤 I/O는 순차 I/O에 비해 통상 4배 정도 비용이 비싸다고 한다. 따라서 조회 데이터가 전체 데이터의 20~25% 수준에 달하면, 인덱스를 활용하지 않고 전체 데이터를 순서대로 읽어서 필터링하는-->
+    <!--    방식이 더욱 빠르다.-->
+
+    <!--    3. 그래서 NO OFFSET 방식을 적용하고 싶다. 어떤 컬럼을 WHERE 절의 비교값으로 두어야할까?-->
+    <!--    - NO OFFSET 방식에서는 OFFSET, LIMIT 절 대신에 WHERE 절을 적극 활용한다.-->
+    <!--    - 조회 ID 를 내림차순으로 페이지네이션을 한다고 할 때, 아래와 같은 쿼리로 대체할 수 있다.-->
+    <!--    - `SELECT * FROM items WHERE 조건문 AND id < 마지막조회ID ORDER BY id DESC LIMIT 페이지사이즈`-->
+    <!--    - judge_rank_point 기준으로 정렬해야하는 상황에서 위 쿼리의 마지막조회ID 대신 무엇을 사용해야할까?-->
+
+    <!--    4. 인덱스 생성시 judge_point 키를 내림차순으로 설정하자.-->
+    <!--    - InnoDB에서 인덱스 역순 스캔이 인덱스 정순 스캔에 비해 느리다.-->
+    <!--    - 페이지 잠금이 인덱스 정순 스캔에 적합한 구조, 페이지 내에서 레코드가 단방향으로만 연결된 구조이기 때문이다.-->
+
+    <!--    5. 인덱스 컬럼으로 지정하고 싶은 컬럼이 두 테이블에 나눠져있으면 어떻게 해야할까?-->
+    <!--    - 다음 컬럼 순서로 정렬하고 싶다.-->
+    <!--    - 1. member 테이블의 judge_point-->
+    <!--    - 2. game_account 테이블의 rank_tier_group-->
+    <!--    - 3. game_account 테이블의 rank_tier_level-->
+
+    <select id="findMemberRankingOrderByJudgePoint" resultType="MemberRankDto">
+        SELECT m.profile_url     AS profileUrl,
+               m.judge_point     As judgePoint,
+               g.nickname        AS nickname,
+               g.rank_tier_group AS rankTierGroup,
+               g.rank_tier_level AS rankTierLevel
+        FROM member m
+                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+        WHERE m.deleted = FALSE
+        ORDER BY m.judge_point DESC
+    </select>
+
     <resultMap id="memberResultMap" type="Member">
         <constructor>
             <idArg column="memberId" javaType="Long"/>
