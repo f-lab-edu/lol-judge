@@ -1,9 +1,12 @@
 package edu.flab.global.vo;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @EqualsAndHashCode
 @Builder
 @Getter
