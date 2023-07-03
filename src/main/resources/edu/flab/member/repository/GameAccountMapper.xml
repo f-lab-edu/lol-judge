@@ -4,13 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.flab.member.repository.GameAccountMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO game_account (login_id, nickname, rank_tier_group, rank_tier_level)
-        VALUES (#{loginId}, #{nickname}, #{rankTier.group}, #{rankTier.level})
+        INSERT INTO game_account (lol_login_id, member_id, nickname, rank_tier_group, rank_tier_level)
+        VALUES (#{lolLoginId}, #{memberId}, #{nickname}, #{rankTier.group}, #{rankTier.level})
     </insert>
 
     <update id="update">
         UPDATE game_account
-        SET login_id=#{loginId},
+        SET lol_login_id=#{lolLoginId},
+            member_id=#{memberId},
             nickname=#{nickname},
             rank_tier_group=#{rankTier.group},
             rank_tier_level=#{rankTier.level}
@@ -18,21 +19,34 @@
     </update>
 
     <select id="findById" resultMap="gameAccountResultMap">
-        SELECT id, login_id, nickname, rank_tier_group, rank_tier_level
+        SELECT id              AS gameAccountId,
+               member_id       AS memberId,
+               nickname        AS nickname,
+               lol_login_id    AS lolLoginId,
+               rank_tier_group AS rankTierGroup,
+               rank_tier_level AS rankTierLevel
         FROM game_account
         WHERE id = #{id}
     </select>
 
     <select id="findByLoginId" resultMap="gameAccountResultMap">
-        SELECT id, login_id, nickname, rank_tier_group, rank_tier_level
+        SELECT id              AS gameAccountId,
+               member_id       AS memberId,
+               nickname        AS nickname,
+               lol_login_id    AS lolLoginId,
+               rank_tier_group AS rankTierGroup,
+               rank_tier_level AS rankTierLevel
         FROM game_account
-        WHERE login_id = #{loginId}
+        WHERE lol_login_id = #{lolLoginId}
     </select>
 
     <resultMap id="gameAccountResultMap" type="GameAccount">
-        <result column="id" property="id"/>
-        <result column="login_id" property="loginId"/>
-        <result column="nickname" property="nickname"/>
+        <constructor>
+            <idArg column="gameAccountId" javaType="Long"/>
+            <arg column="memberId" javaType="Long"/>
+            <arg column="nickname" javaType="String"/>
+            <arg column="lolLoginId" javaType="String"/>
+        </constructor>
         <association property="rankTier" javaType="RankTier">
             <result column="rank_tier_group" property="group"/>
             <result column="rank_tier_level" property="level"/>

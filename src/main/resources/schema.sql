@@ -1,30 +1,30 @@
--- 리그오브레전드 계정 테이블
-CREATE TABLE game_account
+-- 회원 테이블
+CREATE TABLE member
 (
-    id              BIGINT NOT NULL AUTO_INCREMENT,
-    login_id        VARCHAR(24) UNIQUE,
-    nickname        VARCHAR(16) UNIQUE,
-    rank_tier_group VARCHAR(16),
-    rank_tier_level TINYINT CHECK (0 < rank_tier_level AND rank_tier_level < 5),
+    id          BIGINT NOT NULL AUTO_INCREMENT,
+    email       VARCHAR(320) UNIQUE,
+    `password`  VARCHAR(32),
+    profile_url VARCHAR(200),
+    judge_point INT     DEFAULT 0,
+    deleted     BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY (id)
 );
 
--- 회원 테이블
-CREATE TABLE member
+-- 리그오브레전드 계정 테이블
+CREATE TABLE game_account
 (
     id              BIGINT NOT NULL AUTO_INCREMENT,
-    game_account_id BIGINT,
-    profile_url     VARCHAR(200),
-    email           VARCHAR(320),
-    `password`      VARCHAR(32),
-    judge_point     INT        DEFAULT 0,
-    deleted         TINYINT(1) DEFAULT 0,
+    member_id       BIGINT,
+    lol_login_id    VARCHAR(24) UNIQUE,
+    nickname        VARCHAR(16) UNIQUE,
+    rank_tier_group VARCHAR(16),
+    rank_tier_level TINYINT CHECK (0 < rank_tier_level AND rank_tier_level < 5),
 
     PRIMARY KEY (id),
 
-    FOREIGN KEY (game_account_id)
-        REFERENCES game_account (id)
+    FOREIGN KEY (member_id)
+        REFERENCES member (id)
 );
 
 -- 인게임 정보 테이블

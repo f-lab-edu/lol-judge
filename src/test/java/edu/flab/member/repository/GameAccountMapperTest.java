@@ -22,7 +22,7 @@ class GameAccountMapperTest {
 	void 아이디_조회() {
 		// given
 		GameAccount gameAccount = GameAccount.builder()
-			.loginId("login12345")
+			.lolLoginId("login12345")
 			.nickname("hide on bush")
 			.rankTier(RankTier.CHALLENGER)
 			.build();
@@ -40,14 +40,14 @@ class GameAccountMapperTest {
 	void 롤계정_조회() {
 		// given
 		GameAccount gameAccount = GameAccount.builder()
-			.loginId("login1234")
+			.lolLoginId("login1234")
 			.nickname("hide on bush")
 			.rankTier(RankTier.CHALLENGER)
 			.build();
 
 		// when
 		sut.save(gameAccount);
-		GameAccount findGameAccount = sut.findByLoginId(gameAccount.getLoginId()).orElseThrow();
+		GameAccount findGameAccount = sut.findByLoginId(gameAccount.getLolLoginId()).orElseThrow();
 
 		// then
 		assertThat(findGameAccount).isEqualTo(gameAccount);
@@ -59,7 +59,7 @@ class GameAccountMapperTest {
 
 		// given
 		GameAccount gameAccount = GameAccount.builder()
-			.loginId("login1234")
+			.lolLoginId("login1234")
 			.nickname("hide on bush")
 			.rankTier(RankTier.CHALLENGER)
 			.build();
@@ -69,7 +69,7 @@ class GameAccountMapperTest {
 		// when
 		GameAccountUpdateDto dto = GameAccountUpdateDto.builder()
 			.id(gameAccount.getId())
-			.loginId("newLogin1234")
+			.lolLoginId("newLogin1234")
 			.nickname("show maker")
 			.rankTier(RankTier.CHALLENGER)
 			.build();

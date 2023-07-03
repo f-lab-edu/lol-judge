@@ -4,5 +4,5 @@ import edu.flab.global.vo.RankTier;
 import lombok.Builder;
 
 @Builder
-public record GameAccountUpdateDto(Long id, String loginId, String nickname, RankTier rankTier) {
+public record GameAccountUpdateDto(Long id, Long memberId, String lolLoginId, String nickname, RankTier rankTier) {
 }
