@@ -15,14 +15,14 @@ import lombok.ToString;
 public class GameAccount {
 	private Long id;
 	private Long memberId;
-	private String nickname;
-	private String loginId;
-	private RankTier rankTier;
+	private String nickname;    // 리그오브레전드 닉네임
+	private String lolLoginId;  // 리그오브레전드 로그인 아이디
+	private RankTier rankTier;  // 리그오브레전드 랭크 티어
 
-	public GameAccount(Long id, Long memberId, String nickname, String loginId) {
+	public GameAccount(Long id, Long memberId, String nickname, String lolLoginId) {
 		this.id = id;
 		this.memberId = memberId;
 		this.nickname = nickname;
-		this.loginId = loginId;
+		this.lolLoginId = lolLoginId;
 	}
 }
