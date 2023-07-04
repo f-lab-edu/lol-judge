@@ -2,7 +2,14 @@ package edu.flab.member.dto;
 
 import edu.flab.global.vo.RankTier;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
-public record GameAccountUpdateDto(Long id, Long memberId, String loginId, String nickname, RankTier rankTier) {
+public class GameAccountUpdateDto {
+	private final Long id;
+	private final Long memberId;
+	private final String loginId;
+	private final String nickname;
+	private final RankTier rankTier;
 }

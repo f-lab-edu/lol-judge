@@ -1,10 +1,12 @@
 package edu.flab.member.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class MemberJudgePointUpdateDto {
-	private Long id;
-	private Integer judgePoint;
+	private final Long id;
+	private final int judgePoint;
 }
 

@@ -2,13 +2,13 @@ package edu.flab.member.dto;
 
 import edu.flab.global.vo.RankTier;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class MemberRankDto {
-	private String profileUrl;
-	private Integer judge_point;
-	private String nickname;
-	private RankTier rankTier;
+	private final String profileUrl;
+	private final Integer judge_point;
+	private final String nickname;
+	private final RankTier rankTier;
 }

@@ -1,11 +1,11 @@
 package edu.flab.member.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class MemberPasswordUpdateDto {
-	private Long id;
-	private String password;
+	private final Long id;
+	private final String password;
 }
