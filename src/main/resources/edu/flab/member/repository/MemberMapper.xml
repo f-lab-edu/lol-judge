@@ -29,57 +29,42 @@
           AND deleted = FALSE
     </update>
 
-    <select id="findById" resultMap="memberResultMap">
-        SELECT m.id              AS memberId,
-               m.email           AS email,
-               m.password        AS password,
-               m.profile_url     AS profileUrl,
-               m.deleted         As deleted,
-               m.judge_point     As judgePoint,
-               g.id              AS gameAccountId,
-               g.nickname        AS nickname,
-               g.lol_login_id    AS lolLoginId,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
-        FROM member m
-                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+    <select id="findActiveMemberById" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
         WHERE m.id = #{id}
-          AND m.deleted = FALSE
+        AND m.deleted = FALSE
     </select>
 
-    <select id="findByEmail" resultMap="memberResultMap">
-        SELECT m.id              AS memberId,
-               m.email           AS email,
-               m.password        AS password,
-               m.profile_url     AS profileUrl,
-               m.deleted         As deleted,
-               m.judge_point     As judgePoint,
-               g.id              AS gameAccountId,
-               g.nickname        AS nickname,
-               g.lol_login_id    AS lolLoginId,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
-        FROM member m
-                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+    <select id="findDeletedMemberById" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.id = #{id}
+        AND m.deleted = TRUE
+    </select>
+
+    <select id="findActiveMemberByEmail" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
         WHERE m.email = #{email}
-          AND m.deleted = FALSE
+        AND m.deleted = FALSE
     </select>
 
-    <select id="findAll" resultMap="memberResultMap">
-        SELECT m.id              AS memberId,
-               m.email           AS email,
-               m.password        AS password,
-               m.profile_url     AS profileUrl,
-               m.deleted         As deleted,
-               m.judge_point     As judgePoint,
-               g.id              AS gameAccountId,
-               g.nickname        AS nickname,
-               g.lol_login_id    AS lolLoginId,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
-        FROM member m
-                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
-        WHERE m.deleted = FALSE
+    <select id="findDeletedMemberByEmail" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.email = #{email}
+        AND m.deleted = TRUE
+    </select>
+
+    <select id="findActiveMembers" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.id <![CDATA[>=]]> #{offset}
+        AND m.deleted = FALSE
+        LIMIT #{limit}
+    </select>
+
+    <select id="findDeletedMembers" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.id <![CDATA[>=]]> #{offset}
+        AND m.deleted = TRUE
+        LIMIT #{limit}
     </select>
 
     <!--    고민한 점-->
@@ -121,6 +106,22 @@
         WHERE m.deleted = FALSE
         ORDER BY m.judge_point DESC
     </select>
+
+    <sql id="selectMemberJoinGameAccount">
+        SELECT m.id              AS memberId,
+               m.email           AS email,
+               m.password        AS password,
+               m.profile_url     AS profileUrl,
+               m.deleted         As deleted,
+               m.judge_point     As judgePoint,
+               g.id              AS gameAccountId,
+               g.nickname        AS nickname,
+               g.lol_login_id    AS lolLoginId,
+               g.rank_tier_group AS rankTierGroup,
+               g.rank_tier_level AS rankTierLevel
+        FROM member m
+                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+    </sql>
 
     <resultMap id="memberResultMap" type="Member">
         <constructor>
