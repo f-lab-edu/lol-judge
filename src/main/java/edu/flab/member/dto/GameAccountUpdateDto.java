@@ -9,7 +9,7 @@ import lombok.Getter;
 public class GameAccountUpdateDto {
 	private final Long id;
 	private final Long memberId;
-	private final String loginId;
+	private final String lolLoginId;
 	private final String nickname;
 	private final RankTier rankTier;
 }

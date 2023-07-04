@@ -38,7 +38,7 @@
                m.judge_point     As judgePoint,
                g.id              AS gameAccountId,
                g.nickname        AS nickname,
-               g.login_id        AS loginId,
+               g.lol_login_id    AS lolLoginId,
                g.rank_tier_group AS rankTierGroup,
                g.rank_tier_level AS rankTierLevel
         FROM member m
@@ -56,7 +56,7 @@
                m.judge_point     As judgePoint,
                g.id              AS gameAccountId,
                g.nickname        AS nickname,
-               g.login_id        AS loginId,
+               g.lol_login_id    AS lolLoginId,
                g.rank_tier_group AS rankTierGroup,
                g.rank_tier_level AS rankTierLevel
         FROM member m
@@ -74,7 +74,7 @@
                m.judge_point     As judgePoint,
                g.id              AS gameAccountId,
                g.nickname        AS nickname,
-               g.login_id        AS loginId,
+               g.lol_login_id    AS lolLoginId,
                g.rank_tier_group AS rankTierGroup,
                g.rank_tier_level AS rankTierLevel
         FROM member m
