@@ -6,10 +6,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class GameAccountUpdateDto {
-	private final Long id;
-	private final Long memberId;
-	private final String loginId;
+public class MemberRankDto {
+	private final String profileUrl;
+	private final Integer judge_point;
 	private final String nickname;
 	private final RankTier rankTier;
 }
