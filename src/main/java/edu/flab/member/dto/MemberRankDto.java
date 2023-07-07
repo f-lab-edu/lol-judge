@@ -1,6 +1,6 @@
 package edu.flab.member.dto;
 
-import edu.flab.global.vo.RankTier;
+import edu.flab.global.vo.LolTier;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,5 +10,5 @@ public class MemberRankDto {
 	private final String profileUrl;
 	private final Integer judge_point;
 	private final String nickname;
-	private final RankTier rankTier;
+	private final LolTier lolTierGroup;
 }
