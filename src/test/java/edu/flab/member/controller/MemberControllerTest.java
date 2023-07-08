@@ -37,7 +37,7 @@ class MemberControllerTest {
 	}
 
 	@Test
-	void 회원가입() throws Exception {
+	void 회원가입에_성공한다() throws Exception {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 			.email("admin@example.com")
 			.password("aB#12345")
