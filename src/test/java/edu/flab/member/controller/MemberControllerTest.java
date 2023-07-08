@@ -40,8 +40,8 @@ class MemberControllerTest {
 	void 회원가입() throws Exception {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 			.email("admin@example.com")
-			.password("1234")
-			.profileUrl("cloud.example.com/bucket/profile_image.jpg")
+			.password("aB#12345")
+			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
 			.rankTier(RankTier.CHALLENGER)

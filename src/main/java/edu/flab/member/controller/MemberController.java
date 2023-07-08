@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.service.MemberSignUpService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class MemberController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/signUp")
-	public void signUp(@RequestBody MemberSignUpDto dto) {
+	public void signUp(@RequestBody @Valid MemberSignUpDto dto) {
 		memberSignUpService.signUp(dto);
 	}
 }
