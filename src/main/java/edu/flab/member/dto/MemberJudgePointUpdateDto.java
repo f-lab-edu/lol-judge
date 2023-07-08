@@ -1,12 +1,15 @@
 package edu.flab.member.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @Builder
 public class MemberJudgePointUpdateDto {
-	private final Long id;
-	private final int judgePoint;
+	private Long id;
+
+	@NotNull
+	private Integer judgePoint;
 }
 
