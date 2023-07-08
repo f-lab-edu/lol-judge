@@ -17,7 +17,7 @@ CREATE TABLE game_account
 (
     id              BIGINT NOT NULL AUTO_INCREMENT,
     member_id       BIGINT,
-    login_id        VARCHAR(24) UNIQUE,
+    lol_login_id    VARCHAR(24) UNIQUE,
     nickname        VARCHAR(16) UNIQUE,
     rank_tier_group VARCHAR(16),
     rank_tier_level TINYINT CHECK (0 < rank_tier_level AND rank_tier_level < 5),

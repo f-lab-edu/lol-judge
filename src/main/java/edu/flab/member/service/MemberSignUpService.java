@@ -17,7 +17,7 @@ public class MemberSignUpService {
 
 	public void signUp(MemberSignUpDto dto) {
 		GameAccount gameAccount = GameAccount.builder()
-			.loginId(dto.getGameLoginId())
+			.lolLoginId(dto.getGameLoginId())
 			.nickname(dto.getNickname())
 			.rankTier(dto.getRankTier())
 			.build();

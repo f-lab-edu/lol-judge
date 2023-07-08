@@ -15,5 +15,5 @@ public interface GameAccountMapper {
 
 	Optional<GameAccount> findById(Long id);
 
-	Optional<GameAccount> findByLoginId(String loginId);
+	Optional<GameAccount> findByLoginId(String lolLoginId);
 }

@@ -15,7 +15,7 @@ public class GameAccountUpdateDto {
 
 	@NotBlank
 	@Length(max = 24)
-	private String loginId;
+	private String lolLoginId;
 
 	@NotBlank
 	@Length(max = 16)

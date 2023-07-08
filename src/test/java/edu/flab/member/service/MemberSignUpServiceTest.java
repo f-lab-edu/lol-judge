@@ -47,7 +47,7 @@ class MemberSignUpServiceTest {
 
 		// then
 		GameAccount gameAccount = GameAccount.builder()
-			.loginId(dto.getGameLoginId())
+			.lolLoginId(dto.getGameLoginId())
 			.nickname(dto.getNickname())
 			.rankTier(dto.getRankTier()).build();
 

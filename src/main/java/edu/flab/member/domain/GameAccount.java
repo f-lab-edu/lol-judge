@@ -24,19 +24,19 @@ public class GameAccount {
 
 	@NotBlank
 	@Length(max = 16)
-	private String nickname;
+	private String nickname;      // 리그오브레전드 닉네임
 
 	@NotBlank
 	@Length(max = 24)
-	private String loginId;
+	private String lolLoginId;    // 리그오브레전드 계정 아이디
 
 	@NotNull
-	private RankTier rankTier;
+	private RankTier rankTier;    // 리그오브레전드 랭크 티어 정보
 
-	public GameAccount(Long id, Long memberId, String nickname, String loginId) {
+	public GameAccount(Long id, Long memberId, String nickname, String lolLoginId) {
 		this.id = id;
 		this.memberId = memberId;
 		this.nickname = nickname;
-		this.loginId = loginId;
+		this.lolLoginId = lolLoginId;
 	}
 }
