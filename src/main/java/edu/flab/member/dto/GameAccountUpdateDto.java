@@ -1,8 +1,26 @@
 package edu.flab.member.dto;
 
-import edu.flab.global.vo.RankTier;
-import lombok.Builder;
+import org.hibernate.validator.constraints.Length;
 
+import edu.flab.global.vo.RankTier;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
 @Builder
-public record GameAccountUpdateDto(Long id, Long memberId, String loginId, String nickname, RankTier rankTier) {
+public class GameAccountUpdateDto {
+	private Long id;
+
+	@NotBlank
+	@Length(max = 24)
+	private String loginId;
+
+	@NotBlank
+	@Length(max = 16)
+	private String nickname;
+
+	@NotNull
+	private RankTier rankTier;
 }

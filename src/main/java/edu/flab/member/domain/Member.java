@@ -1,5 +1,6 @@
 package edu.flab.member.domain;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.global.validation.Password;
@@ -22,21 +23,22 @@ public class Member {
 	private Long id;
 
 	@NotNull
-	@Email(message = "이메일 형식만 입력 가능합니다")
+	@Email
 	private String email;
 
-	@NotNull
-	@Password(message = "패스워드 규칙은 영소문자, 영대문자, 특수문자를 포함한 최소 8글자입니다")
+	@Password
 	private String password;
 
-	@NotNull
-	@URL(message = "URL 형식만 입력 가능합니다")
+	@URL
+	@Length(max = 200)
 	private String profileUrl;
-	private boolean deleted;
 
 	@Default
 	private JudgePoint judgePoint = JudgePoint.ZERO;
+
 	private GameAccount gameAccount;
+
+	private boolean deleted;
 
 	public Member(Long id, String email, String password, String profileUrl, Boolean deleted) {
 		this.id = id;
