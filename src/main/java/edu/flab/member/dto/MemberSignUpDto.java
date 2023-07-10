@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.global.validation.Password;
-import edu.flab.global.vo.RankTier;
+import edu.flab.global.vo.LolTier;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,5 +40,5 @@ public class MemberSignUpDto {
 	private String gameLoginId;
 
 	@NotNull
-	private RankTier rankTier;
+	private LolTier lolTier;
 }

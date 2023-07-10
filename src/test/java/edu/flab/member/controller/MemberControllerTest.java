@@ -1,5 +1,6 @@
 package edu.flab.member.controller;
 
+import static edu.flab.global.vo.LolTier.Group.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.flab.global.vo.RankTier;
+import edu.flab.global.vo.LolTier;
 import edu.flab.member.dto.MemberSignUpDto;
 
 @Tag("integration")
@@ -44,7 +45,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.rankTier(RankTier.CHALLENGER)
+			.lolTier(new LolTier(CHALLENGER, 40))
 			.build();
 
 		mock.perform(post("/signUp")

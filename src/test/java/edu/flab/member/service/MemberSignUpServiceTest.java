@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import edu.flab.global.vo.RankTier;
+import edu.flab.global.vo.LolTier;
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
@@ -36,7 +36,7 @@ class MemberSignUpServiceTest {
 			.profileUrl("cloud.naver.com/bucket/example_profile.jpg")
 			.gameLoginId("user12345")
 			.nickname("admin")
-			.rankTier(RankTier.CHALLENGER)
+			.lolTier(new LolTier(LolTier.Group.CHALLENGER, 40))
 			.build();
 
 		doNothing().when(memberMapper).save(any(Member.class));
@@ -49,7 +49,7 @@ class MemberSignUpServiceTest {
 		GameAccount gameAccount = GameAccount.builder()
 			.lolLoginId(dto.getGameLoginId())
 			.nickname(dto.getNickname())
-			.rankTier(dto.getRankTier()).build();
+			.lolTier(dto.getLolTier()).build();
 
 		Member member = Member.builder()
 			.email(dto.getEmail())

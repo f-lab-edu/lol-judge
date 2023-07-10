@@ -1,6 +1,6 @@
 package edu.flab.member.dto;
 
-import edu.flab.global.vo.RankTier;
+import edu.flab.global.vo.LolTier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberRankResponseDto {
 	private String profileUrl;
-	private Integer judge_point;
+	private Integer judgePoint;
 	private String nickname;
-	private RankTier rankTier;
+	private LolTier lolTier;
 }
