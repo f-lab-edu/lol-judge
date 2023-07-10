@@ -1,15 +1,27 @@
 package edu.flab.member.dto;
 
-import edu.flab.global.vo.LolTier;
-import lombok.Builder;
-import lombok.Getter;
+import org.hibernate.validator.constraints.Length;
 
-@Getter
+import edu.flab.global.vo.LolTier;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
 @Builder
 public class GameAccountUpdateDto {
-	private final Long id;
-	private final Long memberId;
-	private final String lolLoginId;
-	private final String nickname;
-	private final LolTier lolTier;
+
+	private Long id;
+
+	@NotBlank
+	@Length(max = 24)
+	private String lolLoginId;
+
+	@NotBlank
+	@Length(max = 16)
+	private String nickname;
+
+	@NotNull
+	private LolTier lolTier;
 }

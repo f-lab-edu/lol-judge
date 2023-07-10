@@ -29,57 +29,42 @@
           AND deleted = FALSE
     </update>
 
-    <select id="findById" resultMap="memberResultMap">
-        SELECT m.id              AS memberId,
-               m.email           AS email,
-               m.password        AS password,
-               m.profile_url     AS profileUrl,
-               m.deleted         As deleted,
-               m.judge_point     As judgePoint,
-               g.id              AS gameAccountId,
-               g.nickname        AS nickname,
-               g.login_id        AS loginId,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
-        FROM member m
-                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+    <select id="findActiveMemberById" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
         WHERE m.id = #{id}
-          AND m.deleted = FALSE
+        AND m.deleted = FALSE
     </select>
 
-    <select id="findByEmail" resultMap="memberResultMap">
-        SELECT m.id              AS memberId,
-               m.email           AS email,
-               m.password        AS password,
-               m.profile_url     AS profileUrl,
-               m.deleted         As deleted,
-               m.judge_point     As judgePoint,
-               g.id              AS gameAccountId,
-               g.nickname        AS nickname,
-               g.login_id        AS loginId,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
-        FROM member m
-                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+    <select id="findInactiveMemberById" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.id = #{id}
+        AND m.deleted = TRUE
+    </select>
+
+    <select id="findActiveMemberByEmail" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
         WHERE m.email = #{email}
-          AND m.deleted = FALSE
+        AND m.deleted = FALSE
     </select>
 
-    <select id="findAll" resultMap="memberResultMap">
-        SELECT m.id              AS memberId,
-               m.email           AS email,
-               m.password        AS password,
-               m.profile_url     AS profileUrl,
-               m.deleted         As deleted,
-               m.judge_point     As judgePoint,
-               g.id              AS gameAccountId,
-               g.nickname        AS nickname,
-               g.login_id        AS loginId,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
-        FROM member m
-                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
-        WHERE m.deleted = FALSE
+    <select id="findInactiveMemberByEmail" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.email = #{email}
+        AND m.deleted = TRUE
+    </select>
+
+    <select id="findActiveMembers" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.id <![CDATA[>=]]> #{offset}
+        AND m.deleted = FALSE
+        LIMIT #{limit}
+    </select>
+
+    <select id="findInactiveMembers" resultMap="memberResultMap">
+        <include refid="selectMemberJoinGameAccount"/>
+        WHERE m.id <![CDATA[>=]]> #{offset}
+        AND m.deleted = TRUE
+        LIMIT #{limit}
     </select>
 
     <!--    고민한 점-->
@@ -93,12 +78,12 @@
     <!--    - 데이터 페이지를 풀 스캔하는 것은 순차 I/O라고 부르고, 인덱스를 통한 레코드 접근은 랜덤 I/O 라고 부른다.-->
     <!--    - 랜덤 I/O는 순차 I/O에 비해 통상 4배 정도 비용이 비싸다고 한다. 따라서 조회 데이터가 전체 데이터의 20~25% 수준에 달하면, 인덱스를 활용하지 않고 전체 데이터를 순서대로 읽어서 필터링하는-->
     <!--    방식이 더욱 빠르다.-->
-
+    
     <!--    3. 그래서 NO OFFSET 방식을 적용하고 싶다. 어떤 컬럼을 WHERE 절의 비교값으로 두어야할까?-->
     <!--    - NO OFFSET 방식에서는 OFFSET, LIMIT 절 대신에 WHERE 절을 적극 활용한다.-->
     <!--    - 조회 ID 를 내림차순으로 페이지네이션을 한다고 할 때, 아래와 같은 쿼리로 대체할 수 있다.-->
     <!--    - `SELECT * FROM items WHERE 조건문 AND id < 마지막조회ID ORDER BY id DESC LIMIT 페이지사이즈`-->
-    <!--    - judge_rank_point 기준으로 정렬해야하는 상황에서 위 쿼리의 마지막조회ID 대신 무엇을 사용해야할까?-->
+    <!--    - judge_point 기준으로 정렬해야하는 상황에서 위 쿼리의 마지막조회ID 대신 무엇을 사용해야할까?-->
 
     <!--    4. 인덱스 생성시 judge_point 키를 내림차순으로 설정하자.-->
     <!--    - InnoDB에서 인덱스 역순 스캔이 인덱스 정순 스캔에 비해 느리다.-->
@@ -107,20 +92,39 @@
     <!--    5. 인덱스 컬럼으로 지정하고 싶은 컬럼이 두 테이블에 나눠져있으면 어떻게 해야할까?-->
     <!--    - 다음 컬럼 순서로 정렬하고 싶다.-->
     <!--    - 1. member 테이블의 judge_point-->
-    <!--    - 2. game_account 테이블의 rank_tier_group-->
-    <!--    - 3. game_account 테이블의 rank_tier_level-->
+    <!--    - 2. game_account 테이블의 lol_tier_color-->
+    <!--    - 3. game_account 테이블의 lol_tier_level-->
+    <!--    - 4. game_account 테이블의 lol_tier_point-->
 
-    <select id="findMemberRankingOrderByJudgePoint" resultType="MemberRankDto">
-        SELECT m.profile_url     AS profileUrl,
-               m.judge_point     As judgePoint,
-               g.nickname        AS nickname,
-               g.rank_tier_group AS rankTierGroup,
-               g.rank_tier_level AS rankTierLevel
+    <select id="findMemberRankingOrderByJudgePoint" resultType="MemberRankResponseDto">
+        SELECT m.profile_url    AS profileUrl,
+               m.judge_point    As judgePoint,
+               g.nickname       AS nickname,
+               g.lol_tier_color AS lolTierColor,
+               g.lol_tier_level AS lolTierLevel,
+               g.lol_tier_point AS lolTierPoint
         FROM member m
                  LEFT OUTER JOIN game_account g ON m.id = g.member_id
         WHERE m.deleted = FALSE
         ORDER BY m.judge_point DESC
     </select>
+
+    <sql id="selectMemberJoinGameAccount">
+        SELECT m.id             AS memberId,
+               m.email          AS email,
+               m.password       AS password,
+               m.profile_url    AS profileUrl,
+               m.deleted        As deleted,
+               m.judge_point    As judgePoint,
+               g.id             AS gameAccountId,
+               g.nickname       AS nickname,
+               g.lol_login_id   AS lolLoginId,
+               g.lol_tier_color AS lolTierColor,
+               g.lol_tier_level AS lolTierLevel,
+               g.lol_tier_point AS lolTierPoint
+        FROM member m
+                 LEFT OUTER JOIN game_account g ON m.id = g.member_id
+    </sql>
 
     <resultMap id="memberResultMap" type="Member">
         <constructor>
