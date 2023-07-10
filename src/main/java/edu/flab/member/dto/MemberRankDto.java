@@ -10,5 +10,5 @@ public class MemberRankDto {
 	private final String profileUrl;
 	private final Integer judge_point;
 	private final String nickname;
-	private final LolTier lolTierGroup;
+	private final LolTier lolTier;
 }
