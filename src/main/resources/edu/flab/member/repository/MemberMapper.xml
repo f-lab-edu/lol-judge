@@ -47,7 +47,7 @@
         AND m.deleted = FALSE
     </select>
 
-    <select id="findDeletedMemberByEmail" resultMap="memberResultMap">
+    <select id="findInactiveMemberByEmail" resultMap="memberResultMap">
         <include refid="selectMemberJoinGameAccount"/>
         WHERE m.email = #{email}
         AND m.deleted = TRUE
@@ -60,7 +60,7 @@
         LIMIT #{limit}
     </select>
 
-    <select id="findDeletedMembers" resultMap="memberResultMap">
+    <select id="findInactiveMembers" resultMap="memberResultMap">
         <include refid="selectMemberJoinGameAccount"/>
         WHERE m.id <![CDATA[>=]]> #{offset}
         AND m.deleted = TRUE
@@ -95,7 +95,7 @@
     <!--    - 2. game_account 테이블의 rank_tier_group-->
     <!--    - 3. game_account 테이블의 rank_tier_level-->
 
-    <select id="findMemberRankingOrderByJudgePoint" resultType="MemberRankDto">
+    <select id="findMemberRankingOrderByJudgePoint" resultType="MemberRankResponseDto">
         SELECT m.profile_url     AS profileUrl,
                m.judge_point     As judgePoint,
                g.nickname        AS nickname,
