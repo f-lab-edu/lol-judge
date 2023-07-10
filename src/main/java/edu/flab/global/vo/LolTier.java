@@ -49,9 +49,9 @@ public class LolTier {
 		DIAMOND2("DIAMOND", 2),
 		DIAMOND3("DIAMOND", 3),
 		DIAMOND4("DIAMOND", 4),
-		MASTER("MASTER", null),
-		GRAND_MASTER("GRAND_MASTER", null),
-		CHALLENGER("CHALLENGER", null);
+		MASTER("MASTER"),
+		GRAND_MASTER("GRAND_MASTER"),
+		CHALLENGER("CHALLENGER");
 
 		private final String color;
 		private final Integer level;
@@ -59,6 +59,10 @@ public class LolTier {
 		Group(String color, Integer level) {
 			this.color = color;
 			this.level = level;
+		}
+
+		Group(String color) {
+			this(color, 0);
 		}
 	}
 
