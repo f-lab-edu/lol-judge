@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberListRequestDto {
+public class MemberRequestDto {
 	private final int offset;
 	private final int limit;
 }

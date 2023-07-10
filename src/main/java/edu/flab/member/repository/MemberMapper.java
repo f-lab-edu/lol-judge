@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
-import edu.flab.member.dto.MemberListRequestDto;
 import edu.flab.member.dto.MemberPasswordUpdateDto;
 import edu.flab.member.dto.MemberRankDto;
+import edu.flab.member.dto.MemberRequestDto;
 
 @Mapper
 public interface MemberMapper {
@@ -29,9 +29,9 @@ public interface MemberMapper {
 
 	Optional<Member> findDeletedMemberByEmail(String email);
 
-	List<Member> findActiveMembers(MemberListRequestDto dto);
+	List<Member> findActiveMembers(MemberRequestDto dto);
 
-	List<Member> findDeletedMembers(MemberListRequestDto dto);
+	List<Member> findInactiveMembers(MemberRequestDto dto);
 
 	// NO OFFSET 방식으로 해당 쿼리를 작성하려면 무엇을 매개변수로 넘겨주어야할까?
 	List<MemberRankDto> findMemberRankingOrderByJudgePoint();

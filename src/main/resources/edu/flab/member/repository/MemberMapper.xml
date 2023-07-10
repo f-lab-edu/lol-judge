@@ -35,7 +35,7 @@
         AND m.deleted = FALSE
     </select>
 
-    <select id="findDeletedMemberById" resultMap="memberResultMap">
+    <select id="findInactiveMemberById" resultMap="memberResultMap">
         <include refid="selectMemberJoinGameAccount"/>
         WHERE m.id = #{id}
         AND m.deleted = TRUE
