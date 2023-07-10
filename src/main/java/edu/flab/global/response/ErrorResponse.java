@@ -9,11 +9,11 @@ public record ErrorResponse(String status, String code, String message, List<Fie
 	private final static String ERROR_STATUS = "error";
 
 	public static ErrorResponse of(ErrorCode errorCode, BindingResult bindingResult) {
-		List<FieldErrorDetail> FieldErrorDetails = Collections.emptyList();
+		List<FieldErrorDetail> fieldErrorDetails = Collections.emptyList();
 		if (bindingResult != null && bindingResult.hasErrors()) {
-			FieldErrorDetails = FieldErrorDetail.of(bindingResult);
+			fieldErrorDetails = FieldErrorDetail.of(bindingResult);
 		}
-		return new ErrorResponse(ERROR_STATUS, errorCode.getCode(), errorCode.getMessage(), FieldErrorDetails);
+		return new ErrorResponse(ERROR_STATUS, errorCode.getCode(), errorCode.getMessage(), fieldErrorDetails);
 	}
 
 	public static ErrorResponse of(ErrorCode errorCode) {
