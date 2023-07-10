@@ -2,7 +2,7 @@ package edu.flab.member.domain;
 
 import org.hibernate.validator.constraints.Length;
 
-import edu.flab.global.vo.RankTier;
+import edu.flab.global.vo.LolTier;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,14 +24,14 @@ public class GameAccount {
 
 	@NotBlank
 	@Length(max = 16)
-	private String nickname;      // 리그오브레전드 닉네임
+	private String nickname;    // 리그오브레전드 닉네임
 
 	@NotBlank
 	@Length(max = 24)
-	private String lolLoginId;    // 리그오브레전드 계정 아이디
+	private String lolLoginId;  // 리그오브레전드 계정 아이디
 
 	@NotNull
-	private RankTier rankTier;    // 리그오브레전드 랭크 티어 정보
+	private LolTier lolTier;    // 리그오브레전드 랭크 티어 정보
 
 	public GameAccount(Long id, Long memberId, String nickname, String lolLoginId) {
 		this.id = id;

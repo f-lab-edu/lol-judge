@@ -19,7 +19,7 @@ public class MemberSignUpService {
 		GameAccount gameAccount = GameAccount.builder()
 			.lolLoginId(dto.getGameLoginId())
 			.nickname(dto.getNickname())
-			.rankTier(dto.getRankTier())
+			.lolTier(dto.getLolTier())
 			.build();
 
 		Member member = Member.builder()

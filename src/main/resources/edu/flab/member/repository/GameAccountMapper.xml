@@ -4,41 +4,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.flab.member.repository.GameAccountMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO game_account (lol_login_id, member_id, nickname, rank_tier_group, rank_tier_level)
-        VALUES (#{lolLoginId}, #{memberId}, #{nickname}, #{rankTier.group}, #{rankTier.level})
+        INSERT INTO game_account (lol_login_id, member_id, nickname, lol_tier_color, lol_tier_level, lol_tier_point)
+        VALUES (#{lolLoginId}, #{memberId}, #{nickname}, #{lolTier.group.color}, #{lolTier.group.level},
+                #{lolTier.point})
     </insert>
 
     <update id="update">
         UPDATE game_account
         SET lol_login_id=#{lolLoginId},
-            member_id=#{memberId},
             nickname=#{nickname},
-            rank_tier_group=#{rankTier.group},
-            rank_tier_level=#{rankTier.level}
+            lol_tier_color=#{lolTier.group.color},
+            lol_tier_level=#{lolTier.group.level},
+            lol_tier_point=#{lolTier.point}
         WHERE id = #{id}
     </update>
 
     <select id="findById" resultMap="gameAccountResultMap">
-        SELECT id              AS gameAccountId,
-               member_id       AS memberId,
-               nickname        AS nickname,
-               lol_login_id    AS lolLoginId,
-               rank_tier_group AS rankTierGroup,
-               rank_tier_level AS rankTierLevel
-        FROM game_account
+        <include refid="selectGameAccount"/>
         WHERE id = #{id}
     </select>
 
     <select id="findByLoginId" resultMap="gameAccountResultMap">
-        SELECT id              AS gameAccountId,
-               member_id       AS memberId,
-               nickname        AS nickname,
-               lol_login_id    AS lolLoginId,
-               rank_tier_group AS rankTierGroup,
-               rank_tier_level AS rankTierLevel
-        FROM game_account
+        <include refid="selectGameAccount"/>
         WHERE lol_login_id = #{lolLoginId}
     </select>
+
+    <sql id="selectGameAccount">
+        SELECT id             AS gameAccountId,
+               member_id      AS memberId,
+               nickname       AS nickname,
+               lol_login_id   AS lolLoginId,
+               lol_tier_color AS lolTierColor,
+               lol_tier_level AS lolTierLevel,
+               lol_tier_point AS lolTierPoint
+        FROM game_account
+    </sql>
 
     <resultMap id="gameAccountResultMap" type="GameAccount">
         <constructor>
@@ -47,9 +47,12 @@
             <arg column="nickname" javaType="String"/>
             <arg column="lolLoginId" javaType="String"/>
         </constructor>
-        <association property="rankTier" javaType="RankTier">
-            <result column="rank_tier_group" property="group"/>
-            <result column="rank_tier_level" property="level"/>
+        <association property="lolTier" javaType="edu.flab.global.vo.LolTier">
+            <result column="lolTierPoint" javaType="int"/>
+            <association property="group" javaType="edu.flab.global.vo.LolTier$Group">
+                <result column="lolTierColor" javaType="String"/>
+                <result column="lolTierLevel" javaType="Integer"/>
+            </association>
         </association>
     </resultMap>
 </mapper>
