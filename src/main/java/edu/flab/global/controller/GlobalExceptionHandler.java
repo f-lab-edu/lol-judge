@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.info("컨트롤러에 입력된 값의 유효성 체크에 실패하였습니다", e);
+		log.debug("컨트롤러에 입력된 값의 유효성 체크에 실패하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
 		MethodArgumentTypeMismatchException e) {
-		log.info("컨트롤러에 입력된 값을 객체필드로 바인딩 시도하였으나, 타입이 일치하지 않습니다", e);
+		log.debug("컨트롤러에 입력된 값을 객체필드로 바인딩 시도하였으나, 타입이 일치하지 않습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException e) {
-		log.info("컨트롤러에서 지원하지 않는 메서드를 호출하였습니다", e);
+		log.debug("컨트롤러에서 지원하지 않는 메서드를 호출하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
 		return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
 	}
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(AccessDeniedException.class)
 	protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
-		log.info("컨트롤러에서 지원하지 않는 메서드를 호출하였습니다", e);
+		log.debug("컨트롤러에서 지원하지 않는 메서드를 호출하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.ACCESS_DENIED);
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
@@ -66,8 +66,8 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(BusinessException.class)
 	protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
-		log.info("비즈니스 오류가 발생하였습니다", e);
+		log.debug("비즈니스 오류가 발생하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
-		return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getHttpStatusCode()));
+		return new ResponseEntity<>(errorResponse, e.getErrorCode().getHttpStatusCode());
 	}
 }
