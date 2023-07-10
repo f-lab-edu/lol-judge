@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.flab.global.controller.GlobalExceptionHandler;
 import edu.flab.global.vo.LolTier;
 import edu.flab.member.dto.MemberSignUpDto;
 
@@ -34,7 +35,9 @@ class MemberControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mock = MockMvcBuilders.standaloneSetup(memberController).build();
+		mock = MockMvcBuilders.standaloneSetup(memberController)
+			.setControllerAdvice(new GlobalExceptionHandler())
+			.build();
 	}
 
 	@Test
@@ -52,6 +55,24 @@ class MemberControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(signUpDto)))
 			.andExpect(status().isOk())
+			.andDo(print());
+	}
+
+	@Test
+	void 비밀번호규칙을_어겨서_회원가입에_실패한다() throws Exception {
+		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
+			.email("example.com")
+			.password("aB#")
+			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
+			.gameLoginId("lolId1234")
+			.nickname("hide on bush")
+			.lolTier(new LolTier(CHALLENGER, 40))
+			.build();
+
+		mock.perform(post("/signUp")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(signUpDto)))
+			.andExpect(status().is4xxClientError())
 			.andDo(print());
 	}
 
