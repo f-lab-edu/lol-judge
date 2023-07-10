@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.dto.MemberPasswordUpdateDto;
-import edu.flab.member.dto.MemberRequestDto;
 import edu.flab.member.dto.MemberRankResponseDto;
+import edu.flab.member.dto.MemberRequestDto;
 
 @Mapper
 public interface MemberMapper {
@@ -23,11 +23,11 @@ public interface MemberMapper {
 
 	Optional<Member> findActiveMemberById(Long id);
 
-	Optional<Member> findDeletedMemberById(Long id);
+	Optional<Member> findInactiveMemberById(Long id);
 
 	Optional<Member> findActiveMemberByEmail(String email);
 
-	Optional<Member> findDeletedMemberByEmail(String email);
+	Optional<Member> findInactiveMemberByEmail(String email);
 
 	List<Member> findActiveMembers(MemberRequestDto dto);
 

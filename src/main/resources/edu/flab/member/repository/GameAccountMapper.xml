@@ -11,7 +11,6 @@
     <update id="update">
         UPDATE game_account
         SET lol_login_id=#{lolLoginId},
-            member_id=#{memberId},
             nickname=#{nickname},
             rank_tier_group=#{rankTier.group},
             rank_tier_level=#{rankTier.level}
