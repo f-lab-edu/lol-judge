@@ -1,6 +1,6 @@
 -- 회원 테이블
 -- 패스워드 길이는 BcryptEncoder의 인코딩 값인 60글자로 설정
-CREATE TABLE member
+CREATE TABLE IF NOT EXISTS member
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
     email       VARCHAR(320) UNIQUE,
@@ -13,7 +13,7 @@ CREATE TABLE member
 );
 
 -- 리그오브레전드 계정 테이블
-CREATE TABLE game_account
+CREATE TABLE IF NOT EXISTS game_account
 (
     id             BIGINT NOT NULL AUTO_INCREMENT,
     member_id      BIGINT,
@@ -30,7 +30,7 @@ CREATE TABLE game_account
 );
 
 -- 인게임 정보 테이블
-CREATE TABLE game_info
+CREATE TABLE IF NOT EXISTS game_info
 (
     id        BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -47,7 +47,7 @@ CREATE TABLE game_info
 );
 
 -- 논쟁거리 재판(선거) 테이블
-CREATE TABLE election
+CREATE TABLE IF NOT EXISTS election
 (
     id               BIGINT NOT NULL AUTO_INCREMENT,
     game_info_id     BIGINT,
@@ -66,7 +66,7 @@ CREATE TABLE election
 );
 
 -- 논쟁거리 재판(선거) 후보자 테이블
-CREATE TABLE candidate
+CREATE TABLE IF NOT EXISTS candidate
 (
     id           BIGINT NOT NULL AUTO_INCREMENT,
     election_id  BIGINT NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE candidate
 );
 
 -- 논쟁거리 재판(선거) 후보자 의견 테이블
-CREATE TABLE opinion
+CREATE TABLE IF NOT EXISTS opinion
 (
     id           BIGINT NOT NULL AUTO_INCREMENT,
     candidate_id BIGINT NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE opinion
 );
 
 -- 논쟁거리 재판(선거) 투표 테이블
-CREATE TABLE vote
+CREATE TABLE IF NOT EXISTS vote
 (
     id           BIGINT NOT NULL AUTO_INCREMENT,
     member_id    BIGINT,
