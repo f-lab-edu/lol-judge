@@ -8,6 +8,11 @@ spring:
   profiles:
     active: local
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: edu.flab.member, edu.flab.global
+
 --- # local 설정
 
 spring:
@@ -21,7 +26,24 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-  type-aliases-package: edu.flab.member, edu.flab.global
+  data:
+    redis:
+      port: 6379
+
+--- # production 설정
+
+spring:
+  config:
+    activate:
+      on-profile: production
+
+  datasource:
+    url: jdbc:mysql://db-hdqks.pub-cdb.ntruss.com:3306/lol-judge?characterEncoding=utf8&autoReconnect=true
+    username: ENC(v7Tk2YZmIzDiqHIuLllmKpEzbu9CNKd0)
+    password: ENC(oARmjbL3j1cnW2kNHwbpNB7Ye2W1JRuU)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      port: 6379
+      host: ENC(KnoFviKZlFsHLUq3AG7y4akFR9kPtt8z)

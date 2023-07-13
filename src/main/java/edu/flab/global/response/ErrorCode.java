@@ -10,7 +10,10 @@ public enum ErrorCode {
 	// Common
 	ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "C001", "Access is Denied"),
 	INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "C002", "Invalid input value"),
-	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "C003", "Not supported method");
+	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "C003", "Not supported method"),
+
+	// Member
+	PASSWORD_NOT_VALID(HttpStatus.UNAUTHORIZED, "M002", "Invalid Password");
 
 	private final HttpStatusCode httpStatusCode;
 	private final String code;

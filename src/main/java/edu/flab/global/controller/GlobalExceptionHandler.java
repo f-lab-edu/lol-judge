@@ -1,7 +1,5 @@
 package edu.flab.global.controller;
 
-import java.nio.file.AccessDeniedException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import edu.flab.global.exception.AuthenticationException;
 import edu.flab.global.exception.BusinessException;
 import edu.flab.global.response.ErrorCode;
 import edu.flab.global.response.ErrorResponse;
@@ -52,11 +51,11 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
-	 * 요청자가 필요한 권한을 보유하지 않을시 발생
+	 * 요청자가 로그인 인증에 실패했을 경우 발생
 	 */
-	@ExceptionHandler(AccessDeniedException.class)
-	protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
-		log.debug("컨트롤러에서 지원하지 않는 메서드를 호출하였습니다", e);
+	@ExceptionHandler(AuthenticationException.class)
+	protected ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
+		log.debug("비밀번호가 올바르지 않아 로그인에 실패하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.ACCESS_DENIED);
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
