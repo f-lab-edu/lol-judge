@@ -13,15 +13,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.flab.global.controller.GlobalExceptionHandler;
 import edu.flab.member.domain.LolTier;
+import edu.flab.member.dto.MemberLoginDto;
 import edu.flab.member.dto.MemberSignUpDto;
 
 @Tag("integration")
+@Transactional
 @SpringBootTest
 class MemberControllerTest {
 
@@ -63,7 +66,7 @@ class MemberControllerTest {
 	@Test
 	void 비밀번호규칙을_어겨서_회원가입에_실패한다() throws Exception {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
-			.email("example.com")
+			.email("admin@example.com")
 			.password("aB#")
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
@@ -75,6 +78,35 @@ class MemberControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(signUpDto)))
 			.andExpect(status().is4xxClientError())
+			.andDo(print());
+	}
+
+	@Test
+	void 회원가입_이후_로그인에_성공한다() throws Exception {
+		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
+			.email("admin@example.com")
+			.password("aB#12345")
+			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
+			.gameLoginId("lolId1234")
+			.nickname("hide on bush")
+			.lolTier(new LolTier(CHALLENGER, 40))
+			.build();
+
+		MemberLoginDto loginDto = MemberLoginDto.builder()
+			.email(signUpDto.getEmail())
+			.password(signUpDto.getPassword())
+			.build();
+
+		mock.perform(post("/signUp")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(signUpDto)))
+			.andExpect(status().isOk())
+			.andDo(print());
+
+		mock.perform(post("/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(loginDto)))
+			.andExpect(status().isOk())
 			.andDo(print());
 	}
 
