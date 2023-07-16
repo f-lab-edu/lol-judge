@@ -108,6 +108,49 @@ class MemberControllerTest {
 			.andDo(print());
 	}
 
+	@Test
+	void 회원가입_이후_비밀번호를_틀려_로그인에_실패한다() throws Exception {
+		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
+			.email("admin@example.com")
+			.password("aB#12345")
+			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
+			.gameLoginId("lolId1234")
+			.nickname("hide on bush")
+			.lolTier(new LolTier(CHALLENGER, 40))
+			.build();
+
+		MemberLoginDto loginDto = MemberLoginDto.builder()
+			.email(signUpDto.getEmail())
+			.password("invalid password")
+			.build();
+
+		mock.perform(post("/signUp")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(signUpDto)))
+			.andExpect(status().isOk())
+			.andDo(print());
+
+		mock.perform(post("/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(loginDto)))
+			.andExpect(status().is4xxClientError())
+			.andDo(print());
+	}
+
+	@Test
+	void 존재하지않는_이메일를_입력하여_로그인에_실패한다() throws Exception {
+		MemberLoginDto loginDto = MemberLoginDto.builder()
+			.email("admin@example.com")
+			.password("aB#12345")
+			.build();
+
+		mock.perform(post("/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(loginDto)))
+			.andExpect(status().is4xxClientError())
+			.andDo(print());
+	}
+
 	public <T> String toJson(T data) throws JsonProcessingException {
 		return objectMapper.writeValueAsString(data);
 	}
