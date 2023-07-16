@@ -1,5 +1,7 @@
 package edu.flab.global.controller;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -23,7 +25,6 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.debug("컨트롤러에 입력된 값의 유효성 체크에 실패하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -34,7 +35,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
 		MethodArgumentTypeMismatchException e) {
-		log.debug("컨트롤러에 입력된 값을 객체필드로 바인딩 시도하였으나, 타입이 일치하지 않습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -45,7 +45,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException e) {
-		log.debug("컨트롤러에서 지원하지 않는 메서드를 호출하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
 		return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
 	}
@@ -55,7 +54,6 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(AuthenticationException.class)
 	protected ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
-		log.debug("비밀번호가 올바르지 않아 로그인에 실패하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.ACCESS_DENIED);
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
@@ -65,8 +63,16 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(BusinessException.class)
 	protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
-		log.debug("비즈니스 오류가 발생하였습니다", e);
 		ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
 		return new ResponseEntity<>(errorResponse, e.getErrorCode().getHttpStatusCode());
+	}
+
+	/**
+	 * 조회 서비스를 수행했으나, 결과를 찾지 못했을 경우 발생
+	 */
+	@ExceptionHandler(NoSuchElementException.class)
+	protected ResponseEntity<ErrorResponse> handleNoSuchException(Exception e) {
+		ErrorResponse errorResponse = ErrorResponse.of(e.getMessage());
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 }
