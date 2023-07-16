@@ -14,8 +14,8 @@
 
 <br/>
 
-
 # 🏗️ 시스템 구조
+
 ![시스템 구조](doc/system_architecture.jpg)
 
 <br />
@@ -27,8 +27,12 @@
     - [CI/CD 파이프라인 구축(2) - 빌드 자동화](https://cookie-dev.tistory.com/20)
     - [CI/CD 파이프라인 구축(3) - 배포 자동화](https://cookie-dev.tistory.com/21)
 
-<br/>
 
+- #4 로그인, 로그아웃 구현
+    - [롤문철 닷컴 구현기 2탄 - 로그인 기능 구현](https://cookie-dev.tistory.com/23)
+    - [롤문철 닷컴 구현기 3탄 - 로그인 체크 (AOP vs 필터 vs 인터셉터)](https://cookie-dev.tistory.com/24)
+
+<br/>
 
 # 🔀 브랜치 관리 전략
 
