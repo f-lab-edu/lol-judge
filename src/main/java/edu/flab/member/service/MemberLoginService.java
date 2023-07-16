@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import edu.flab.global.annotation.ValidationFailLogTrace;
 import edu.flab.global.exception.AuthenticationException;
 import edu.flab.global.response.ErrorCode;
 import edu.flab.member.domain.Member;
@@ -24,6 +25,7 @@ public class MemberLoginService {
 	private final MemberMapper memberMapper;
 	private final PasswordEncoder passwordEncoder;
 
+	@ValidationFailLogTrace
 	public void login(HttpServletRequest request, MemberLoginDto dto) {
 		Member member = validationEmail(dto.getEmail());
 
