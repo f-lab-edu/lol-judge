@@ -11,7 +11,7 @@ import org.springframework.validation.BindingResult;
  * 따라서 ErrorDetail 이라는 인터페이스를 정의하고, 이를 정의한 오류 정보를 ErrorResponse 에 담길 수 있도록 수정하였다.
  */
 
-public record ErrorResponse(String status, String code, String message, List<? extends ErrorDetail> errors) {
+public record ErrorResponse(String status, String message, List<? extends ErrorDetail> errors) {
 	private final static String ERROR_STATUS = "error";
 
 	public static ErrorResponse of(ErrorCode errorCode, BindingResult bindingResult) {
@@ -19,10 +19,14 @@ public record ErrorResponse(String status, String code, String message, List<? e
 		if (bindingResult != null && bindingResult.hasErrors()) {
 			fieldErrorDetails = FieldErrorDetail.of(bindingResult);
 		}
-		return new ErrorResponse(ERROR_STATUS, errorCode.getCode(), errorCode.getMessage(), fieldErrorDetails);
+		return new ErrorResponse(ERROR_STATUS, errorCode.getMessage(), fieldErrorDetails);
 	}
 
 	public static ErrorResponse of(ErrorCode errorCode) {
-		return of(errorCode, null);
+		return new ErrorResponse(ERROR_STATUS, errorCode.getMessage(), null);
+	}
+
+	public static ErrorResponse of(String message) {
+		return new ErrorResponse(ERROR_STATUS, message, null);
 	}
 }
