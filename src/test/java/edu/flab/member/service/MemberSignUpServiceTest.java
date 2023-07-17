@@ -1,5 +1,6 @@
 package edu.flab.member.service;
 
+import static edu.flab.member.domain.LolTier.Color.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,8 @@ class MemberSignUpServiceTest {
 	@InjectMocks
 	private MemberSignUpService memberSignUpService;
 
+	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
+
 	@Test
 	@DisplayName("회원가입 서비스는 전달받은 정보를 Member 객체로 변환하고, 비밀번호는 암호화하여 데이터베이스에 저장한다.")
 	void 회원가입() {
@@ -36,7 +39,7 @@ class MemberSignUpServiceTest {
 			.profileUrl("cloud.naver.com/bucket/example_profile.jpg")
 			.gameLoginId("user12345")
 			.nickname("admin")
-			.lolTier(new LolTier(LolTier.Group.CHALLENGER, 40))
+			.lolTier(challenger)
 			.build();
 
 		doNothing().when(memberMapper).save(any(Member.class));
