@@ -5,7 +5,7 @@
 <mapper namespace="edu.flab.member.repository.GameAccountMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO game_account (lol_login_id, member_id, nickname, lol_tier_color, lol_tier_level, lol_tier_point)
-        VALUES (#{lolLoginId}, #{memberId}, #{nickname}, #{lolTier.group.color}, #{lolTier.group.level},
+        VALUES (#{lolLoginId}, #{memberId}, #{nickname}, #{lolTier.color}, #{lolTier.level},
                 #{lolTier.point})
     </insert>
 
@@ -13,8 +13,8 @@
         UPDATE game_account
         SET lol_login_id=#{lolLoginId},
             nickname=#{nickname},
-            lol_tier_color=#{lolTier.group.color},
-            lol_tier_level=#{lolTier.group.level},
+            lol_tier_color=#{lolTier.color},
+            lol_tier_level=#{lolTier.level},
             lol_tier_point=#{lolTier.point}
         WHERE id = #{id}
     </update>
