@@ -48,11 +48,9 @@
             <arg column="lolLoginId" javaType="String"/>
         </constructor>
         <association property="lolTier" javaType="edu.flab.member.domain.LolTier">
-            <result column="lolTierPoint" javaType="int"/>
-            <association property="group" javaType="edu.flab.member.domain.LolTier$Group">
-                <result column="lolTierColor" javaType="String"/>
-                <result column="lolTierLevel" javaType="Integer"/>
-            </association>
+            <result column="lolTierColor" javaType="edu.flab.member.domain.LolTier$Color" property="color"/>
+            <result column="lolTierLevel" javaType="int" property="level"/>
+            <result column="lolTierPoint" javaType="int" property="point"/>
         </association>
     </resultMap>
 </mapper>
