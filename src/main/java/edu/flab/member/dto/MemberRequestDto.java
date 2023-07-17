@@ -1,11 +1,16 @@
 package edu.flab.member.dto;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberRequestDto {
-	private final int offset;
-	private final int limit;
+	private int offset;
+	private int limit;
 }
