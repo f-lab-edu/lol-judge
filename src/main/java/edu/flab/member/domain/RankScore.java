@@ -1,5 +1,7 @@
 package edu.flab.member.domain;
 
+import java.util.NoSuchElementException;
+
 public record RankScore(long score) {
 
 	/**
@@ -13,6 +15,10 @@ public record RankScore(long score) {
 	 */
 	public static RankScore calc(Member member) {
 		LolTier lolTier = member.getGameAccount().getLolTier();
+
+		if (lolTier == null) {
+			throw new NoSuchElementException("리그오브레전드 계정이 없는 회원은 랭킹에서 제외됩니다");
+		}
 
 		String judgePoint = String.format("%08d", member.getJudgePoint());
 		String lolTierColor = String.format("%02d", lolTier.getColor().ordinal());
