@@ -22,6 +22,13 @@
           AND deleted = FALSE
     </update>
 
+    <update id="updateRankScore">
+        UPDATE member
+        SET rank_score=#{rankScore}
+        WHERE id = #{id}
+          AND deleted = FALSE
+    </update>
+
     <update id="delete">
         UPDATE member
         SET deleted= TRUE
@@ -78,7 +85,7 @@
     <!--    - 데이터 페이지를 풀 스캔하는 것은 순차 I/O라고 부르고, 인덱스를 통한 레코드 접근은 랜덤 I/O 라고 부른다.-->
     <!--    - 랜덤 I/O는 순차 I/O에 비해 통상 4배 정도 비용이 비싸다고 한다. 따라서 조회 데이터가 전체 데이터의 20~25% 수준에 달하면, 인덱스를 활용하지 않고 전체 데이터를 순서대로 읽어서 필터링하는-->
     <!--    방식이 더욱 빠르다.-->
-    
+
     <!--    3. 그래서 NO OFFSET 방식을 적용하고 싶다. 어떤 컬럼을 WHERE 절의 비교값으로 두어야할까?-->
     <!--    - NO OFFSET 방식에서는 OFFSET, LIMIT 절 대신에 WHERE 절을 적극 활용한다.-->
     <!--    - 조회 ID 를 내림차순으로 페이지네이션을 한다고 할 때, 아래와 같은 쿼리로 대체할 수 있다.-->
@@ -96,7 +103,7 @@
     <!--    - 3. game_account 테이블의 lol_tier_level-->
     <!--    - 4. game_account 테이블의 lol_tier_point-->
 
-    <select id="findMemberRankingOrderByJudgePoint" resultType="MemberRankResponseDto">
+    <select id="findMemberRankingOrderByRankScore" resultType="MemberRankResponseDto">
         SELECT m.profile_url    AS profileUrl,
                m.judge_point    As judgePoint,
                g.nickname       AS nickname,
@@ -106,7 +113,9 @@
         FROM member m
                  LEFT OUTER JOIN game_account g ON m.id = g.member_id
         WHERE m.deleted = FALSE
-        ORDER BY m.judge_point DESC
+          AND m.rank_score <![CDATA[<]]> #{upperBoundScore}
+        ORDER BY m.rank_score DESC
+        LIMIT #{limit}
     </select>
 
     <sql id="selectMemberJoinGameAccount">
@@ -114,8 +123,9 @@
                m.email          AS email,
                m.password       AS password,
                m.profile_url    AS profileUrl,
-               m.deleted        As deleted,
                m.judge_point    As judgePoint,
+               m.rank_score     AS rankScore,
+               m.deleted        As deleted,
                g.id             AS gameAccountId,
                g.nickname       AS nickname,
                g.lol_login_id   AS lolLoginId,
@@ -132,10 +142,11 @@
             <arg column="email" javaType="String"/>
             <arg column="password" javaType="String"/>
             <arg column="profileUrl" javaType="String"/>
+            <arg column="judgePoint" javaType="int"/>
             <arg column="deleted" javaType="Boolean"/>
         </constructor>
-        <association property="judgePoint" javaType="JudgePoint">
-            <result property="point" column="judgePoint"/>
+        <association property="rankScore" javaType="RankScore">
+            <result column="rankScore" property="score"/>
         </association>
         <association property="gameAccount" javaType="GameAccount" fetchType="lazy"
                      resultMap="edu.flab.member.repository.GameAccountMapper.gameAccountResultMap"/>
