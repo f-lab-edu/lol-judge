@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import edu.flab.global.vo.LolTier;
 import edu.flab.member.domain.GameAccount;
+import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.repository.MemberMapper;

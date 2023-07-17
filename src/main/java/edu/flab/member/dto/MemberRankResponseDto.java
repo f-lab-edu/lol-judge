@@ -1,6 +1,6 @@
 package edu.flab.member.dto;
 
-import edu.flab.global.vo.LolTier;
+import edu.flab.member.domain.LolTier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package edu.flab.global.vo;
+package edu.flab.member.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

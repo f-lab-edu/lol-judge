@@ -2,7 +2,7 @@ package edu.flab.member.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import edu.flab.global.vo.LolTier;
+import edu.flab.member.domain.LolTier;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

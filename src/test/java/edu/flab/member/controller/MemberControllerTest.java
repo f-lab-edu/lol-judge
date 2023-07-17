@@ -1,6 +1,6 @@
 package edu.flab.member.controller;
 
-import static edu.flab.global.vo.LolTier.Group.*;
+import static edu.flab.member.domain.LolTier.Group.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.flab.global.controller.GlobalExceptionHandler;
-import edu.flab.global.vo.LolTier;
+import edu.flab.member.domain.LolTier;
 import edu.flab.member.dto.MemberSignUpDto;
 
 @Tag("integration")
