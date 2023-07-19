@@ -17,13 +17,19 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
     implementation 'com.h2database:h2'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
+    implementation 'mysql:mysql-connector-java:8.0.28'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.security:spring-security-crypto:6.1.0'
+    implementation 'org.springframework.session:spring-session-data-redis'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
