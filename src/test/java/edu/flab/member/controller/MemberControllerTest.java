@@ -89,7 +89,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.lolTier(new LolTier(CHALLENGER, 40))
+			.lolTier(LolTier.highTier(CHALLENGER, 1400))
 			.build();
 
 		MemberLoginDto loginDto = MemberLoginDto.builder()
@@ -118,7 +118,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.lolTier(new LolTier(CHALLENGER, 40))
+			.lolTier(LolTier.highTier(CHALLENGER, 1400))
 			.build();
 
 		MemberLoginDto loginDto = MemberLoginDto.builder()
