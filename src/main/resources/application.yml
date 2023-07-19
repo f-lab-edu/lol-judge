@@ -29,7 +29,7 @@ spring:
   data:
     redis:
       port: 6379
-
+      
 --- # production 설정
 
 spring:
@@ -38,7 +38,7 @@ spring:
       on-profile: production
 
   datasource:
-    url: jdbc:mysql://db-hdqks.pub-cdb.ntruss.com:3306/lol-judge?characterEncoding=utf8&autoReconnect=true
+    url: ENC(vpdRbvKy8fKoFAcQZq9tC2Pc1KZkO2/9tj3ZcBrjddUE5wYgCrYkr0RHsIhQmy+NMMWE1pMnCba1ndXdsffHAOCmp3MoveGHhURlMRMs8Em2vY2C/UnjCsB6aGni/yZl8830xKyi2XgGFlkaQg54Aw==)
     username: ENC(v7Tk2YZmIzDiqHIuLllmKpEzbu9CNKd0)
     password: ENC(oARmjbL3j1cnW2kNHwbpNB7Ye2W1JRuU)
     driver-class-name: com.mysql.cj.jdbc.Driver
