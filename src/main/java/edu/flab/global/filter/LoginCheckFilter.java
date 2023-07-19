@@ -1,6 +1,6 @@
 package edu.flab.global.filter;
 
-import static edu.flab.global.config.LoginConfiguration.*;
+import static edu.flab.global.config.LoginConstant.*;
 
 import java.io.IOException;
 
