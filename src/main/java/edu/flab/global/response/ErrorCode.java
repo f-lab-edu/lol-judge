@@ -13,7 +13,7 @@ public enum ErrorCode {
 	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "C003", "Not supported method"),
 
 	// Member
-	PASSWORD_NOT_VALID(HttpStatus.UNAUTHORIZED, "M002", "Invalid Password");
+	WRONG_ACCOUNT(HttpStatus.UNAUTHORIZED, "M002", "Wrong Email or Password");
 
 	private final HttpStatusCode httpStatusCode;
 	private final String code;
