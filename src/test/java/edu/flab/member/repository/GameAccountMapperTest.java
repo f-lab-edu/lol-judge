@@ -1,6 +1,6 @@
 package edu.flab.member.repository;
 
-import static edu.flab.member.domain.LolTier.Group.*;
+import static edu.flab.member.domain.LolTier.Color.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
@@ -32,7 +32,7 @@ class GameAccountMapperTest {
 	@Autowired
 	private SqlSession sqlSession;
 
-	private final LolTier challenger = LolTier.builder().group(CHALLENGER).point(0).build();
+	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
 
 	// given
 	private final GameAccount gameAccount = GameAccount.builder()

@@ -1,6 +1,6 @@
 package edu.flab.member.controller;
 
-import static edu.flab.member.domain.LolTier.Group.*;
+import static edu.flab.member.domain.LolTier.Color.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,6 +33,8 @@ class MemberControllerTest {
 
 	private MockMvc mock;
 
+	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
+
 	@BeforeEach
 	void setUp() {
 		mock = MockMvcBuilders.standaloneSetup(memberController)
@@ -48,7 +50,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.lolTier(new LolTier(CHALLENGER, 40))
+			.lolTier(challenger)
 			.build();
 
 		mock.perform(post("/signUp")
@@ -66,7 +68,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.lolTier(new LolTier(CHALLENGER, 40))
+			.lolTier(challenger)
 			.build();
 
 		mock.perform(post("/signUp")
