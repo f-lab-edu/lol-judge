@@ -4,12 +4,10 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.global.validation.Password;
-import edu.flab.global.vo.JudgePoint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -33,18 +31,24 @@ public class Member {
 	@Length(max = 200)
 	private String profileUrl;
 
-	@Default
-	private JudgePoint judgePoint = JudgePoint.ZERO;
-
 	private GameAccount gameAccount;
+
+	private RankScore rankScore;
+
+	private int judgePoint;
 
 	private boolean deleted;
 
-	public Member(Long id, String email, String password, String profileUrl, Boolean deleted) {
+	public Member(Long id, String email, String password, String profileUrl, Integer judgePoint, Boolean deleted) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.profileUrl = profileUrl;
+		this.judgePoint = judgePoint;
 		this.deleted = deleted;
+	}
+
+	public RankScore updateRankScore() {
+		return rankScore = RankScore.calc(this);
 	}
 }

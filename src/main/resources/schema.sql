@@ -1,5 +1,9 @@
 -- 회원 테이블
 -- 패스워드 길이는 BcryptEncoder의 인코딩 값인 60글자로 설정
+-- InnoDB에서 인덱스 역순 스캔이 인덱스 정순 스캔에 비해 느리다.
+-- 이유1. 페이지 잠금이 인덱스 정순 스캔에 적합한 구조
+-- 이유2. 페이지 내에서 인덱스 레코드가 단방향으로만 연결된 구조
+-- 따라서 index_rank_score 인덱스의 rank_score 컬럼에 DESC 키워드를 붙여 내림차순 정렬시, 정순 스캔이 되도록 한다.
 CREATE TABLE IF NOT EXISTS member
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
@@ -7,9 +11,11 @@ CREATE TABLE IF NOT EXISTS member
     `password`  VARCHAR(60),
     profile_url VARCHAR(200),
     judge_point INT     DEFAULT 0,
+    rank_score  BIGINT  DEFAULT 0,
     deleted     BOOLEAN DEFAULT FALSE,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    INDEX index_rank_score (rank_score DESC)
 );
 
 -- 리그오브레전드 계정 테이블
