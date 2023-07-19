@@ -23,9 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 @Component
-public class ValidationFailLogTraceAspect {
+public class ExceptionLogTraceAspect {
 
-	@AfterThrowing(value = "@annotation(edu.flab.global.annotation.ValidationFailLogTrace)", throwing = "exception")
+	@AfterThrowing(value = "@annotation(edu.flab.global.annotation.ExceptionLogTrace)", throwing = "exception")
 	public void doTrace(JoinPoint joinPoint, Exception exception) {
 		Object[] args = joinPoint.getArgs();
 		log.warn("[Exception occurred] location={} args={}", joinPoint.getSignature(), args, exception);
