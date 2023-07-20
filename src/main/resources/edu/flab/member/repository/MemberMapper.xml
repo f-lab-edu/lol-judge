@@ -103,9 +103,10 @@
     <!--    - 3. game_account 테이블의 lol_tier_level-->
     <!--    - 4. game_account 테이블의 lol_tier_point-->
 
-    <select id="findMemberRankingOrderByRankScore" resultType="MemberRankResponseDto">
+    <select id="findMemberRankingOrderByRankScore" resultMap="memberRankResponseDtoResultMap">
         SELECT m.profile_url    AS profileUrl,
                m.judge_point    As judgePoint,
+               m.rank_score     AS rankScore,
                g.nickname       AS nickname,
                g.lol_tier_color AS lolTierColor,
                g.lol_tier_level AS lolTierLevel,
@@ -146,9 +147,27 @@
             <arg column="deleted" javaType="Boolean"/>
         </constructor>
         <association property="rankScore" javaType="RankScore">
-            <result column="rankScore" property="score"/>
+            <constructor>
+                <arg column="rankScore" javaType="long"/>
+            </constructor>
         </association>
         <association property="gameAccount" javaType="GameAccount" fetchType="lazy"
                      resultMap="edu.flab.member.repository.GameAccountMapper.gameAccountResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberRankResponseDtoResultMap" type="MemberRankResponseDto">
+        <constructor>
+            <arg column="profileUrl" javaType="String"/>
+            <arg column="judgePoint" javaType="int"/>
+            <arg column="rankScore" javaType="long"/>
+            <arg column="nickname" javaType="String"/>
+        </constructor>
+        <association property="lolTier" javaType="LolTier">
+            <constructor>
+                <arg column="lolTierColor" javaType="String"/>
+                <arg column="lolTierLevel" javaType="int"/>
+                <arg column="lolTierPoint" javaType="int"/>
+            </constructor>
+        </association>
     </resultMap>
 </mapper>

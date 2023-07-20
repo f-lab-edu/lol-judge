@@ -31,7 +31,6 @@ public class LolTier {
 	 * [선택2] class를 사용하여 확장 가능성을 열어둔다.
 	 * 클래스에 color, level, 필드를 선언하고, 클라이언트코드에 입력을 맡긴다.
 	 * 이 경우, 입력의 제한을 두기 위해 생성자에 유효성 검사 로직을 구현해야 한다.
-	 *
 	 */
 	public enum Color {
 		IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND, MASTER, GRAND_MASTER, CHALLENGER
@@ -46,13 +45,22 @@ public class LolTier {
 	private int level;
 	private int point;
 
-	private LolTier(Color color, Integer level, Integer point) {
+	private LolTier(Color color, int level, int point) {
 		this.color = color;
 		this.level = level;
 		this.point = point;
 
 		validateLevel();
 		validatePoint();
+	}
+
+	/**
+	 * mybatis 로 DB record → LolTier 객체 mapping 시 사용하는 생성자
+	 */
+	private LolTier(String color, Integer level, Integer point) {
+		this.color = Color.valueOf(color);
+		this.level = level;
+		this.point = point;
 	}
 
 	public static LolTier normalTier(Color color, int level, int point) {
