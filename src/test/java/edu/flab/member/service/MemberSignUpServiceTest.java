@@ -15,6 +15,7 @@ import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
+import edu.flab.member.repository.GameAccountMapper;
 import edu.flab.member.repository.MemberMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,8 +23,13 @@ class MemberSignUpServiceTest {
 
 	@Mock
 	private MemberMapper memberMapper;
+
+	@Mock
+	private GameAccountMapper gameAccountMapper;
+
 	@Mock
 	private PasswordEncoder passwordEncoder;
+
 	@InjectMocks
 	private MemberSignUpService memberSignUpService;
 
@@ -61,5 +67,6 @@ class MemberSignUpServiceTest {
 			.gameAccount(gameAccount).build();
 
 		verify(memberMapper).save(member);
+		verify(gameAccountMapper).save(gameAccount);
 	}
 }
