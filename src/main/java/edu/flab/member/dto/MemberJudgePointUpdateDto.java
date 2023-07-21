@@ -1,6 +1,5 @@
 package edu.flab.member.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class MemberJudgePointUpdateDto {
 	private Long id;
 
-	@NotNull
-	private Integer judgePoint;
+	private int judgePoint;
 }
 

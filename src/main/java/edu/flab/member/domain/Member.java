@@ -53,4 +53,8 @@ public class Member {
 	public RankScore updateRankScore() {
 		return rankScore = RankScore.calc(this);
 	}
+
+	public void updateJudgePoint(int judgePoint) {
+		this.judgePoint = judgePoint;
+	}
 }
