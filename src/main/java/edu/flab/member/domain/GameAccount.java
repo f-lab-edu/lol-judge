@@ -38,4 +38,8 @@ public class GameAccount {
 		this.nickname = nickname;
 		this.lolLoginId = lolLoginId;
 	}
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
 }

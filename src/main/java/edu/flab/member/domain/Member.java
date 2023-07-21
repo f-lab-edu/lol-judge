@@ -57,4 +57,12 @@ public class Member {
 	public void updateJudgePoint(int judgePoint) {
 		this.judgePoint = judgePoint;
 	}
+
+	public void setGameAccount(GameAccount gameAccount) {
+		if (this.gameAccount != null) {
+			this.gameAccount.setMemberId(null);
+		}
+		this.gameAccount = gameAccount;
+		gameAccount.setMemberId(id);
+	}
 }

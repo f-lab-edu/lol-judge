@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
+import edu.flab.member.repository.GameAccountMapper;
 import edu.flab.member.repository.MemberMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -13,9 +14,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MemberSignUpService {
 	private final MemberMapper memberMapper;
+	private final GameAccountMapper gameAccountMapper;
 	private final PasswordEncoder passwordEncoder;
 
-	public void signUp(MemberSignUpDto dto) {
+	public Member signUp(MemberSignUpDto dto) {
 		GameAccount gameAccount = GameAccount.builder()
 			.lolLoginId(dto.getGameLoginId())
 			.nickname(dto.getNickname())
@@ -30,6 +32,10 @@ public class MemberSignUpService {
 			.build();
 
 		memberMapper.save(member);
+		member.setGameAccount(gameAccount);
+		gameAccountMapper.save(gameAccount);
+
+		return member;
 	}
 
 	private String encryptPassword(String password) {
