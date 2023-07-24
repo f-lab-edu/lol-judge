@@ -33,7 +33,7 @@ class GameAccountMapperTest {
 	@Autowired
 	private SqlSession sqlSession;
 
-	private final LolTier challenger = LolTierUtil.highTier(CHALLENGER, 1000);
+	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
 
 	// given
 	private final GameAccount gameAccount = GameAccount.builder()
