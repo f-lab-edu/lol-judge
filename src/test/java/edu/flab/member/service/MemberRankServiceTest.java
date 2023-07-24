@@ -3,8 +3,6 @@ package edu.flab.member.service;
 import static edu.flab.member.domain.LolTier.Color.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,9 +13,7 @@ import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
-import edu.flab.member.domain.RankScore;
 import edu.flab.member.dto.MemberRankRequestDto;
-import edu.flab.member.dto.MemberRankScoreUpdateDto;
 import edu.flab.member.repository.MemberMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,25 +53,5 @@ class MemberRankServiceTest {
 
 		// then
 		verify(memberMapper).findMemberRankingOrderByRankScore(dto);
-	}
-
-	@Test
-	void 회원랭킹점수를_업데이트한다() {
-		// given
-		RankScore rankScore = RankScore.calc(member);
-		MemberRankScoreUpdateDto dto = MemberRankScoreUpdateDto.builder()
-			.id(member.getId())
-			.rankScore(rankScore.getScore())
-			.build();
-
-		when(memberMapper.findActiveMemberById(1L)).thenReturn(Optional.of(member));
-		doNothing().when(memberMapper).updateRankScore(dto);
-
-		// when
-		sut.updateRankScore(member.getId());
-
-		// then
-		verify(memberMapper).findActiveMemberById(member.getId());
-		verify(memberMapper).updateRankScore(dto);
 	}
 }

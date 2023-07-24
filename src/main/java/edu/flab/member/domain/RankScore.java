@@ -13,6 +13,13 @@ public class RankScore {
 
 	private long score;
 
+	/**
+	 * 생성자 for Mybatis mapping
+	 */
+	public RankScore(Long score) {
+		this.score = score;
+	}
+
 	public static RankScore zero() {
 		return new RankScore(0L);
 	}
@@ -23,8 +30,6 @@ public class RankScore {
 	 * - 16자리 숫자로 구성
 	 * - 큰 자릿수부터 순서대로 8자리, 2자리, 2자리, 4자리는 각각 judgePoint, LolTier.color, LolTier.level, LolTier.point 의 값으로 채워진다.
 	 * 회원의 judgePoint, lolTier 정보가 변경될 때마다, 이 함수를 호출하여 rankScore 를 갱신한다.
-	 * ====
-	 * 고민. RankScore 를 계산하기 더 좋은 방법은 없을까?
 	 */
 	public static RankScore calc(Member member) {
 		LolTier lolTier = member.getGameAccount().getLolTier();

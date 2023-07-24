@@ -18,6 +18,7 @@ public class MemberSignUpService {
 	private final GameAccountMapper gameAccountMapper;
 	private final PasswordEncoder passwordEncoder;
 
+
 	@Transactional
 	public Member signUp(MemberSignUpDto dto) {
 		Member member = Member.builder()
