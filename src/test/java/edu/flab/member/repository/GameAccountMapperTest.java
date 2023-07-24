@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
+import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.GameAccountUpdateDto;
 
@@ -34,7 +35,7 @@ class GameAccountMapperTest {
 	@Autowired
 	private SqlSession sqlSession;
 
-	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
+	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
 
 	// given
 	private final GameAccount gameAccount = GameAccount.builder()

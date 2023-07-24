@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.flab.global.controller.GlobalExceptionHandler;
 import edu.flab.member.domain.LolTier;
+import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.dto.MemberLoginDto;
 import edu.flab.member.dto.MemberSignUpDto;
 
@@ -36,7 +37,7 @@ class MemberControllerTest {
 
 	private MockMvc mock;
 
-	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
+	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
 
 	@BeforeEach
 	void setUp() {
@@ -89,7 +90,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.lolTier(LolTier.highTier(CHALLENGER, 1400))
+			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1400))
 			.build();
 
 		MemberLoginDto loginDto = MemberLoginDto.builder()
@@ -118,7 +119,7 @@ class MemberControllerTest {
 			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
 			.nickname("hide on bush")
-			.lolTier(LolTier.highTier(CHALLENGER, 1400))
+			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1400))
 			.build();
 
 		MemberLoginDto loginDto = MemberLoginDto.builder()

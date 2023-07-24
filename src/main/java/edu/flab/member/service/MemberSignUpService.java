@@ -2,6 +2,7 @@ package edu.flab.member.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.Member;
@@ -17,18 +18,20 @@ public class MemberSignUpService {
 	private final GameAccountMapper gameAccountMapper;
 	private final PasswordEncoder passwordEncoder;
 
-	public Member signUp(MemberSignUpDto dto) {
-		GameAccount gameAccount = GameAccount.builder()
-			.lolLoginId(dto.getGameLoginId())
-			.nickname(dto.getNickname())
-			.lolTier(dto.getLolTier())
-			.build();
 
+	@Transactional
+	public Member signUp(MemberSignUpDto dto) {
 		Member member = Member.builder()
 			.email(dto.getEmail())
 			.password(encryptPassword(dto.getPassword()))
 			.profileUrl(dto.getProfileUrl())
-			.gameAccount(gameAccount)
+			.build();
+
+		GameAccount gameAccount = GameAccount.builder()
+			.memberId(member.getId())
+			.lolLoginId(dto.getGameLoginId())
+			.nickname(dto.getNickname())
+			.lolTier(dto.getLolTier())
 			.build();
 
 		memberMapper.save(member);
