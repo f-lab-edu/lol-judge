@@ -23,4 +23,3 @@ public sealed class LolTier permits LolTierUtil {
 		this.point = point;
 	}
 }
-
