@@ -1,4 +1,4 @@
-package edu.flab.member.util;
+package edu.flab.member.event;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package edu.flab.member.util;
+package edu.flab.member.event;
 
 import edu.flab.member.domain.Member;
 import lombok.AllArgsConstructor;

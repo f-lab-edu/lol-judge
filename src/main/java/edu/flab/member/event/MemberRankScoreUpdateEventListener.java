@@ -1,4 +1,4 @@
-package edu.flab.member.service;
+package edu.flab.member.event;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,6 @@ import edu.flab.member.domain.Member;
 import edu.flab.member.domain.RankScore;
 import edu.flab.member.dto.MemberRankScoreUpdateDto;
 import edu.flab.member.repository.MemberMapper;
-import edu.flab.member.util.MemberRankScoreUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

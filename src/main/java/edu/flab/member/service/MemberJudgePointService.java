@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.repository.MemberMapper;
-import edu.flab.member.util.MemberRankScoreUpdateEventPublisher;
+import edu.flab.member.event.MemberRankScoreUpdateEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
