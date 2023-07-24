@@ -15,6 +15,7 @@ import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
+import edu.flab.member.repository.GameAccountMapper;
 import edu.flab.member.repository.MemberMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,9 +24,11 @@ class MemberSignUpServiceTest {
 	@Mock
 	private MemberMapper memberMapper;
 	@Mock
+	private GameAccountMapper gameAccountMapper;
+	@Mock
 	private PasswordEncoder passwordEncoder;
 	@InjectMocks
-	private MemberSignUpService memberSignUpService;
+	private MemberSignUpService sut;
 
 	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
 
@@ -43,10 +46,11 @@ class MemberSignUpServiceTest {
 			.build();
 
 		doNothing().when(memberMapper).save(any(Member.class));
+		doNothing().when(gameAccountMapper).save(any(GameAccount.class));
 		when(passwordEncoder.encode(anyString())).thenReturn("encrypted password");
 
 		// when
-		memberSignUpService.signUp(dto);
+		sut.signUp(dto);
 
 		// then
 		GameAccount gameAccount = GameAccount.builder()

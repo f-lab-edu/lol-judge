@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
@@ -20,6 +21,7 @@ import edu.flab.member.domain.Member;
 import edu.flab.member.dto.GameAccountUpdateDto;
 
 @MybatisTest
+@Transactional
 @AutoConfigureTestDatabase(replace = NONE)
 class GameAccountMapperTest {
 
@@ -37,7 +39,6 @@ class GameAccountMapperTest {
 	// given
 	private final GameAccount gameAccount = GameAccount.builder()
 		.lolLoginId("login12345")
-		.memberId(1L)
 		.nickname("hide on bush")
 		.lolTier(challenger)
 		.build();

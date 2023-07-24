@@ -1,4 +1,4 @@
-package edu.flab.member.service;
+package edu.flab.member.event;
 
 import static edu.flab.member.domain.LolTier.Color.*;
 import static org.assertj.core.api.Assertions.*;
@@ -6,18 +6,24 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.repository.MemberMapper;
+import edu.flab.member.service.MemberJudgePointService;
+import edu.flab.member.service.MemberSignUpService;
 
+@Tag("integration")
+@Transactional
 @SpringBootTest
 @RecordApplicationEvents
 class MemberRankScoreUpdateEventListenerTest {

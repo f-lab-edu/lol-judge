@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.repository.MemberMapper;
-import edu.flab.member.util.MemberRankScoreUpdateEventPublisher;
+import edu.flab.member.event.MemberRankScoreUpdateEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 class MemberJudgePointServiceTest {
