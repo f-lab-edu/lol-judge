@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -34,7 +33,7 @@ public class Member {
 
 	private GameAccount gameAccount;
 
-	@Default
+	@Builder.Default
 	private RankScore rankScore = RankScore.zero();
 
 	private int judgePoint;
@@ -56,5 +55,13 @@ public class Member {
 
 	public void updateJudgePoint(int judgePoint) {
 		this.judgePoint = judgePoint;
+	}
+
+	public void setGameAccount(GameAccount gameAccount) {
+		if (this.gameAccount != null) {
+			this.gameAccount.setMemberId(null);
+		}
+		this.gameAccount = gameAccount;
+		gameAccount.setMemberId(id);
 	}
 }

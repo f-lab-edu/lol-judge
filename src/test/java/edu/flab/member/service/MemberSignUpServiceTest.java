@@ -13,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
+import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
+import edu.flab.member.repository.GameAccountMapper;
 import edu.flab.member.repository.MemberMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,12 +24,17 @@ class MemberSignUpServiceTest {
 
 	@Mock
 	private MemberMapper memberMapper;
+
+	@Mock
+	private GameAccountMapper gameAccountMapper;
+
 	@Mock
 	private PasswordEncoder passwordEncoder;
+
 	@InjectMocks
 	private MemberSignUpService memberSignUpService;
 
-	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
+	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
 
 	@Test
 	@DisplayName("회원가입 서비스는 전달받은 정보를 Member 객체로 변환하고, 비밀번호는 암호화하여 데이터베이스에 저장한다.")
@@ -61,5 +68,6 @@ class MemberSignUpServiceTest {
 			.gameAccount(gameAccount).build();
 
 		verify(memberMapper).save(member);
+		verify(gameAccountMapper).save(gameAccount);
 	}
 }
