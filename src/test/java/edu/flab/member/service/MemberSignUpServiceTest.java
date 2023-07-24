@@ -29,10 +29,12 @@ class MemberSignUpServiceTest {
 	private GameAccountMapper gameAccountMapper;
 
 	@Mock
+	private GameAccountMapper gameAccountMapper;
+	@Mock
 	private PasswordEncoder passwordEncoder;
 
 	@InjectMocks
-	private MemberSignUpService memberSignUpService;
+	private MemberSignUpService sut;
 
 	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
 
@@ -50,10 +52,11 @@ class MemberSignUpServiceTest {
 			.build();
 
 		doNothing().when(memberMapper).save(any(Member.class));
+		doNothing().when(gameAccountMapper).save(any(GameAccount.class));
 		when(passwordEncoder.encode(anyString())).thenReturn("encrypted password");
 
 		// when
-		memberSignUpService.signUp(dto);
+		sut.signUp(dto);
 
 		// then
 		GameAccount gameAccount = GameAccount.builder()
