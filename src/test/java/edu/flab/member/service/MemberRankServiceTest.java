@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTier;
+import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
 import edu.flab.member.domain.RankScore;
 import edu.flab.member.dto.MemberRankRequestDto;
@@ -28,7 +29,7 @@ class MemberRankServiceTest {
 	@Mock
 	private MemberMapper memberMapper;
 
-	private final LolTier challenger = LolTier.highTier(CHALLENGER, 1000);
+	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
 
 	// given
 	private final GameAccount gameAccount = GameAccount.builder()
