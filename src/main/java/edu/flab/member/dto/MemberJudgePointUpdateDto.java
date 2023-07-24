@@ -1,6 +1,7 @@
 package edu.flab.member.dto;
 
-import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Range;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MemberJudgePointUpdateDto {
 	private Long id;
 
-	@NotNull
-	private Integer judgePoint;
+	@Range(min = 0, max = Integer.MAX_VALUE)
+	private int judgePoint;
 }
 
