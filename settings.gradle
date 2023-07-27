@@ -1,3 +1,6 @@
 rootProject.name = 'lol-judge'
-include 'notification'
-include 'app'
+include 'module-app'
+include 'module-jasypt'
+include 'module-mq'
+include 'module-notification'
+

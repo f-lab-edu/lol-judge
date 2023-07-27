@@ -1,0 +1,18 @@
+plugins {
+    id 'spring-common-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':module-jasypt')
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+}
+
+test {
+    useJUnitPlatform()
+}

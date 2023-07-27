@@ -1,0 +1,69 @@
+plugins {
+    id 'spring-common-conventions'
+    id 'jacoco'
+}
+
+group 'edu.flab'
+version '1.0-SNAPSHOT'
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':module-jasypt')
+    implementation project(':module-mq')
+
+    // spring 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.security:spring-security-crypto:6.1.0'
+
+    // redis 의존성
+    implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
+
+    // database 의존성
+    implementation 'com.h2database:h2'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+}
+
+jacoco {
+    toolVersion '0.8.8'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element 'CLASS'
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+            }
+            includes = ['*.service.*']
+        }
+    }
+}
+
+test {
+    finalizedBy jacocoTestCoverageVerification
+    useJUnitPlatform {
+        excludeTags 'integration'
+    }
+}
+
+// 통합테스트를 포함하는 테스트
+tasks.register('integrationTest', Test) {
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+}

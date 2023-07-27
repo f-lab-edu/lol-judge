@@ -1,0 +1,15 @@
+plugins {
+    id 'spring-common-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+}
+
+test {
+    useJUnitPlatform()
+}
