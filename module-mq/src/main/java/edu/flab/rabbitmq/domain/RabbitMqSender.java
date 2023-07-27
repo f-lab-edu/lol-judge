@@ -10,6 +10,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
 
+import edu.flab.rabbitmq.annotation.Retry;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,7 @@ public class RabbitMqSender {
 		this.connectionFactory = connectionFactory;
 	}
 
+	@Retry
 	public void notify(RabbitMqMessage message) {
 		try (Connection connection = connectionFactory.newConnection();
 			 Channel channel = connection.createChannel()) {
