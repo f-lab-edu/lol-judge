@@ -35,8 +35,9 @@ public class RabbitMqSender {
 		}
 	}
 
+	// 재시도에 실패했을 때, 수행되는 로직
 	@Recover
-	public void retry(Exception exception, RabbitMqMessage message) {
+	private void onError(Exception exception, RabbitMqMessage message) {
 		log.error("RabbitMq 메시지 전송에 실패하였습니다. <메시지 = {}>", message, exception);
 	}
 }
