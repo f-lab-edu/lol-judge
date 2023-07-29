@@ -25,6 +25,7 @@
 
     <select id="findById" resultMap="candidateResultMap">
         <include refid="selectCandidate"/>
+        WHERE id = #{id}
     </select>
 
     <sql id="selectCandidate">
