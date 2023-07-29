@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.flab.election.repository.CandidateMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO candidate (voted_status, member_id, election_id, contents)
+        VALUES (#{votedStatus}, #{memberId}, #{electionId}, #{contents})
+    </insert>
+
+    <update id="updateById">
+        UPDATE INTO candidate
+        SET voted_status = #{votedStatus},
+            member_id    = #{memberId},
+            election_id  = #{electionId},
+            contents     = #{contents}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM candidate
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findById" resultMap="candidateResultMap">
+        <include refid="selectCandidate"/>
+        WHERE id = #{id}
+    </select>
+
+    <sql id="selectCandidate">
+        SELECT id AS candidate_id,
+               voted_status,
+               member_id,
+               election_id,
+               contents
+        FROM candidate
+    </sql>
+
+    <resultMap id="candidateResultMap" type="edu.flab.election.domain.Candidate">
+        <id column="candidate_id" property="id"/>
+        <result column="voted_status" property="votedStatus"/>
+        <result column="member_id" property="memberId"/>
+        <result column="election_id" property="electionId"/>
+        <result column="candidate_contents" property="contents"/>
+    </resultMap>
+</mapper>

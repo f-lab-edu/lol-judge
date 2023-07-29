@@ -35,40 +35,41 @@ CREATE TABLE IF NOT EXISTS game_account
         REFERENCES member (id)
 );
 
--- 인게임 정보 테이블
-CREATE TABLE IF NOT EXISTS game_info
+-- 논쟁거리 재판(선거) 테이블
+CREATE TABLE IF NOT EXISTS election
 (
-    id        BIGINT NOT NULL AUTO_INCREMENT,
-
-    team      VARCHAR(8),
-    position  VARCHAR(16),
-    nickname  VARCHAR(16),
-    champion  VARCHAR(8),
-    `kill`    TINYINT,
-    death     TINYINT,
-    assist    TINYINT,
-    played_at TIMESTAMP,
+    id                BIGINT NOT NULL AUTO_INCREMENT,
+    election_no       VARCHAR(64),
+    `status`          VARCHAR(15),
+    contents          VARCHAR(1000),
+    cost              INT,
+    total_voted_count BIGINT DEFAULT 0,
+    youtube_url       VARCHAR(20),
+    created_at        TIMESTAMP,
+    ended_at          TIMESTAMP,
 
     PRIMARY KEY (id)
 );
 
--- 논쟁거리 재판(선거) 테이블
-CREATE TABLE IF NOT EXISTS election
+-- 인게임 정보 테이블
+CREATE TABLE IF NOT EXISTS game_info
 (
-    id               BIGINT NOT NULL AUTO_INCREMENT,
-    game_info_id     BIGINT,
-    election_no      VARCHAR(64),
-    `status`         VARCHAR(8),
-    contents         VARCHAR(1000),
-    cost             INT,
-    youtube_share_id VARCHAR(20),
-    modified_at      TIMESTAMP,
-    ended_at         TIMESTAMP,
+    id          BIGINT NOT NULL AUTO_INCREMENT,
+    election_id BIGINT,
+    match_id    VARCHAR(16),
+    team        VARCHAR(8),
+    position    VARCHAR(16),
+    nickname    VARCHAR(16),
+    champion    VARCHAR(8),
+    `kill`      TINYINT,
+    death       TINYINT,
+    assist      TINYINT,
+    played_at   TIMESTAMP,
 
     PRIMARY KEY (id),
 
-    FOREIGN KEY (game_info_id)
-        REFERENCES game_info (id)
+    FOREIGN KEY (election_id)
+        REFERENCES election (id)
 );
 
 -- 논쟁거리 재판(선거) 후보자 테이블
@@ -77,8 +78,8 @@ CREATE TABLE IF NOT EXISTS candidate
     id           BIGINT NOT NULL AUTO_INCREMENT,
     election_id  BIGINT NOT NULL,
     member_id    BIGINT NOT NULL,
-    voted_count  BIGINT,
     voted_status ENUM ('WIN','LOSE'),
+    contents     VARCHAR(1000),
 
     PRIMARY KEY (id),
 
@@ -86,22 +87,6 @@ CREATE TABLE IF NOT EXISTS candidate
         REFERENCES election (id),
     FOREIGN KEY (member_id)
         REFERENCES member (id)
-);
-
--- 논쟁거리 재판(선거) 후보자 의견 테이블
-CREATE TABLE IF NOT EXISTS opinion
-(
-    id           BIGINT NOT NULL AUTO_INCREMENT,
-    candidate_id BIGINT NOT NULL,
-    game_info_id BIGINT NOT NULL,
-    contents     VARCHAR(1000),
-    modified_at  TIMESTAMP,
-    is_agreed    BOOLEAN,
-
-    FOREIGN KEY (candidate_id)
-        REFERENCES candidate (id),
-
-    PRIMARY KEY (id)
 );
 
 -- 논쟁거리 재판(선거) 투표 테이블
