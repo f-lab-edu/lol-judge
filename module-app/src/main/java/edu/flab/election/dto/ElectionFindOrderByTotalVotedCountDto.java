@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionFindOrderByTotalVotedCntDto {
-	long offset;
+public class ElectionFindOrderByTotalVotedCountDto {
+	long countOffset;
 	long limit;
 }

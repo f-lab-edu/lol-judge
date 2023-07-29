@@ -8,15 +8,29 @@
         VALUES (#{status}, #{contents}, #{cost}, #{youtubeUrl}, #{createdAt}, #{endedAt});
     </insert>
 
-    <update id="updateById">
+    <update id="updateContentsById">
         UPDATE election
-        SET status            = #{status},
-            contents          = #{contents},
-            cost              = #{cost},
-            total_voted_count = #{totalVotedCount},
-            youtube_url       = #{youtubeUrl},
-            created_at        = #{createdAt},
-            ended_at          = #{endedAt}
+        SET contents    = #{contents},
+            cost        = #{cost},
+            youtube_url = #{youtubeUrl}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatusById">
+        UPDATE election
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateEndTimeById">
+        UPDATE election
+        SET ended_at = #{endedAt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateTotalVotedCountById">
+        UPDATE election
+        SET total_voted_count = #{totalVotedCount}
         WHERE id = #{id}
     </update>
 
