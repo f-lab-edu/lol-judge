@@ -1,0 +1,21 @@
+plugins {
+    id 'spring-common-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

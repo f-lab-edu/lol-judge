@@ -1,0 +1,6 @@
+// 통합테스트를 포함하는 테스트
+tasks.register('integrationTest', Test) {
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+}

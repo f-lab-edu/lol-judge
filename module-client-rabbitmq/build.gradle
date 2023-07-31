@@ -1,0 +1,19 @@
+plugins {
+    id 'spring-common-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

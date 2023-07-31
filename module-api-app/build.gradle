@@ -1,0 +1,21 @@
+plugins {
+    id 'spring-common-conventions'
+    id 'spring-mvc-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-domain-election')
+    implementation project(':module-domain-member')
+    implementation project(':module-client-rabbitmq')
+    implementation project(':module-client-redis')
+    implementation 'org.springframework.security:spring-security-crypto:6.1.0'
+}
+
+test {
+    useJUnitPlatform()
+}
