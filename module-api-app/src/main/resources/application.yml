@@ -2,6 +2,8 @@ spring:
   profiles:
     active: local
     include:
-      - db
+      - member
+      - election
       - redis
       - rabbitmq
+
