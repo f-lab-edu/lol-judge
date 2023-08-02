@@ -43,7 +43,7 @@
     <select id="findPendingElectionById" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
         WHERE e.id = #{id}
-        AND e.status LIKE 'PENDING%'
+        AND e.status IN ('PENDING', 'PENDING_HOST_NCK', 'PENDING_PARTICIPANT_NCK')
     </select>
 
     <select id="findInProgressElectionById" resultMap="electionResultMap">
@@ -60,15 +60,15 @@
 
     <select id="findPendingElections" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{offset}
-        AND e.status LIKE 'PENDING%'
+        WHERE e.id <![CDATA[<=]]> #{countOffset}
+        AND e.status IN ('PENDING', 'PENDING_HOST_NCK', 'PENDING_PARTICIPANT_NCK')
         ORDER BY e.id DESC
         LIMIT #{limit}
     </select>
 
     <select id="findInProgressElections" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{offset}
+        WHERE e.id <![CDATA[<=]]> #{countOffset}
         AND e.status = 'IN_PROGRESS'
         ORDER BY e.id DESC
         LIMIT #{limit}
@@ -76,7 +76,7 @@
 
     <select id="findFinishedElections" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{offset}
+        WHERE e.id <![CDATA[<=]]> #{countOffset}
         AND e.status = 'FINISHED'
         ORDER BY e.id DESC
         LIMIT #{limit}
@@ -84,7 +84,7 @@
 
     <select id="findInProgressElectionsOrderByTotalVotedCount" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.total_voted_count <![CDATA[<=]]> #{offset}
+        WHERE e.total_voted_count <![CDATA[<=]]> #{countOffset}
         AND e.status = 'IN_PROGRESS'
         ORDER BY e.id DESC
         LIMIT #{limit}
@@ -92,7 +92,7 @@
 
     <select id="findFinishedElectionsOrderByTotalVotedCount" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.total_voted_count <![CDATA[<=]]> #{offset}
+        WHERE e.total_voted_count <![CDATA[<=]]> #{countOffset}
         AND e.status = 'FINISHED'
         ORDER BY e.id DESC
         LIMIT #{limit}
