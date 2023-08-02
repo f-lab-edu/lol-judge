@@ -9,7 +9,9 @@ repositories {
 }
 
 dependencies {
+    implementation project(':module-core')
     implementation project(':module-domain-election')
+    implementation project(':module-domain-member')
     implementation project(':module-domain-notification')
     implementation project(':module-client-rabbitmq')
     implementation 'org.springframework.boot:spring-boot-starter-amqp'

@@ -8,8 +8,6 @@ repositories {
 }
 
 dependencies {
-    implementation project(':module-core')
-
     // database 의존성
     implementation 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java:8.0.28'
