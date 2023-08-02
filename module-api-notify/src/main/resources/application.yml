@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: local
+    include:
+      - election
+      - rabbitmq
+
+--- # local
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+api:
+  url: "localhost:8080/api"
+
+--- # production
+
+spring:
+  config:
+    activate:
+      on-profile: production
+
+api:
+  url: "118.67.134.233:8080/api"
+
