@@ -103,3 +103,18 @@ CREATE TABLE IF NOT EXISTS vote
 
     PRIMARY KEY (id)
 );
+
+-- 알림 테이블
+CREATE TABLE IF NOT EXISTS notification
+(
+    id          BIGINT NOT NULL AUTO_INCREMENT,
+    member_id   BIGINT,
+    contents    VARCHAR(1000),
+    read_status VARCHAR(16),
+    created_at  TIMESTAMP,
+
+    FOREIGN KEY (member_id)
+        REFERENCES member (id),
+
+    PRIMARY KEY (id)
+);
