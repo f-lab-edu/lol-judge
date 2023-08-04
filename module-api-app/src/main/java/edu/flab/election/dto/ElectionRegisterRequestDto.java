@@ -20,7 +20,7 @@ public class ElectionRegisterRequestDto {
 	private String contents;
 
 	@NotBlank
-	@Length(max = 20)
+	@Length(max = 50)
 	private String youtubeUrl;
 
 	@NotBlank
