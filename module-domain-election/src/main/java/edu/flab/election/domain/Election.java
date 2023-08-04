@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import edu.flab.election.config.ElectionConstant;
@@ -41,7 +42,7 @@ public class Election {
 	@NotBlank
 	private String contents;
 
-	@NotBlank
+	@Length(max = 50)
 	private String youtubeUrl;
 
 	@Range(min = ElectionConstant.MIN_COST, max = ElectionConstant.MAX_COST)

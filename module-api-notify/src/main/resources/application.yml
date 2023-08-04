@@ -12,8 +12,9 @@ spring:
     activate:
       on-profile: local
 
-api:
-  url: "localhost:8080/api"
+api-url:
+  host: localhost
+  port: 8080
 
 --- # production
 
@@ -22,6 +23,7 @@ spring:
     activate:
       on-profile: production
 
-api:
-  url: "118.67.134.233:8080/api"
+api-url:
+  host: 118.67.134.233
+  port: 8080
 
