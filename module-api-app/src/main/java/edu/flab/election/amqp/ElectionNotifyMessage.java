@@ -1,9 +1,7 @@
-package edu.flab.election.message;
+package edu.flab.election.amqp;
 
 import edu.flab.election.domain.Election;
-import edu.flab.rabbitmq.config.RabbitMqConstant;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
-import edu.flab.rabbitmq.message.RabbitMqMessageType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,23 +16,18 @@ import lombok.NoArgsConstructor;
 public class ElectionNotifyMessage implements RabbitMqMessage<Election> {
 
 	@NotNull
-	private RabbitMqMessageType messageType;
-
-	@NotNull
 	private Election election;
 
-	@Override
-	public RabbitMqMessageType getMessageType() {
-		return messageType;
-	}
+	@NotNull
+	private String queueName;
 
 	@Override
-	public Election getMessageObject() {
+	public Election getObject() {
 		return election;
 	}
 
 	@Override
 	public String getQueueName() {
-		return RabbitMqConstant.NOTIFICATION_QUEUE_NAME + "_" + messageType;
+		return queueName;
 	}
 }
