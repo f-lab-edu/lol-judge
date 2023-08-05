@@ -15,5 +15,5 @@ public interface NotificationMapper {
 
 	List<Notification> findAll(NotificationFindRequestDto dto);
 
-	List<Notification> findNotReadNotifications(NotificationFindRequestDto dto);
+	List<Notification> findAllFilteredByReadStatus(NotificationFindRequestDto dto, boolean read);
 }

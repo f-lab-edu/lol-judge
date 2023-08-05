@@ -21,10 +21,17 @@
         LIMIT #{limit}
     </select>
 
-    <select id="findNotReadNotifications">
+    <select id="findAllFilteredByReadStatus">
         <include refid="selectNotification"/>
         WHERE id <![CDATA[<=]]> #{countOffset}
-        AND read_status = 'NOT_READ'
+        <choose>
+            <when test="#{read}">
+                AND read_status = 'READ'
+            </when>
+            <otherwise>
+                AND read_status = 'NOT_READ'
+            </otherwise>
+        </choose>
         ORDER BY id DESC
         LIMIT #{limit}
     </select>
