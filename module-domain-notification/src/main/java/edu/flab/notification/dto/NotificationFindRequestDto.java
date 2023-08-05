@@ -1,6 +1,5 @@
-package edu.flab.election.dto;
+package edu.flab.notification.dto;
 
-import edu.flab.election.domain.Election.ElectionStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionFindRequestDto {
-	private Long id;
-	private ElectionStatus electionStatus;
+public class NotificationFindRequestDto {
+	private long offset;
+	private long limit;
 }

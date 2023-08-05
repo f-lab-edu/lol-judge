@@ -40,60 +40,24 @@
         WHERE id = #{id}
     </delete>
 
-    <select id="findPendingElectionById" resultMap="electionResultMap">
+    <select id="findElectionByStatusAndId" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
         WHERE e.id = #{id}
-        AND e.status LIKE 'PENDING%'
+        AND e.status = #{status}
     </select>
 
-    <select id="findInProgressElectionById" resultMap="electionResultMap">
+    <select id="findAllElectionsByStatusAndId" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id = #{id}
-        AND e.status = 'IN_PROGRESS'
-    </select>
-
-    <select id="findFinishedElectionById" resultMap="electionResultMap">
-        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id = #{id}
-        AND e.status = 'FINISHED'
-    </select>
-
-    <select id="findPendingElections" resultMap="electionResultMap">
-        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{offset}
-        AND e.status LIKE 'PENDING%'
+        WHERE e.id <![CDATA[<=]]> #{countOffset}
+        AND e.status = #{status}
         ORDER BY e.id DESC
         LIMIT #{limit}
     </select>
 
-    <select id="findInProgressElections" resultMap="electionResultMap">
+    <select id="findAllElectionsOrderByTotalVotedCount" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{offset}
-        AND e.status = 'IN_PROGRESS'
-        ORDER BY e.id DESC
-        LIMIT #{limit}
-    </select>
-
-    <select id="findFinishedElections" resultMap="electionResultMap">
-        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{offset}
-        AND e.status = 'FINISHED'
-        ORDER BY e.id DESC
-        LIMIT #{limit}
-    </select>
-
-    <select id="findInProgressElectionsOrderByTotalVotedCount" resultMap="electionResultMap">
-        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.total_voted_count <![CDATA[<=]]> #{offset}
-        AND e.status = 'IN_PROGRESS'
-        ORDER BY e.id DESC
-        LIMIT #{limit}
-    </select>
-
-    <select id="findFinishedElectionsOrderByTotalVotedCount" resultMap="electionResultMap">
-        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.total_voted_count <![CDATA[<=]]> #{offset}
-        AND e.status = 'FINISHED'
+        WHERE e.total_voted_count <![CDATA[<=]]> #{countOffset}
+        AND e.status = #{status}
         ORDER BY e.id DESC
         LIMIT #{limit}
     </select>

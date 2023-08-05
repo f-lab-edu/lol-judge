@@ -1,6 +1,6 @@
 package edu.flab.election.dto;
 
-import edu.flab.election.domain.Election.ElectionStatus;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionFindRequestDto {
-	private Long id;
-	private ElectionStatus electionStatus;
+public class ElectionRegisterResponseDto {
+	@Positive
+	private Long electionId;
+
+	@Positive
+	private Long hostId;
+
+	@Positive
+	private Long participantId;
 }

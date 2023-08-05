@@ -1,9 +1,7 @@
 package edu.flab.rabbitmq.message;
 
 public interface RabbitMqMessage<T> {
-	RabbitMqMessageType getMessageType();
-
-	T getMessageObject();
+	T getObject();
 
 	String getQueueName();
 }
