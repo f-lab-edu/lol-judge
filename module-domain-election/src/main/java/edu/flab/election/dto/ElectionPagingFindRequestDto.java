@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionFindRequestDto {
-	private Long id;
+public class ElectionPagingFindRequestDto {
+	private long offset;
+	private long limit;
 	private ElectionStatus electionStatus;
 }

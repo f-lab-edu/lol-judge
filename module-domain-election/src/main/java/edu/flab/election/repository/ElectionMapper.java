@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import edu.flab.election.domain.Election;
 import edu.flab.election.dto.ElectionContentsUpdateRequestDto;
 import edu.flab.election.dto.ElectionEndTimeUpdateRequestDto;
-import edu.flab.election.dto.ElectionFindOrderByTotalVotedCountDto;
 import edu.flab.election.dto.ElectionFindRequestDto;
+import edu.flab.election.dto.ElectionPagingFindRequestDto;
 import edu.flab.election.dto.ElectionStatusUpdateRequestDto;
 import edu.flab.election.dto.ElectionTotalVotedCountUpdateRequestDto;
 
@@ -27,19 +27,9 @@ public interface ElectionMapper {
 
 	void deleteById(Long id);
 
-	Optional<Election> findPendingElectionById(Long id);
+	Optional<Election> findElectionByStatusAndId(ElectionFindRequestDto dto);
 
-	Optional<Election> findInProgressElectionById(Long id);
+	List<Election> findAllElectionsByStatusAndId(ElectionPagingFindRequestDto dto);
 
-	Optional<Election> findFinishedElectionById(Long id);
-
-	List<Election> findPendingElections(ElectionFindRequestDto dto);
-
-	List<Election> findInProgressElections(ElectionFindRequestDto dto);
-
-	List<Election> findFinishedElections(ElectionFindRequestDto dto);
-
-	List<Election> findInProgressElectionsOrderByTotalVotedCount(ElectionFindOrderByTotalVotedCountDto dto);
-
-	List<Election> findFinishedElectionsOrderByTotalVotedCount(ElectionFindOrderByTotalVotedCountDto dto);
+	List<Election> findElectionsOrderByTotalVotedCount(ElectionPagingFindRequestDto dto);
 }
