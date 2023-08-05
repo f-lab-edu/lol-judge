@@ -23,6 +23,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.flab.election.domain.Election;
+import edu.flab.election.dto.ElectionFindRequestDto;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionFindService;
@@ -119,7 +121,8 @@ class ElectionControllerTest {
 			mvcResult.getResponse().getContentAsString(), javaType);
 
 		Assertions.assertThatNoException()
-			.isThrownBy(() -> electionFindService.findPendingElection(result.data().getElectionId()));
+			.isThrownBy(() -> electionFindService.findElection(
+				new ElectionFindRequestDto(result.data().getElectionId(), Election.ElectionStatus.PENDING)));
 	}
 
 	public <T> String toJson(T data) throws JsonProcessingException {
