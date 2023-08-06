@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
 import edu.flab.election.domain.Election;
+import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionFindRequestDto;
 import edu.flab.election.dto.ElectionPagingFindRequestDto;
 import edu.flab.election.repository.ElectionMapper;
@@ -25,8 +26,12 @@ public class ElectionFindService {
 				() -> new NoSuchElementException(String.format(NOT_FOUND_EXCEPTION_MESSAGE_FORMAT, dto.getId())));
 	}
 
-	public List<Election> findAllElections(ElectionPagingFindRequestDto dto) {
-		return electionMapper.findAllElectionsByStatusAndId(dto);
+	public List<Election> findAllElections(ElectionStatus status) {
+		return electionMapper.findAllElectionsByStatus(status);
+	}
+
+	public List<Election> findAllElectionsWithPaging(ElectionPagingFindRequestDto dto) {
+		return electionMapper.findAllElectionsByStatusWithPaging(dto);
 	}
 
 	public List<Election> findAllElectionsOrderByTotalCount(ElectionPagingFindRequestDto dto) {
