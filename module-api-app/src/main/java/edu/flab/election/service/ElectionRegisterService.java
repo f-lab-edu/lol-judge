@@ -6,9 +6,9 @@ import java.time.OffsetDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.flab.election.amqp.ElectionNotifyMessage;
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
+import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.repository.CandidateMapper;
@@ -17,6 +17,7 @@ import edu.flab.member.domain.Member;
 import edu.flab.member.service.MemberFindService;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
 import edu.flab.rabbitmq.domain.RabbitMqSender;
+import edu.flab.rabbitmq.message.RabbitMqMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +36,7 @@ public class ElectionRegisterService {
 		Candidate host = addCandidateToElection(election, dto.getHostEmail());
 		Candidate participant = addCandidateToElection(election, dto.getParticipantEmail());
 
-		rabbitMqSender.send(new ElectionNotifyMessage(election, RabbitMqQueueName.ELECTION_REGISTER));
+		rabbitMqSender.send(new RabbitMqMessage<>(election, RabbitMqQueueName.ELECTION_REGISTER));
 
 		return ElectionRegisterResponseDto.builder()
 			.electionId(election.getId())
@@ -46,7 +47,7 @@ public class ElectionRegisterService {
 
 	private Election saveElection(ElectionRegisterRequestDto dto) {
 		Election election = Election.builder()
-			.status(Election.ElectionStatus.PENDING)
+			.status(ElectionStatus.PENDING)
 			.contents(dto.getContents())
 			.youtubeUrl(dto.getYoutubeUrl())
 			.cost(dto.getCost())

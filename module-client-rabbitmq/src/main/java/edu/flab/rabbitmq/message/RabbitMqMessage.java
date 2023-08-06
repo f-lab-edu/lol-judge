@@ -1,7 +1,29 @@
 package edu.flab.rabbitmq.message;
 
-public interface RabbitMqMessage<T> {
-	T getObject();
+import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	String getQueueName();
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class RabbitMqMessage<T> {
+
+	@NotNull
+	private T object;
+
+	@NotNull
+	private String queueName;
+
+	public T getObject() {
+		return object;
+	}
+
+	public String getQueueName() {
+		return queueName;
+	}
 }
