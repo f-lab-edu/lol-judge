@@ -23,4 +23,11 @@ public class ElectionNotifyListener {
 		String notification = "재판이 생성되었습니다. 자신의 의견을 작성하세요. 링크 = " + apiUrlUtil.getElectionApiUrl(Election);
 		electionNotificationService.notifyToCandidates(Election, notification);
 	}
+
+	@RabbitListener(queues = RabbitMqQueueName.ELECTION_IN_PROGRESS, ackMode = "AUTO")
+	public void listenInProgress(RabbitMqMessage<Election> message) {
+		Election Election = message.getObject();
+		String notification = "재판이 시작되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(Election);
+		electionNotificationService.notifyToCandidates(Election, notification);
+	}
 }
