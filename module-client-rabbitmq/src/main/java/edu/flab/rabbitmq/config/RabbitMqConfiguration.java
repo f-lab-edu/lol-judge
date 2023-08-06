@@ -1,7 +1,9 @@
 package edu.flab.rabbitmq.config;
 
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -40,6 +42,9 @@ public class RabbitMqConfiguration {
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
 		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+		RabbitAdmin admin = new RabbitAdmin(rabbitTemplate);
+		admin.declareQueue(new Queue(RabbitMqQueueName.ELECTION_REGISTER));
+		admin.declareQueue(new Queue(RabbitMqQueueName.ELECTION_IN_PROGRESS));
 		rabbitTemplate.setMessageConverter(messageConverter);
 		return rabbitTemplate;
 	}
