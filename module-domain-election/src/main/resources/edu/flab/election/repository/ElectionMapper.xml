@@ -83,7 +83,7 @@
 
     <resultMap id="electionResultMap" type="edu.flab.election.domain.Election">
         <id column="election_id" property="id"/>
-        <result column="status" property="status" javaType="edu.flab.election.domain.Election$ElectionStatus"/>
+        <result column="status" property="status" javaType="edu.flab.election.domain.ElectionStatus"/>
         <result column="election_contents" property="contents"/>
         <result column="youtube_url" property="youtubeUrl"/>
         <result column="cost" property="cost"/>

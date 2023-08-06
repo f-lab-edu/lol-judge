@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class ElectionPagingFindRequestDto {
 	private long offset;
 	private long limit;
-	private ElectionStatus electionStatus;
+	private ElectionStatus status;
 }
