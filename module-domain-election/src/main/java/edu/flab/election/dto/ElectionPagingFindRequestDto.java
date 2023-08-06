@@ -1,6 +1,6 @@
 package edu.flab.election.dto;
 
-import edu.flab.election.domain.Election.ElectionStatus;
+import edu.flab.election.domain.ElectionStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

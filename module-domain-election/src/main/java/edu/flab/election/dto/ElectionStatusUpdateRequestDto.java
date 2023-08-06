@@ -1,6 +1,6 @@
 package edu.flab.election.dto;
 
-import edu.flab.election.domain.Election;
+import edu.flab.election.domain.ElectionStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class ElectionStatusUpdateRequestDto {
 	private Long id;
 
-	private Election.ElectionStatus status;
+	private ElectionStatus status;
 }

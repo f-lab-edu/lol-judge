@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.flab.election.domain.Election;
+import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionFindRequestDto;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
@@ -122,7 +122,7 @@ class ElectionControllerTest {
 
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> electionFindService.findElection(
-				new ElectionFindRequestDto(result.data().getElectionId(), Election.ElectionStatus.PENDING)));
+				new ElectionFindRequestDto(result.data().getElectionId(), ElectionStatus.PENDING)));
 	}
 
 	public <T> String toJson(T data) throws JsonProcessingException {
