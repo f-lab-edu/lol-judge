@@ -26,7 +26,11 @@ public class VoteFindService {
 	}
 
 	public List<Vote> findAllVotesByElectionId(Long electionId) {
-		return voteMapper.findByElectionId(electionId);
+		return voteMapper.findAllByElectionId(electionId);
+	}
+
+	public List<Vote> findAllVotesByCandidateId(Long candidateId) {
+		return voteMapper.findAllByCandidateId(candidateId);
 	}
 
 	public boolean hasVotedBefore(Long memberId) {
