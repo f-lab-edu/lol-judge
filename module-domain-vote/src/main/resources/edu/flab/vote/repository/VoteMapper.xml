@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.flab.vote.repository.VoteMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO vote (member_id, election_id, candidate_id)
+        VALUES (#{memberId}, #{electionId}, #{candidateId})
+    </insert>
+
+    <update id="updateById">
+        UPDATE vote
+        SET candidate_id=#{candidateId}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM vote
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findById">
+        <include refid="selectVote"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByMemberId">
+        <include refid="selectVote"/>
+        WHERE member_id = #{memberId}
+    </select>
+
+    <select id="findByElectionId">
+        <include refid="selectVote"/>
+        WHERE election_id = #{electionId}
+    </select>
+
+    <sql id="selectVote">
+        SELECT id AS vote_id,
+               member_id,
+               election_id,
+               candidate_id
+        FROM vote
+    </sql>
+</mapper>
