@@ -11,6 +11,7 @@ import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.service.MemberJudgePointUpdateService;
 import edu.flab.vote.domain.Vote;
+import edu.flab.vote.domain.VoteRule;
 import edu.flab.vote.dto.VoteAddRequestDto;
 import edu.flab.vote.repository.VoteMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class VoteAddService {
-
-	private final static int FEE = 10;
 
 	private final VoteFindService voteFindService;
 	private final VoteMapper voteMapper;
@@ -30,7 +29,7 @@ public class VoteAddService {
 	public void add(Member member, VoteAddRequestDto dto) {
 		validate(member, dto);
 
-		memberJudgePointUpdateService.minusJudgePoint(new MemberJudgePointCalcDto(member.getId(), FEE));
+		memberJudgePointUpdateService.minusJudgePoint(new MemberJudgePointCalcDto(member.getId(), VoteRule.FEE));
 
 		Vote vote = Vote.builder()
 			.candidateId(dto.getCandidateId())
@@ -61,11 +60,11 @@ public class VoteAddService {
 					+ "<투표 후보자번호 = " + dto.getCandidateId() + ">");
 		}
 
-		if (member.getJudgePoint() < FEE) {
+		if (member.getJudgePoint() < VoteRule.FEE) {
 			throw new IllegalStateException(
 				"회원의 포인트가 참가 비용보다 적습니다 "
 					+ "<이메일 = " + member.getEmail() + ">"
-					+ "<참여 비용 = " + FEE + ">"
+					+ "<참여 비용 = " + VoteRule.FEE + ">"
 					+ "<보유 포인트 = " + member.getJudgePoint() + ">");
 		}
 
