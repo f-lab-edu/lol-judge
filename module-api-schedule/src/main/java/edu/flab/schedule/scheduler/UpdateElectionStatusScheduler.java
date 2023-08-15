@@ -31,7 +31,7 @@ public class UpdateElectionStatusScheduler {
 
 		elections.forEach(e -> {
 			electionMapper.updateStatusById(new ElectionStatusUpdateRequestDto(e.getId(), ElectionStatus.IN_PROGRESS));
-			rabbitMqSender.send(new RabbitMqMessage<>(e, RabbitMqQueueName.ELECTION_IN_PROGRESS));
+			rabbitMqSender.send(new RabbitMqMessage<>(e.getId(), RabbitMqQueueName.ELECTION_IN_PROGRESS));
 		});
 	}
 }
