@@ -1,4 +1,4 @@
-package edu.flab.confirm.scheduler;
+package edu.flab.schedule.scheduler;
 
 import java.util.List;
 

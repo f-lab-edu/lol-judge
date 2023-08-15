@@ -20,5 +20,7 @@ public interface VoteMapper {
 
 	Optional<Vote> findByMemberId(Long memberId);
 
-	List<Vote> findByElectionId(Long electionId);
+	List<Vote> findAllByElectionId(Long electionId);
+
+	List<Vote> findAllByCandidateId(Long candidateId);
 }

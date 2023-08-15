@@ -6,7 +6,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: edu.flab.member, edu.flab.election
+  type-aliases-package: edu.flab
 
 --- # local 설정
 

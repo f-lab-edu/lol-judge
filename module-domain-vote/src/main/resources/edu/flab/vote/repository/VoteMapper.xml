@@ -30,9 +30,14 @@
         WHERE member_id = #{memberId}
     </select>
 
-    <select id="findByElectionId">
+    <select id="findAllByElectionId">
         <include refid="selectVote"/>
         WHERE election_id = #{electionId}
+    </select>
+
+    <select id="findAllByCandidateId">
+        <include refid="selectVote"/>
+        WHERE candidate_id = #{candidateId}
     </select>
 
     <sql id="selectVote">
