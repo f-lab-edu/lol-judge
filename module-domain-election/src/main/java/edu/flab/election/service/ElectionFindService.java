@@ -20,6 +20,11 @@ public class ElectionFindService {
 	private static final String NOT_FOUND_EXCEPTION_MESSAGE_FORMAT = "재판을 찾을 수 없습니다 < id = %d >";
 	private final ElectionMapper electionMapper;
 
+	public Election findElection(Long electionId) {
+		return electionMapper.findElectionById(electionId).orElseThrow(
+			() -> new NoSuchElementException(String.format(NOT_FOUND_EXCEPTION_MESSAGE_FORMAT, electionId)));
+	}
+
 	public Election findElection(ElectionFindRequestDto dto) {
 		return electionMapper.findElectionByStatusAndId(dto)
 			.orElseThrow(

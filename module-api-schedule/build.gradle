@@ -1,0 +1,17 @@
+plugins {
+    id 'spring-common-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-domain-election')
+    implementation project(':module-client-rabbitmq')
+}
+
+test {
+    useJUnitPlatform()
+}

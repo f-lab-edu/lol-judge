@@ -2,7 +2,6 @@ package edu.flab.notify.util;
 
 import org.springframework.stereotype.Component;
 
-import edu.flab.election.domain.Election;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,13 +15,13 @@ public class ApiUrlUtil {
 
 	private final ApiUrlProperties apiUrlProperties;
 
-	public String getElectionApiUrl(Election election) {
+	public String getElectionApiUrl(Long electionId) {
 		String host = apiUrlProperties.getHost();
 
 		if (host.endsWith("/")) {
 			host = host.substring(0, host.length() - 1);
 		}
 
-		return SCHEME + host + ":" + apiUrlProperties.getPort() + "/api/" + ELECTION_API + "/" + election.getId();
+		return SCHEME + host + ":" + apiUrlProperties.getPort() + "/api/" + ELECTION_API + "/" + electionId;
 	}
 }
