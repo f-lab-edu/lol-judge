@@ -40,6 +40,11 @@
         WHERE id = #{id}
     </delete>
 
+    <select id="findElectionById" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.id = #{id}
+    </select>
+
     <select id="findElectionByStatusAndId" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
         WHERE e.id = #{id}
