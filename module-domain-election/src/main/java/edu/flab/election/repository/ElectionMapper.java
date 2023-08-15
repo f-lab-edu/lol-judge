@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 
 import edu.flab.election.domain.Election;
+import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionContentsUpdateRequestDto;
 import edu.flab.election.dto.ElectionEndTimeUpdateRequestDto;
 import edu.flab.election.dto.ElectionFindRequestDto;
@@ -27,9 +28,13 @@ public interface ElectionMapper {
 
 	void deleteById(Long id);
 
+	Optional<Election> findElectionById(Long electionId);
+
 	Optional<Election> findElectionByStatusAndId(ElectionFindRequestDto dto);
 
-	List<Election> findAllElectionsByStatusAndId(ElectionPagingFindRequestDto dto);
+	List<Election> findAllElectionsByStatus(ElectionStatus status);
+
+	List<Election> findAllElectionsByStatusWithPaging(ElectionPagingFindRequestDto dto);
 
 	List<Election> findElectionsOrderByTotalVotedCount(ElectionPagingFindRequestDto dto);
 }

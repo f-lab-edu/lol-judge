@@ -40,13 +40,23 @@
         WHERE id = #{id}
     </delete>
 
+    <select id="findElectionById" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.id = #{id}
+    </select>
+
     <select id="findElectionByStatusAndId" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
         WHERE e.id = #{id}
         AND e.status = #{status}
     </select>
 
-    <select id="findAllElectionsByStatusAndId" resultMap="electionResultMap">
+    <select id="findAllElectionsByStatus" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.status = #{status}
+    </select>
+
+    <select id="findAllElectionsByStatusWithPaging" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
         WHERE e.id <![CDATA[<=]]> #{countOffset}
         AND e.status = #{status}
