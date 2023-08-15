@@ -45,6 +45,7 @@ public class RabbitMqConfiguration {
 		RabbitAdmin admin = new RabbitAdmin(rabbitTemplate);
 		admin.declareQueue(new Queue(RabbitMqQueueName.ELECTION_REGISTER));
 		admin.declareQueue(new Queue(RabbitMqQueueName.ELECTION_IN_PROGRESS));
+		admin.declareQueue(new Queue(RabbitMqQueueName.ELECTION_FINISHED));
 		rabbitTemplate.setMessageConverter(messageConverter);
 		return rabbitTemplate;
 	}
