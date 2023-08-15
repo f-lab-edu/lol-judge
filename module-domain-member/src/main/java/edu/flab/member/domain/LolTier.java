@@ -9,8 +9,24 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @Getter
 public sealed class LolTier permits LolTierUtil {
+
+	@Getter
 	public enum Color {
-		IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND, MASTER, GRAND_MASTER, CHALLENGER
+		IRON(1),
+		BRONZE(2),
+		SILVER(3),
+		GOLD(4),
+		PLATINUM(5),
+		DIAMOND(6),
+		MASTER(7),
+		GRAND_MASTER(8),
+		CHALLENGER(9);
+
+		private final long score;
+
+		Color(long score) {
+			this.score = score;
+		}
 	}
 
 	private Color color;
