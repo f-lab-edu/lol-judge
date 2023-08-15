@@ -2,7 +2,6 @@ package edu.flab.notify.listener;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
-import edu.flab.election.domain.Election;
 import edu.flab.notify.service.ElectionNotificationService;
 import edu.flab.notify.util.ApiUrlUtil;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
@@ -18,23 +17,23 @@ public class ElectionNotifyListener {
 	private final ApiUrlUtil apiUrlUtil;
 
 	@RabbitListener(queues = RabbitMqQueueName.ELECTION_REGISTER, ackMode = "AUTO")
-	public void listenRegistration(RabbitMqMessage<Election> message) {
-		Election election = message.getObject();
-		String notification = "재판이 생성되었습니다. 자신의 의견을 작성하세요. 링크 = " + apiUrlUtil.getElectionApiUrl(election);
-		electionNotificationService.notifyToCandidates(election, notification);
+	public void listenRegistration(RabbitMqMessage<Long> message) {
+		Long electionId = message.getObject();
+		String notification = "재판이 생성되었습니다. 자신의 의견을 작성하세요. 링크 = " + apiUrlUtil.getElectionApiUrl(electionId);
+		electionNotificationService.notifyToCandidates(electionId, notification);
 	}
 
 	@RabbitListener(queues = RabbitMqQueueName.ELECTION_IN_PROGRESS, ackMode = "AUTO")
-	public void listenInProgress(RabbitMqMessage<Election> message) {
-		Election election = message.getObject();
-		String notification = "재판이 시작되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(election);
-		electionNotificationService.notifyToCandidates(election, notification);
+	public void listenInProgress(RabbitMqMessage<Long> message) {
+		Long electionId = message.getObject();
+		String notification = "재판이 시작되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(electionId);
+		electionNotificationService.notifyToCandidates(electionId, notification);
 	}
 
 	@RabbitListener(queues = RabbitMqQueueName.ELECTION_FINISHED, ackMode = "AUTO")
-	public void listenFinish(RabbitMqMessage<Election> rabbitMqMessage) {
-		Election election = rabbitMqMessage.getObject();
-		String notification = "재판이 종료되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(election);
-		electionNotificationService.notifyToCandidates(election, notification);
+	public void listenFinish(RabbitMqMessage<Long> rabbitMqMessage) {
+		Long electionId = rabbitMqMessage.getObject();
+		String notification = "재판이 종료되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(electionId);
+		electionNotificationService.notifyToCandidates(electionId, notification);
 	}
 }
