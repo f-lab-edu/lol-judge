@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.member.domain.Member;
+import edu.flab.member.domain.specification.JudgePointSpecification;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.event.MemberRankScoreUpdateEventPublisher;
@@ -22,6 +23,8 @@ public class MemberJudgePointUpdateService {
 
 	@Transactional
 	public Member updateJudgePoint(Member member, int updatedJudgePoint) {
+		validateJudgePoint(member, updatedJudgePoint);
+
 		int beforeUpdate = member.getJudgePoint();
 
 		memberMapper.updateJudgePoint(new MemberJudgePointUpdateDto(member.getId(), updatedJudgePoint));
@@ -44,5 +47,13 @@ public class MemberJudgePointUpdateService {
 	public Member plusJudgePoint(MemberJudgePointCalcDto dto) {
 		Member member = memberFindService.findActiveMember(dto.getId());
 		return updateJudgePoint(member, member.getJudgePoint() + dto.getValue());
+	}
+
+	private void validateJudgePoint(Member member, int judgePoint) {
+		JudgePointSpecification spec = new JudgePointSpecification(judgePoint);
+		if (!spec.isSatisfied()) {
+			log.warn("judgePoint 범위를 벗어났습니다. <email = {}> <judgePoint = {}>", member.getEmail(), judgePoint);
+			throw new IllegalArgumentException("judgePoint 범위를 벗어났습니다");
+		}
 	}
 }
