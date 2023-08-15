@@ -28,6 +28,8 @@ public interface ElectionMapper {
 
 	void deleteById(Long id);
 
+	Optional<Election> findElectionById(Long electionId);
+
 	Optional<Election> findElectionByStatusAndId(ElectionFindRequestDto dto);
 
 	List<Election> findAllElectionsByStatus(ElectionStatus status);
