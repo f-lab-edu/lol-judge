@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import edu.flab.election.domain.Election;
+
 class ApiUrlUtilTest {
 
 	@Test
@@ -17,7 +19,8 @@ class ApiUrlUtilTest {
 		ApiUrlUtil apiUrlUtil = new ApiUrlUtil(apiUrlProperties);
 
 		// when
-		String electionApiUrl = apiUrlUtil.getElectionApiUrl(1L);
+		Election election = Election.builder().id(1L).build();
+		String electionApiUrl = apiUrlUtil.getElectionApiUrl(election);
 
 		// then
 		assertThat(electionApiUrl).isEqualTo("https://localhost:8080/api/election/1");

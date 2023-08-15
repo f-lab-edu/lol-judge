@@ -1,0 +1,24 @@
+plugins {
+    id 'spring-common-conventions'
+    id 'spring-mvc-conventions'
+    id 'junit-test-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-domain-election')
+    implementation project(':module-domain-member')
+    implementation project(':module-domain-vote')
+    implementation project(':module-client-rabbitmq')
+    implementation project(':module-client-redis')
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.security:spring-security-crypto:6.1.0'
+}
+
+test {
+    useJUnitPlatform()
+}

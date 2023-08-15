@@ -12,7 +12,6 @@ dependencies {
     implementation project(':module-core')
     implementation project(':module-domain-election')
     implementation project(':module-domain-member')
-    implementation project(':module-domain-vote')
     implementation project(':module-client-rabbitmq')
     implementation project(':module-client-redis')
     implementation 'org.springframework.boot:spring-boot-starter-amqp'

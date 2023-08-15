@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.flab.election.repository.ElectionMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO election (status, contents, cost, youtube_url, created_at, ended_at)
+        VALUES (#{status}, #{contents}, #{cost}, #{youtubeUrl}, #{createdAt}, #{endedAt});
+    </insert>
+
+    <update id="updateContentsById">
+        UPDATE election
+        SET contents    = #{contents},
+            cost        = #{cost},
+            youtube_url = #{youtubeUrl}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatusById">
+        UPDATE election
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateEndTimeById">
+        UPDATE election
+        SET ended_at = #{endedAt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateTotalVotedCountById">
+        UPDATE election
+        SET total_voted_count = #{totalVotedCount}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM election
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findElectionById" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.id = #{id}
+    </select>
+
+    <select id="findElectionByStatusAndId" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.id = #{id}
+        AND e.status = #{status}
+    </select>
+
+    <select id="findAllElectionsByStatus" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.status = #{status}
+    </select>
+
+    <select id="findAllElectionsByStatusWithPaging" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.id <![CDATA[<=]]> #{countOffset}
+        AND e.status = #{status}
+        ORDER BY e.id DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="findAllElectionsOrderByTotalVotedCount" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE e.total_voted_count <![CDATA[<=]]> #{countOffset}
+        AND e.status = #{status}
+        ORDER BY e.id DESC
+        LIMIT #{limit}
+    </select>
+
+    <sql id="selectElectionJoinWithGameInfoAndCandidate">
+        SELECT e.id       AS election_id,
+               e.status,
+               e.contents AS election_contents,
+               e.youtube_url,
+               e.cost,
+               e.total_voted_count,
+               e.created_at,
+               e.ended_at,
+               c.id       AS candidate_id,
+               c.member_id,
+               c.election_id,
+               c.contents AS candidate_contents,
+               c.voted_status
+        FROM election e
+                 LEFT OUTER JOIN game_info g ON e.id = g.election_id
+                 LEFT OUTER JOIN candidate c ON e.id = c.election_id
+    </sql>
+
+    <resultMap id="electionResultMap" type="edu.flab.election.domain.Election">
+        <id column="election_id" property="id"/>
+        <result column="status" property="status" javaType="edu.flab.election.domain.ElectionStatus"/>
+        <result column="election_contents" property="contents"/>
+        <result column="youtube_url" property="youtubeUrl"/>
+        <result column="cost" property="cost"/>
+        <result column="total_voted_count" property="totalVotedCount"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="ended_at" property="endedAt"/>
+        <collection property="candidates" fetchType="lazy"
+                    resultMap="edu.flab.election.repository.CandidateMapper.candidateResultMap"/>
+    </resultMap>
+</mapper>

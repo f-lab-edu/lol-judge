@@ -1,10 +1,8 @@
 package edu.flab.member.domain;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
-import edu.flab.member.domain.specification.JudgePointSpecification;
 import edu.flab.member.validation.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +36,6 @@ public class Member {
 	@Builder.Default
 	private RankScore rankScore = RankScore.zero();
 
-	@Range(min = JudgePointSpecification.MIN_VALUE, max = JudgePointSpecification.MAX_VALUE)
 	private int judgePoint;
 
 	private boolean deleted;

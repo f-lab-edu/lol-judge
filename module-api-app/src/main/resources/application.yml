@@ -4,7 +4,6 @@ spring:
     include:
       - member
       - election
-      - vote
       - redis
       - rabbitmq
 

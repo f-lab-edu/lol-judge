@@ -3,15 +3,17 @@ package edu.flab.member.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.member.domain.Member;
-import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.event.MemberRankScoreUpdateEventPublisher;
 import edu.flab.member.repository.MemberMapper;
@@ -26,29 +28,29 @@ class MemberJudgePointUpdateServiceTest {
 	private MemberMapper memberMapper;
 
 	@Mock
-	private MemberFindService memberFindService;
-
-	@Mock
 	private MemberRankScoreUpdateEventPublisher eventPublisher;
 
 	@Test
 	@DisplayName("회원의 JudgePoint 를 변경할 수 있다")
 	void test1() {
 		// given
-		Member member = Member.builder().id(1L).email("example@example.com").password("1234").judgePoint(500).build();
-		MemberJudgePointCalcDto dto = new MemberJudgePointCalcDto(1L, 1000);
-		MemberJudgePointUpdateDto updateDto = new MemberJudgePointUpdateDto(1L, 1500);
+		Member member = Member.builder().email("example@example.com").password("1234").build();
+		MemberJudgePointUpdateDto dto = MemberJudgePointUpdateDto.builder().id(1L).judgePoint(1000).build();
 
-		when(memberFindService.findActiveMember(1L)).thenReturn(member);
+		Mockito.when(memberMapper.findActiveMemberById(1L)).thenReturn(Optional.of(member));
+		when(memberMapper.findActiveMemberById(1L)).thenReturn(Optional.of(member));
 		doNothing().when(eventPublisher).publishEvent(member);
 
 		// when
-		Member updatedMember = sut.plusJudgePoint(dto);
+		Member updatedMember = sut.updateJudgePoint(dto);
 
 		// then
-		verify(memberFindService).findActiveMember(1L);
-		verify(memberMapper).updateJudgePoint(updateDto);
+		Mockito.verify(memberMapper).findActiveMemberById(1L);
+		Mockito.verify(memberMapper).updateJudgePoint(dto);
+
+		verify(memberMapper).findActiveMemberById(1L);
+		verify(memberMapper).updateJudgePoint(dto);
 		verify(eventPublisher).publishEvent(member);
-		assertThat(updatedMember.getJudgePoint()).isEqualTo(updateDto.getJudgePoint());
+		assertThat(updatedMember.getJudgePoint()).isEqualTo(dto.getJudgePoint());
 	}
 }

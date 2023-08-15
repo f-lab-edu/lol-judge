@@ -36,7 +36,7 @@ public class ElectionRegisterService {
 		Candidate host = addCandidateToElection(election, dto.getHostEmail());
 		Candidate participant = addCandidateToElection(election, dto.getParticipantEmail());
 
-		rabbitMqSender.send(new RabbitMqMessage<>(election.getId(), RabbitMqQueueName.ELECTION_REGISTER));
+		rabbitMqSender.send(new RabbitMqMessage<>(election, RabbitMqQueueName.ELECTION_REGISTER));
 
 		return ElectionRegisterResponseDto.builder()
 			.electionId(election.getId())
