@@ -6,8 +6,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-public class UpdateElectionStatusApplication {
+public class ScheduleApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(UpdateElectionStatusApplication.class, args);
+		SpringApplication.run(ScheduleApplication.class, args);
 	}
 }
