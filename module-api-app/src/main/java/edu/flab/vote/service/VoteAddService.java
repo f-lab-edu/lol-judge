@@ -39,7 +39,7 @@ public class VoteAddService {
 		voteMapper.save(vote);
 	}
 
-	public void validate(Member member, VoteAddRequestDto dto) {
+	private void validate(Member member, VoteAddRequestDto dto) {
 		Election election = electionFindService.findElection(
 			new ElectionFindRequestDto(dto.getElectionId(), ElectionStatus.IN_PROGRESS));
 
