@@ -1,9 +1,0 @@
-spring:
-  profiles:
-    active: local
-    include:
-      - member
-      - election
-      - redis
-      - rabbitmq
-

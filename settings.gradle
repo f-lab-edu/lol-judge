@@ -1,6 +1,0 @@
-rootProject.name = 'lol-judge'
-
-include 'module-api-app', 'module-api-notify'
-include 'module-domain-election', 'module-domain-member', 'module-domain-notification'
-include 'module-client-redis', 'module-client-rabbitmq'
-include 'module-core'
