@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.ElectionStatus;
+import edu.flab.election.dto.ElectionFindRequestDto;
 import edu.flab.election.service.ElectionFindService;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
@@ -92,7 +93,7 @@ class VoteAddServiceTest {
 	void test1() {
 		// given
 		when(memberJudgePointUpdateService.minusJudgePoint(any(MemberJudgePointCalcDto.class))).thenReturn(member3);
-		when(electionFindService.findElection(any())).thenReturn(election);
+		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
 		when(voteFindService.hasVotedBefore(any())).thenReturn(false);
 
 		// when
@@ -109,7 +110,7 @@ class VoteAddServiceTest {
 	void test2() {
 		// given
 		member3.updateJudgePoint(0);
-		when(electionFindService.findElection(any())).thenReturn(election);
+		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
 
 		// when
 		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), host.getId());
@@ -124,7 +125,7 @@ class VoteAddServiceTest {
 	@DisplayName("이미 투표했다면 다시 투표할 수 없다")
 	void test3() {
 		// given
-		when(electionFindService.findElection(any())).thenReturn(election);
+		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
 		when(voteFindService.hasVotedBefore(any())).thenReturn(true);
 
 		// when
@@ -140,7 +141,7 @@ class VoteAddServiceTest {
 	@DisplayName("투표 대상이 재판의 피고인 또는 고소인이 아닐 경우 예외가 발생한다")
 	void test4() {
 		// given
-		when(electionFindService.findElection(any())).thenReturn(election);
+		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
 
 		// when
 		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), 100L);
@@ -155,7 +156,7 @@ class VoteAddServiceTest {
 	@DisplayName("피고인 또는 원고는 투표를 할 수 없다")
 	void test5() {
 		// given
-		when(electionFindService.findElection(any())).thenReturn(election);
+		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
 
 		// when
 		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), host.getId());
