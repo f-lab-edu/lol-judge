@@ -1,0 +1,27 @@
+plugins {
+    id 'spring-common-conventions'
+    id 'junit-test-conventions'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // database 의존성
+    implementation 'com.h2database:h2'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
