@@ -1,7 +1,5 @@
 package edu.flab.election.controller;
 
-import static edu.flab.member.domain.LolTier.Color.*;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +27,6 @@ import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionFindService;
 import edu.flab.member.controller.MemberController;
-import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.service.MemberSignUpService;
@@ -75,19 +72,13 @@ class ElectionControllerTest {
 		MemberSignUpDto hostSignUpDto = MemberSignUpDto.builder()
 			.email("host@example.com")
 			.password("aB#12345")
-			.profileUrl("https://cloud.example.com/bucket/profile_image1.jpg")
 			.gameLoginId("lolId1111")
-			.nickname("hide on bush")
-			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1100))
 			.build();
 
 		MemberSignUpDto participantSignUpDto = MemberSignUpDto.builder()
 			.email("participant@example.com")
 			.password("aB#12345")
-			.profileUrl("https://cloud.example.com/bucket/profile_image2.jpg")
 			.gameLoginId("lolId2222")
-			.nickname("show maker")
-			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1000))
 			.build();
 
 		Member hostMember = memberSignUpService.signUp(hostSignUpDto);
