@@ -28,7 +28,7 @@ spring:
 
 access:
   control:
-    allow-origin: http://localhost:8080
+    allow-origin: http://localhost:3000
 
 --- # production 설정
 spring:
