@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.flab.member.domain.GamePosition;
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.dto.MemberLoginDto;
@@ -51,10 +52,8 @@ class MemberControllerTest {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 			.email("admin@example.com")
 			.password("aB#12345")
-			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
-			.nickname("hide on bush")
-			.lolTier(challenger)
+			.position("MID")
 			.build();
 
 		mock.perform(MockMvcRequestBuilders.post("/signUp")
@@ -69,10 +68,7 @@ class MemberControllerTest {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 			.email("admin@example.com")
 			.password("aB#")
-			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
-			.nickname("hide on bush")
-			.lolTier(challenger)
 			.build();
 
 		mock.perform(MockMvcRequestBuilders.post("/signUp")
@@ -87,10 +83,8 @@ class MemberControllerTest {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 			.email("admin@example.com")
 			.password("aB#12345")
-			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
-			.nickname("hide on bush")
-			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1400))
+			.position("MID")
 			.build();
 
 		MemberLoginDto loginDto = MemberLoginDto.builder()
@@ -116,10 +110,8 @@ class MemberControllerTest {
 		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 			.email("admin@example.com")
 			.password("aB#12345")
-			.profileUrl("https://cloud.example.com/bucket/profile_image.jpg")
 			.gameLoginId("lolId1234")
-			.nickname("hide on bush")
-			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1400))
+			.position("MID")
 			.build();
 
 		MemberLoginDto loginDto = MemberLoginDto.builder()

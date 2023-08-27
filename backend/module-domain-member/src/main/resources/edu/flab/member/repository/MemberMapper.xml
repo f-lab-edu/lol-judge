@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.flab.member.repository.MemberMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO member (email, password, profile_url)
-        VALUES (#{email}, #{password}, #{profileUrl});
+        INSERT INTO member (email, password)
+        VALUES (#{email}, #{password});
     </insert>
 
     <update id="updatePassword">

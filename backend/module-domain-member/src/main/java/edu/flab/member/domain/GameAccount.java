@@ -30,6 +30,8 @@ public class GameAccount {
 	private String lolLoginId;  // 리그오브레전드 계정 아이디
 
 	@NotNull
+	private GamePosition position;	// 리그오브레전드 포지션
+
 	private LolTier lolTier;    // 리그오브레전드 랭크 티어 정보
 
 	public GameAccount(Long id, Long memberId, String nickname, String lolLoginId) {

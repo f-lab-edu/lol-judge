@@ -13,7 +13,8 @@ public enum ErrorCode {
 	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "Not supported method"),
 
 	// Member
-	WRONG_ACCOUNT(HttpStatus.UNAUTHORIZED, "Wrong Email or Password");
+	WRONG_ACCOUNT(HttpStatus.UNAUTHORIZED, "Wrong Email or Password"),
+	DUPLICATE_ACCOUNT(HttpStatus.CONFLICT, "Member Already Exists");
 
 	private final HttpStatusCode httpStatusCode;
 	private final String message;
