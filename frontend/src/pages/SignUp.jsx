@@ -1,55 +1,54 @@
-import React, { useState } from "react";
-import useForm from "../hooks/useForm";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import LinkBox from "../components/LinkBox";
+import ProfileBox from "../components/ProfileBox";
+import { FormProvider, useForm } from "react-hook-form";
+import { defaultSignUpFormData } from "../utils/defaultData";
+import { post } from "../utils/axiosApi";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
-  const [member, setMember] = useState({});
-  const handleSubmit = useForm({url: "/signUp", data: member});
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setMember((prev) => ({ ...prev, [name]: value }));
+  const navigate = useNavigate();
+  const signUpForm = useForm({
+    mode: "onChange",
+    defaultValues: defaultSignUpFormData,
+  });
+  const onSubmit = (data) => {
+    post({ url: "/signUp", data: data })
+      .catch((e) => {
+        signUpForm.setError("root.serverError", { type: "400" });
+        if (e.response?.data?.message === "Member Already Exists") {
+          alert("이미 가입한 회원입니다");
+          return;
+        }
+        alert("네트워크 오류가 발생하였습니다");
+      })
+      .then((res) => {
+        if (res?.data.status === "success") {
+          alert("회원가입 완료");
+          navigate("/login");
+        }
+      });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <input
-          type="email"
-          name="email"
-          className="border"
-          placeholder="이메일"
-          required
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <input type="text" className="border" placeholder="닉네임" />
-      </div>
-      <div>
-        <select name="position">
-          <option>탑(TOP)</option>
-          <option>정글(JUNGLE)</option>
-          <option>미드(MID)</option>
-          <option>원딜(ADC)</option>
-          <option>서포터(SPT)</option>
-        </select>
-      </div>
-      <div>
-        <input
-          type="password"
-          name="password"
-          className="border"
-          placeholder="비밀번호"
-        />
-      </div>
-      <div>
-        <input
-          type="password"
-          name="re-password"
-          className="border"
-          placeholder="비밀번호 확인"
-        />
-      </div>
-      <button>확인</button>
-    </form>
+    <Container component="main" maxWidth="xs" className="mt-10 pt-10">
+      <FormProvider {...signUpForm}>
+        <form>
+          <ProfileBox />
+        </form>
+      </FormProvider>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={signUpForm.handleSubmit(onSubmit)}
+      >
+        회원가입
+      </Button>
+      <LinkBox to="/login"> 회원이신가요? 로그인 </LinkBox>
+    </Container>
   );
 }

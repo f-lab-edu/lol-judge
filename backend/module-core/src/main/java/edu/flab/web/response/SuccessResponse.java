@@ -6,4 +6,8 @@ public record SuccessResponse<T>(String status, T data) {
 	public static <T> SuccessResponse<T> of(T data) {
 		return new SuccessResponse<>(SUCCESS_STATUS, data);
 	}
+
+	public static SuccessResponse<Void> ok() {
+		return of(null);
+	}
 }
