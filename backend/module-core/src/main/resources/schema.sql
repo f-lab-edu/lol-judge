@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS game_account
     member_id      BIGINT,
     lol_login_id   VARCHAR(24) UNIQUE,
     nickname       VARCHAR(16) UNIQUE,
+    position       VARCHAR(16),
     lol_tier_color VARCHAR(16),
     lol_tier_level TINYINT CHECK (0 <= lol_tier_level AND lol_tier_level < 5),
     lol_tier_point INT,
