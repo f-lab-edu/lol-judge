@@ -16,10 +16,13 @@ import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.service.MemberLoginService;
 import edu.flab.member.service.MemberRankFindService;
 import edu.flab.member.service.MemberSignUpService;
+import edu.flab.web.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
@@ -29,13 +32,15 @@ public class MemberController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/signUp")
-	public void signUp(@RequestBody @Valid MemberSignUpDto dto) {
+	public SuccessResponse<Void> signUp(@RequestBody @Valid MemberSignUpDto dto) {
 		memberSignUpService.signUp(dto);
+		return SuccessResponse.ok();
 	}
 
 	@PostMapping("/login")
-	public void login(HttpServletRequest request, @RequestBody @Valid MemberLoginDto dto) {
+	public SuccessResponse<Void> login(HttpServletRequest request, @RequestBody @Valid MemberLoginDto dto) {
 		memberLoginService.login(request, dto);
+		return SuccessResponse.ok();
 	}
 
 	@ResponseStatus(HttpStatus.OK)
