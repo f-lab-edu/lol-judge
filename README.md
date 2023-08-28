@@ -4,6 +4,32 @@
 
 <br/>
 
+# 🛠️ 사용 기술
+
+### Backend
+- Java17
+- Spring Boot 3.0
+- MyBatis
+- Gradle
+- Junit5
+
+### Frontend
+- JavaScript
+- React 18.2
+- Node.js
+
+### Infra
+- MySQL 8.0
+- RabbitMQ
+- Redis
+- Docker
+- NCP(Naver Cloud Platform)
+    - Server
+    - Object Storage
+    - Container Registry
+
+<br/>
+
 # :dart: 프로젝트 목표
 
 - 실제 사용 가능한 서비스를 목표로 합니다.
