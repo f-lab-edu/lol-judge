@@ -5,3 +5,9 @@ export const defaultSignUpFormData = {
     repassword: '',
     position: ''
 }
+
+export const defaultElectionFormData = {
+    youtubeLink: '',
+    champion: '',
+    opinion: ''
+}

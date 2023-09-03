@@ -7,6 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { defaultSignUpFormData } from "../utils/defaultData";
 import { post } from "../utils/axiosApi";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ export default function SignUp() {
 
   return (
     <Container component="main" maxWidth="xs" className="mt-10 pt-10">
+      <Typography component="h1" align="center" variant="h5" className="p-3">
+        회원가입
+      </Typography>
       <FormProvider {...signUpForm}>
         <form>
           <ProfileBox />
@@ -46,7 +50,7 @@ export default function SignUp() {
         sx={{ mt: 3, mb: 2 }}
         onClick={signUpForm.handleSubmit(onSubmit)}
       >
-        회원가입
+        가입하기
       </Button>
       <LinkBox to="/login"> 회원이신가요? 로그인 </LinkBox>
     </Container>

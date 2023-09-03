@@ -10,6 +10,7 @@ import ScoreRanking from "./pages/ScoreRanking";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import "./index.css";
+import ElectionRegister from "./pages/ElectionRegister";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "/elections", element: <ElectionList /> },
       { path: "/elections/:electionId", element: <ElectionDetail /> },
+      { path: "/elections/register", element: <ElectionRegister /> },
       { path: "/ranking", element: <ScoreRanking /> },
       { path: "/signUp", element: <SignUp /> },
       { path: "/login", element: <Login /> },
