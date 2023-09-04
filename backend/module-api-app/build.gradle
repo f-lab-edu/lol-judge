@@ -17,6 +17,7 @@ dependencies {
     implementation project(':module-client-redis')
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.security:spring-security-crypto:6.1.0'
+    implementation 'org.springframework.session:spring-session-data-redis'
 }
 
 test {
