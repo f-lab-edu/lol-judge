@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.flab.member.dto.MemberLoginDto;
+import edu.flab.member.dto.MemberLoginRequestDto;
+import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.member.dto.MemberRankRequestDto;
 import edu.flab.member.dto.MemberRankResponseDto;
 import edu.flab.member.dto.MemberSignUpDto;
@@ -38,9 +39,15 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public SuccessResponse<Void> login(HttpServletRequest request, @RequestBody @Valid MemberLoginDto dto) {
-		memberLoginService.login(request, dto);
-		return SuccessResponse.ok();
+	public SuccessResponse<MemberLoginResponseDto> login(HttpServletRequest request,
+		@RequestBody @Valid MemberLoginRequestDto dto) {
+		MemberLoginResponseDto loginSuccessDto = memberLoginService.login(request, dto);
+		return SuccessResponse.of(loginSuccessDto);
+	}
+
+	@GetMapping("/login")
+	public SuccessResponse<String> checkLogin(HttpServletRequest request) {
+		return SuccessResponse.of(memberLoginService.getLoginMember(request));
 	}
 
 	@ResponseStatus(HttpStatus.OK)

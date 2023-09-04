@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import edu.flab.exception.AuthenticationException;
 import edu.flab.log.ExceptionLogTrace;
 import edu.flab.member.domain.Member;
-import edu.flab.member.dto.MemberLoginDto;
+import edu.flab.member.dto.MemberLoginRequestDto;
+import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.member.repository.MemberMapper;
 import edu.flab.web.config.LoginConstant;
 import edu.flab.web.response.ErrorCode;
@@ -25,14 +26,21 @@ public class MemberLoginService {
 	private final PasswordEncoder passwordEncoder;
 
 	@ExceptionLogTrace
-	public void login(HttpServletRequest request, MemberLoginDto dto) {
+	public MemberLoginResponseDto login(HttpServletRequest request, MemberLoginRequestDto dto) {
 		Member member = validationEmail(dto.getEmail());
-
 		validationPassword(dto.getPassword(), member.getPassword());
-
 		HttpSession session = request.getSession(true);
-
 		session.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, member);
+		return new MemberLoginResponseDto(member.getGameAccount().getLolLoginId());
+	}
+
+	public String getLoginMember(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return null;
+		}
+		Member member = (Member)session.getAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE);
+		return member.getGameAccount().getLolLoginId();
 	}
 
 	private Member validationEmail(String email) {
