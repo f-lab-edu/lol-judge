@@ -11,3 +11,7 @@ export const defaultElectionFormData = {
     champion: '',
     opinion: ''
 }
+
+export const defaultLoginState = {
+    lolLoginId: ''
+}

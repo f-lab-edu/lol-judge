@@ -5,24 +5,30 @@ import LinkBox from "../components/LinkBox";
 import ProfileBox from "../components/ProfileBox";
 import { FormProvider, useForm } from "react-hook-form";
 import { defaultSignUpFormData } from "../utils/defaultData";
-import { post } from "../utils/axiosApi";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
+import axios from "axios";
+import { convertUrl } from "../utils/urlUtil";
 
 export default function SignUp() {
   const navigate = useNavigate();
+
   const signUpForm = useForm({
     mode: "onChange",
     defaultValues: defaultSignUpFormData,
   });
-  const onSubmit = (data) => {
-    post({ url: "/signUp", data: data })
+
+  const signUp = (data) => {
+    const url = convertUrl("/signUp");
+    axios
+      .post(url, data)
       .catch((e) => {
         signUpForm.setError("root.serverError", { type: "400" });
         if (e.response?.data?.message === "Member Already Exists") {
           alert("이미 가입한 회원입니다");
           return;
         }
+        console.log(e);
         alert("네트워크 오류가 발생하였습니다");
       })
       .then((res) => {
@@ -31,6 +37,10 @@ export default function SignUp() {
           navigate("/login");
         }
       });
+  };
+
+  const onSubmit = (data) => {
+    signUp(data);
   };
 
   return (
