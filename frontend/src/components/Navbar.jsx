@@ -11,7 +11,7 @@ export default function Navbar() {
   const logout = (event) => {
     event.preventDefault();
     setLoginState(defaultLoginState);
-  }
+  };
 
   return (
     <header className="flex justify-between border-b border-gray-300 p-2">
@@ -28,7 +28,9 @@ export default function Navbar() {
         ) : (
           <>
             <Typography>{`${loginState.lolLoginId}님`}</Typography>
-            <Button variant="contained" onClick={logout}>로그아웃</Button>
+            <Button variant="contained" onClick={logout}>
+              로그아웃
+            </Button>
           </>
         )}
       </nav>
