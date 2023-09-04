@@ -1,4 +1,4 @@
-package edu.flab.config;
+package edu.flab.web.config;
 
 import java.util.List;
 
