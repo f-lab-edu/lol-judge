@@ -2,15 +2,20 @@ package edu.flab.member.domain;
 
 import java.util.NoSuchElementException;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
+@Builder
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RankScore {
 
 	private long score;

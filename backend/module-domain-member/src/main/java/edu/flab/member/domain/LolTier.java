@@ -5,9 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
+
+
 @Getter
+@EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public sealed class LolTier permits LolTierUtil {
 
 	@Getter
