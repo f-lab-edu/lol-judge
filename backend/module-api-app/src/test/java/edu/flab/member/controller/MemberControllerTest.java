@@ -18,10 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.flab.member.domain.GamePosition;
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.LolTierUtil;
-import edu.flab.member.dto.MemberLoginDto;
+import edu.flab.member.dto.MemberLoginRequestDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.web.handler.GlobalExceptionHandler;
 
@@ -87,7 +86,7 @@ class MemberControllerTest {
 			.position("MID")
 			.build();
 
-		MemberLoginDto loginDto = MemberLoginDto.builder()
+		MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
 			.email(signUpDto.getEmail())
 			.password(signUpDto.getPassword())
 			.build();
@@ -114,7 +113,7 @@ class MemberControllerTest {
 			.position("MID")
 			.build();
 
-		MemberLoginDto loginDto = MemberLoginDto.builder()
+		MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
 			.email(signUpDto.getEmail())
 			.password("invalid password")
 			.build();
@@ -134,7 +133,7 @@ class MemberControllerTest {
 
 	@Test
 	void 존재하지않는_이메일를_입력하여_로그인에_실패한다() throws Exception {
-		MemberLoginDto loginDto = MemberLoginDto.builder()
+		MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
 			.email("admin@example.com")
 			.password("aB#12345")
 			.build();
