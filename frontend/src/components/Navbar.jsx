@@ -4,13 +4,16 @@ import Logo from "./Logo";
 import { LoginContext } from "../context/LoginContext";
 import { Button, Typography } from "@mui/material";
 import { defaultLoginState } from "../utils/defaultData";
+import axios from "axios";
+import { convertUrl } from "../utils/urlUtil";
 
 export default function Navbar() {
   const { loginState, setLoginState } = useContext(LoginContext);
 
   const logout = (event) => {
     event.preventDefault();
-    setLoginState(defaultLoginState);
+    const url = convertUrl("/logout");
+    axios.get(url).then(() => setLoginState(defaultLoginState));
   };
 
   return (

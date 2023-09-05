@@ -43,6 +43,14 @@ public class MemberLoginService {
 		return member.getGameAccount().getLolLoginId();
 	}
 
+	public void logout(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			session.invalidate();
+		}
+	}
+
 	private Member validationEmail(String email) {
 		return memberMapper.findActiveMemberByEmail(email).orElseThrow(NoSuchElementException::new);
 	}

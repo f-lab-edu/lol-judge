@@ -50,6 +50,11 @@ public class MemberController {
 		return SuccessResponse.of(memberLoginService.getLoginMember(request));
 	}
 
+	@GetMapping("/logout")
+	public void logout(HttpServletRequest httpServletRequest) {
+		memberLoginService.logout(httpServletRequest);
+	}
+
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("members/ranking")
 	public List<MemberRankResponseDto> getMemberRankingOrderByRankScore(@RequestBody @Valid MemberRankRequestDto dto) {
