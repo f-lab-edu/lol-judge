@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberLoginDto {
+public class MemberLoginRequestDto {
 
 	@Email
 	@NotNull
