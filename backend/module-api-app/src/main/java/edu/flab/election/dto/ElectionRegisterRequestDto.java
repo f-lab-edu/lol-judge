@@ -17,15 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ElectionRegisterRequestDto {
 	@NotBlank
-	private String contents;
+	private String opinion;
 
 	@NotBlank
-	@Length(max = 50)
+	@Length(max = 100)
 	private String youtubeUrl;
-
-	@NotBlank
-	@Length(max = 300)
-	private String hostEmail;
 
 	@NotBlank
 	@Length(max = 300)
@@ -34,6 +30,9 @@ public class ElectionRegisterRequestDto {
 	@Range(min = ElectionConstant.MIN_COST, max = ElectionConstant.MAX_COST)
 	private int cost;
 
-	@Range(min = ElectionConstant.MIN_DURATION, max = ElectionConstant.MAX_DURATION)
-	private int durationMinute;
+	@Range(min = ElectionConstant.MIN_PROGRESS_HOUR, max = ElectionConstant.MAX_PROGRESS_HOUR)
+	private int progressTime;
+
+	@NotBlank
+	private String champion;
 }
