@@ -16,6 +16,9 @@ dependencies {
     implementation project(':module-client-rabbitmq')
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.testcontainers:testcontainers:1.19.0'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
+    testImplementation 'org.testcontainers:rabbitmq:1.19.0'
 }
 
 test {
