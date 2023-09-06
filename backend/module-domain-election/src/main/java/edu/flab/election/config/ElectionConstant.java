@@ -6,6 +6,6 @@ public class ElectionConstant {
 	public static final int MAX_COST = 5000;
 
 	// 재판 오픈 기간
-	public static final int MIN_DURATION = 30;
-	public static final int MAX_DURATION = 1440;
+	public static final int MIN_PROGRESS_HOUR = 1;
+	public static final int MAX_PROGRESS_HOUR = 72;
 }
