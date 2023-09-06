@@ -1,31 +1,35 @@
 package edu.flab.member.controller;
 
-import static edu.flab.member.domain.LolTier.Color.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.RabbitMQContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.flab.member.domain.LolTier;
-import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.dto.MemberLoginRequestDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.web.handler.GlobalExceptionHandler;
 
 @Tag("integration")
 @Transactional
+@Testcontainers
 @SpringBootTest
 class MemberControllerTest {
 
@@ -37,13 +41,27 @@ class MemberControllerTest {
 
 	private MockMvc mock;
 
-	private final LolTier challenger = LolTierUtil.createHighTier(CHALLENGER, 1000);
+	@Container
+	private static GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
+
+	@Container
+	private static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:latest").withExposedPorts(5672, 15672);
 
 	@BeforeEach
 	void setUp() {
+		redis.start();
+		rabbitmq.start();
 		mock = MockMvcBuilders.standaloneSetup(memberController)
 			.setControllerAdvice(new GlobalExceptionHandler())
 			.build();
+	}
+
+	@DynamicPropertySource
+	static void registerProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.rabbitmq.host", rabbitmq::getHost);
+		registry.add("spring.rabbitmq.port", rabbitmq::getAmqpPort);
+		registry.add("spring.rabbitmq.username", rabbitmq::getAdminUsername);
+		registry.add("spring.rabbitmq.password", rabbitmq::getAdminPassword);
 	}
 
 	@Test

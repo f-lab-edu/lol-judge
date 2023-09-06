@@ -22,12 +22,15 @@ export default function ChampionSelectBox() {
               return true;
             },
           }}
-          render={({ fieldState: { error } }) => (
+          render={({ field: { value, onChange, defaultValue }, fieldState: { error }}) => (
             <>
               <Select
                 options={champions}
+                onChange={onChange}
+                value={champions.find((c) => c.value === value)}
+                defaultValue={champions.find((c) => c.value === defaultValue)}
                 required
-                placeholder="챔피언을 선택하세요 *"
+                placeholder="플레이한 챔피언을 선택하세요 *"
               />
               <FormHelperText>{error?.message}</FormHelperText>
             </>

@@ -18,6 +18,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.security:spring-security-crypto:6.1.0'
     implementation 'org.springframework.session:spring-session-data-redis'
+    testImplementation 'org.testcontainers:testcontainers:1.19.0'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
+    testImplementation 'org.testcontainers:rabbitmq:1.19.0'
 }
 
 test {

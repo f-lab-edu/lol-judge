@@ -3,12 +3,12 @@ package edu.flab.election.domain;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import edu.flab.election.config.ElectionConstant;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
@@ -30,9 +30,6 @@ public class Election {
 
 	@NotNull
 	private ElectionStatus status;
-
-	@NotBlank
-	private String contents;
 
 	@Length(max = 50)
 	private String youtubeUrl;
@@ -57,5 +54,20 @@ public class Election {
 		}
 		candidates.add(candidate);
 		candidate.setElectionId(id);
+	}
+
+	public Candidate getHost() {
+		return getCandidates(0);
+	}
+
+	public Candidate getParticipant() {
+		return getCandidates(1);
+	}
+
+	private Candidate getCandidates(int index) {
+		if (index < candidates.size()) {
+			return candidates.get(index);
+		}
+		throw new NoSuchElementException("선거의 후보자를 조회했으나 존재하지 않습니다.");
 	}
 }

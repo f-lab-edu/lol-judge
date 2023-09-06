@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import edu.flab.election.config.ElectionConstant;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,24 +14,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionRegisterRequestDto {
-	@NotBlank
-	private String opinion;
+public class ElectionDetailResponseDto {
+	private Long id;
 
-	@NotBlank
-	@Length(max = 100)
+	@Length(max = 50)
 	private String youtubeUrl;
-
-	@NotBlank
-	@Length(max = 300)
-	private String participantEmail;
 
 	@Range(min = ElectionConstant.MIN_COST, max = ElectionConstant.MAX_COST)
 	private int cost;
 
-	@Range(min = ElectionConstant.MIN_PROGRESS_HOUR, max = ElectionConstant.MAX_PROGRESS_HOUR)
-	private int progressTime;
+	private String hostChampion;
 
-	@NotBlank
-	private String champion;
+	private String hostOpinion;
+
+	private String participantChampion;
+
+	private String participantOpinion;
 }

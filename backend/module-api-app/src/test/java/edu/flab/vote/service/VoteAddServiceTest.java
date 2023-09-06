@@ -47,7 +47,6 @@ class VoteAddServiceTest {
 	private final Election election = Election.builder()
 		.id(1L)
 		.status(ElectionStatus.IN_PROGRESS)
-		.contents("원딜이 쌍둥이 포탑을 계속 쳤으면 게임을 끝낼 수 있었다 vs 카밀의 압박 때문에 할 수 없다")
 		.youtubeUrl("7I5SKTY-JXc")
 		.cost(100)
 		.createdAt(OffsetDateTime.now())
