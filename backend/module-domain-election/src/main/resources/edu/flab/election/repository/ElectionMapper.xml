@@ -4,17 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.flab.election.repository.ElectionMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO election (status, contents, cost, youtube_url, created_at, ended_at)
-        VALUES (#{status}, #{contents}, #{cost}, #{youtubeUrl}, #{createdAt}, #{endedAt});
+        INSERT INTO election (status, cost, youtube_url, created_at, ended_at)
+        VALUES (#{status}, #{cost}, #{youtubeUrl}, #{createdAt}, #{endedAt});
     </insert>
-
-    <update id="updateContentsById">
-        UPDATE election
-        SET contents    = #{contents},
-            cost        = #{cost},
-            youtube_url = #{youtubeUrl}
-        WHERE id = #{id}
-    </update>
 
     <update id="updateStatusById">
         UPDATE election
@@ -75,7 +67,6 @@
     <sql id="selectElectionJoinWithGameInfoAndCandidate">
         SELECT e.id       AS election_id,
                e.status,
-               e.contents AS election_contents,
                e.youtube_url,
                e.cost,
                e.total_voted_count,
@@ -84,7 +75,8 @@
                c.id       AS candidate_id,
                c.member_id,
                c.election_id,
-               c.contents AS candidate_contents,
+               c.opinion,
+               c.champion,
                c.voted_status
         FROM election e
                  LEFT OUTER JOIN game_info g ON e.id = g.election_id
@@ -94,7 +86,6 @@
     <resultMap id="electionResultMap" type="edu.flab.election.domain.Election">
         <id column="election_id" property="id"/>
         <result column="status" property="status" javaType="edu.flab.election.domain.ElectionStatus"/>
-        <result column="election_contents" property="contents"/>
         <result column="youtube_url" property="youtubeUrl"/>
         <result column="cost" property="cost"/>
         <result column="total_voted_count" property="totalVotedCount"/>

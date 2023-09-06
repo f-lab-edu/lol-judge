@@ -42,10 +42,9 @@ CREATE TABLE IF NOT EXISTS election
     id                BIGINT NOT NULL AUTO_INCREMENT,
     election_no       VARCHAR(64),
     `status`          VARCHAR(15),
-    contents          VARCHAR(1000),
     cost              INT,
     total_voted_count BIGINT DEFAULT 0,
-    youtube_url       VARCHAR(20),
+    youtube_url       VARCHAR(100),
     created_at        TIMESTAMP,
     ended_at          TIMESTAMP,
 
@@ -80,7 +79,8 @@ CREATE TABLE IF NOT EXISTS candidate
     election_id  BIGINT NOT NULL,
     member_id    BIGINT NOT NULL,
     voted_status ENUM ('WIN','LOSE'),
-    contents     VARCHAR(1000),
+    opinion      VARCHAR(1000),
+    champion     VARCHAR(16),
 
     PRIMARY KEY (id),
 

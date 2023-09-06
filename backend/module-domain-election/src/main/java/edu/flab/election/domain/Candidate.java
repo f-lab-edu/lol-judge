@@ -24,14 +24,18 @@ public class Candidate {
 	@NotNull
 	private Long electionId;
 
-	private String contents;
+	private String opinion;
+
+	private String champion;
 
 	@NotNull
 	private VotedStatus votedStatus;
 
-	public Candidate(Long memberId, Long electionId) {
+	public Candidate(Long memberId, Long electionId, String opinion, String champion) {
 		this.memberId = memberId;
 		this.electionId = electionId;
+		this.opinion = opinion;
+		this.champion = champion;
 	}
 
 	public void setElectionId(Long electionId) {
