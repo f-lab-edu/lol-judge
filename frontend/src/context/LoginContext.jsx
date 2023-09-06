@@ -18,7 +18,7 @@ export function LoginProvider({children}) {
             })
             .then((res) => res?.data)
             .then((payload) => {
-                const lolLoginId = payload.data;
+                const lolLoginId = payload?.data;
                 if (lolLoginId !== null && lolLoginId !== undefined)
                 setLoginState({lolLoginId});
             });

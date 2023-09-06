@@ -9,7 +9,7 @@ export default function CheckBox({ label }) {
     <Grid container spacing={1} className="pt-3 pb-3">
       <Grid item xs={12}>
         <Controller
-        name="agree"
+          name="agree"
           control={control}
           render={() => (
             <FormControlLabel

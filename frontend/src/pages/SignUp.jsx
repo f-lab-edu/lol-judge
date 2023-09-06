@@ -43,6 +43,10 @@ export default function SignUp() {
     signUp(data);
   };
 
+  const onError = (e) => {
+    alert("모든 입력란를 채워주세요");
+  }
+
   return (
     <Container component="main" maxWidth="xs" className="mt-10 pt-10">
       <Typography component="h1" align="center" variant="h5" className="p-3">
@@ -58,7 +62,7 @@ export default function SignUp() {
         fullWidth
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
-        onClick={signUpForm.handleSubmit(onSubmit)}
+        onClick={signUpForm.handleSubmit(onSubmit, onError)}
       >
         가입하기
       </Button>

@@ -11,6 +11,7 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import "./index.css";
 import ElectionRegister from "./pages/ElectionRegister";
+import ElectionEdit from "./pages/ElectionEdit";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "/elections", element: <ElectionList /> },
       { path: "/elections/:electionId", element: <ElectionDetail /> },
       { path: "/elections/register", element: <ElectionRegister /> },
+      { path: "/elections/edit/:electionId", element: <ElectionEdit /> },
       { path: "/ranking", element: <ScoreRanking /> },
       { path: "/signUp", element: <SignUp /> },
       { path: "/login", element: <Login /> },

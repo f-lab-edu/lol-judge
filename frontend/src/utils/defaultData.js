@@ -7,9 +7,21 @@ export const defaultSignUpFormData = {
 }
 
 export const defaultElectionFormData = {
-    youtubeLink: '',
+    opinion: '',
+    youtubeUrl: '',
+    participantEmail: '',
+    cost: 0,
+    progressTime: 0,
     champion: '',
-    opinion: ''
+}
+
+export const defaultElectionEditData = {
+    youtubeUrl: '',
+    cost: 0,
+    hostChampion: '',
+    hostOpinion: '',
+    participantChampion: '',
+    participantOpinion: '',
 }
 
 export const defaultLoginState = {

@@ -77,7 +77,7 @@ export default function ProfileBox() {
             required: true,
             validate: (value) => {
               const regex =
-              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
               if (!regex.test(value)) {
                 return "비밀번호는 영어, 숫자, 특수문자로 구성된 8글자이어야 합니다";
               }
@@ -140,9 +140,7 @@ export default function ProfileBox() {
             fieldState: { invalid, error },
           }) => (
             <FormControl fullWidth>
-              <InputLabel>
-                포지션
-              </InputLabel>
+              <InputLabel>포지션</InputLabel>
               <Select
                 required
                 label="postion"

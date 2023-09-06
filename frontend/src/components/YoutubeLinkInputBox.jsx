@@ -9,12 +9,12 @@ export default function YoutubeLinkInputBox() {
       <Grid item xs={12}>
         <Controller
           Controller={control}
-          name="youtubeLink"
+          name="youtubeUrl"
           rules={{
             required: true,
             validate: (value) => {
               const regex =
-                /^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?$/;
+                /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|live\/|v\/)?)([\w\-]+)(\S+)?$/;
               if (!regex.test(value)) {
                 return "유튜브 링크를 입력하세요";
               }
