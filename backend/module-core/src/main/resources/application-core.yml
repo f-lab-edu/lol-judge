@@ -1,7 +1,7 @@
 --- # 공통 설정
 access:
   control:
-    methods: GET, POST, PUT, DELETE # 설정된 종류의 메서드만 접근 허용
+    methods: GET, POST, PUT, PATCH, DELETE, OPTIONS # 설정된 종류의 메서드만 접근 허용
     max-age: 60 # 클라이언트는 설정된 시간만큼 Preflight 요청 결과를 캐시
     allow-credentials: true # 클라이언트에서 전송한 쿠키를 받아들임
 
