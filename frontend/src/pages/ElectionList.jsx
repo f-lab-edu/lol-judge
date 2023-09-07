@@ -8,6 +8,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import PaginationOutlined from "../components/PaginationOutlined";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -89,7 +91,14 @@ export default function ElectionList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <PaginationOutlined />
+      <div className="flex justify-between">
+        <PaginationOutlined />
+        <Link to="/elections/register">
+          <Button variant="contained" className="p-3">
+            등록하기
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

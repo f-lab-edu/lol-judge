@@ -23,7 +23,7 @@ export default function Navbar() {
       </Link>
       <nav className="flex items-center gap-6 text-2xl">
         <Link to="/ranking">랭킹</Link>
-        <Link to="/elections">재판</Link>
+        <Link to="/statistics">통계</Link>
         {loginState.lolLoginId === "" ? (
           <Link to="/login">
             <Button variant="contained">로그인</Button>
