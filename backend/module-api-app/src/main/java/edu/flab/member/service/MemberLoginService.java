@@ -31,16 +31,16 @@ public class MemberLoginService {
 		validationPassword(dto.getPassword(), member.getPassword());
 		HttpSession session = request.getSession(true);
 		session.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, member);
-		return new MemberLoginResponseDto(member.getGameAccount().getLolLoginId());
+		return new MemberLoginResponseDto(member.getId(), member.getGameAccount().getLolLoginId(), member.getEmail());
 	}
 
-	public String getLoginMember(HttpServletRequest request) {
+	public MemberLoginResponseDto getLoginMember(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
 			return null;
 		}
 		Member member = (Member)session.getAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE);
-		return member.getGameAccount().getLolLoginId();
+		return new MemberLoginResponseDto(member.getId(), member.getGameAccount().getLolLoginId(), member.getEmail());
 	}
 
 	public void logout(HttpServletRequest request) {
