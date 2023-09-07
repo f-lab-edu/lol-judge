@@ -40,6 +40,9 @@ public class Election {
 	@PositiveOrZero
 	private long totalVotedCount;
 
+	@Range(min = ElectionConstant.MIN_PROGRESS_HOUR, max = ElectionConstant.MAX_PROGRESS_HOUR)
+	private int progressTime;
+
 	@NotNull
 	private OffsetDateTime createdAt;
 

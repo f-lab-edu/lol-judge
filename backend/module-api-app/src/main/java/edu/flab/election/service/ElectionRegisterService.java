@@ -1,6 +1,5 @@
 package edu.flab.election.service;
 
-import java.time.Duration;
 import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Service;
@@ -52,8 +51,8 @@ public class ElectionRegisterService {
 			.status(ElectionStatus.PENDING)
 			.youtubeUrl(dto.getYoutubeUrl())
 			.cost(dto.getCost())
+			.progressTime(dto.getProgressTime())
 			.createdAt(OffsetDateTime.now())
-			.endedAt(OffsetDateTime.now().plus(Duration.ofMinutes(dto.getProgressTime())))
 			.build();
 
 		electionMapper.save(election);
