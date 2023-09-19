@@ -1,6 +1,7 @@
 package edu.flab.election.dto;
 
-import edu.flab.election.domain.ElectionStatus;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionPagingFindRequestDto {
-	private long countOffset;
-	private long limit;
-	private ElectionStatus status;
+public class ElectionInfoFindResponseDto {
+	private Long lastId;
+	private List<ElectionInfoDto> electionInfoDtoList;
 }

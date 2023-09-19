@@ -7,9 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import PaginationOutlined from "../components/PaginationOutlined";
-import { Button } from "@mui/material";
+import { Button, Pagination } from "@mui/material";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { convertUrl } from "../utils/urlUtil";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,69 +31,56 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, "user123", "2022-01-13"),
-  createData("Ice cream sandwich", 237, 9.0, "user123", "2022-01-13"),
-  createData("Eclair", 262, 16.0, "user123", "2022-01-13"),
-  createData("Cupcake", 305, 3.7, "user1234", "2022-01-12"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-  createData("Gingerbread", 356, 16.0, "admin1233", "2022-01-11"),
-];
-
 export default function ElectionList() {
+  const [pageOffset, setPageOffset] = React.useState(1);
+  const [electionList, setElectionList] = React.useState([]);
+
+  const handleChangePage = (event, page) => {
+    setPageOffset(page);
+  };
+
+  React.useEffect(() => {
+    axios
+      .get(convertUrl("/elections"), {
+        params: {
+          countOffset: 0,
+          limit: 30,
+          status: "IN_PROGRESS",
+        },
+      })
+      .catch((e) => console.error(e))
+      .then((res) => res?.data)
+      .then((payload) => payload?.data)
+      .then((data) => setElectionList(data));
+  }, [pageOffset]);
+
   return (
     <div>
       <TableContainer component={Paper} className="mt-10">
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>제목</StyledTableCell>
-              <StyledTableCell align="right">티어</StyledTableCell>
-              <StyledTableCell align="right">투표수</StyledTableCell>
-              <StyledTableCell align="right">작성자</StyledTableCell>
-              <StyledTableCell align="right">날짜</StyledTableCell>
+              <StyledTableCell align="left">썸네일</StyledTableCell>
+              <StyledTableCell align="center">제목</StyledTableCell>
+              <StyledTableCell align="center">투표수</StyledTableCell>
+              <StyledTableCell align="center">날짜</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.protein}</StyledTableCell>
+            
+            {electionList?.map((e, number) => (
+              <StyledTableRow key={number}>
+                <StyledTableCell align="left" scope="row">{e.thumbnail}</StyledTableCell>
+                <StyledTableCell align="center">{e.title}</StyledTableCell>
+                <StyledTableCell align="center">{e.totalVotedCount}</StyledTableCell>
+                <StyledTableCell align="center">{e.createdAt}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="flex justify-between">
-        <PaginationOutlined />
+      <div className="flex justify-between pt-3">
+        <Pagination count={Math.ceil(electionList?.length / 30)} onChange={handleChangePage} />
         <Link to="/elections/register">
           <Button variant="contained" className="p-3">
             등록하기

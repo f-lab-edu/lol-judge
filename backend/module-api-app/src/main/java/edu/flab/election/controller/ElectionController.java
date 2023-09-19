@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.flab.election.dto.ElectionDetailResponseDto;
 import edu.flab.election.dto.ElectionEditRequestDto;
+import edu.flab.election.dto.ElectionInfoFindResponseDto;
+import edu.flab.election.dto.ElectionPagingFindRequestDto;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionDetailService;
 import edu.flab.election.service.ElectionEditService;
+import edu.flab.election.service.ElectionInfoFindService;
 import edu.flab.election.service.ElectionRegisterService;
 import edu.flab.member.domain.Member;
 import edu.flab.web.annotation.Login;
@@ -31,6 +34,13 @@ public class ElectionController {
 	private final ElectionRegisterService electionRegisterService;
 	private final ElectionDetailService electionDetailService;
 	private final ElectionEditService electionEditService;
+	private final ElectionInfoFindService electionInfoFindService;
+
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/elections")
+	public SuccessResponse<ElectionInfoFindResponseDto> getElectionInfoWithPaging(ElectionPagingFindRequestDto dto) {
+		return SuccessResponse.of(electionInfoFindService.findAllElectionInfoWithPaging(dto));
+	}
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/elections")
@@ -41,16 +51,16 @@ public class ElectionController {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping("/elections/{electionId}")
-	public SuccessResponse<ElectionDetailResponseDto> findElectionDetail(@PathVariable Long electionId) {
-		ElectionDetailResponseDto electionDetail = electionDetailService.findElectionDetail(electionId);
-		return SuccessResponse.of(electionDetail);
-	}
-
-	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/elections")
 	public SuccessResponse<Void> updateElection(@RequestBody @Valid ElectionEditRequestDto dto) {
 		electionEditService.update(dto);
 		return SuccessResponse.ok();
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/elections/{electionId}")
+	public SuccessResponse<ElectionDetailResponseDto> findElectionDetail(@PathVariable Long electionId) {
+		ElectionDetailResponseDto electionDetail = electionDetailService.findElectionDetail(electionId);
+		return SuccessResponse.of(electionDetail);
 	}
 }

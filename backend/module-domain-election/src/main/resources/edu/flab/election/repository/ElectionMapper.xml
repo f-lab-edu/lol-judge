@@ -55,10 +55,19 @@
         WHERE e.status = #{status}
     </select>
 
+    <select id="findLatestElectionsByStatusWithPaging" resultMap="electionResultMap">
+        <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
+        WHERE
+        e.status = #{status}
+        ORDER BY e.id DESC
+        LIMIT #{limit}
+    </select>
+
     <select id="findAllElectionsByStatusWithPaging" resultMap="electionResultMap">
         <include refid="selectElectionJoinWithGameInfoAndCandidate"/>
-        WHERE e.id <![CDATA[<=]]> #{countOffset}
-        AND e.status = #{status}
+        WHERE
+        e.id <![CDATA[<=]]> #{countOffset} AND
+        e.status = #{status}
         ORDER BY e.id DESC
         LIMIT #{limit}
     </select>
