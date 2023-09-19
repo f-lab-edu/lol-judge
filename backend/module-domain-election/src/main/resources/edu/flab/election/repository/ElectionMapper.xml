@@ -4,9 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.flab.election.repository.ElectionMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO election (status, cost, youtube_url, created_at, ended_at)
-        VALUES (#{status}, #{cost}, #{youtubeUrl}, #{createdAt}, #{endedAt});
+        INSERT INTO election (status, cost, youtube_url, created_at, progress_time)
+        VALUES (#{status}, #{cost}, #{youtubeUrl}, #{createdAt}, #{progressTime});
     </insert>
+
+    <update id="updateContentsById">
+        UPDATE election
+        SET cost = #{cost},
+            youtube_url = #{youtubeUrl}
+        WHERE id = #{id}
+    </update>
 
     <update id="updateStatusById">
         UPDATE election

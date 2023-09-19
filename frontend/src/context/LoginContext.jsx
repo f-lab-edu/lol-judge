@@ -14,13 +14,12 @@ export function LoginProvider({children}) {
             .get(url, {withCredentials: true})
             .catch(() => {
                 setLoginState(defaultLoginState);
-                alert("잘못된 접근입니다.");
             })
             .then((res) => res?.data)
             .then((payload) => {
-                const lolLoginId = payload?.data;
-                if (lolLoginId !== null && lolLoginId !== undefined)
-                setLoginState({lolLoginId});
+                const loginData = payload?.data;
+                if (loginData !== null && loginData !== undefined)
+                setLoginState(loginData);
             });
     }, []);
 

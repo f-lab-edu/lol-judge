@@ -46,7 +46,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/login")
-	public SuccessResponse<String> checkLogin(HttpServletRequest request) {
+	public SuccessResponse<MemberLoginResponseDto> getLoginMember(HttpServletRequest request) {
 		return SuccessResponse.of(memberLoginService.getLoginMember(request));
 	}
 

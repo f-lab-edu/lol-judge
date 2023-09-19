@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS election
     election_no       VARCHAR(64),
     `status`          VARCHAR(15),
     cost              INT,
+    progress_time     INT,
     total_voted_count BIGINT DEFAULT 0,
     youtube_url       VARCHAR(100),
     created_at        TIMESTAMP,

@@ -16,6 +16,9 @@ export const defaultElectionFormData = {
 }
 
 export const defaultElectionEditData = {
+    id: 0,
+    hostId: 0,
+    participantId: 0,
     youtubeUrl: '',
     cost: 0,
     hostChampion: '',
@@ -25,5 +28,7 @@ export const defaultElectionEditData = {
 }
 
 export const defaultLoginState = {
-    lolLoginId: ''
+    memberId: 0,
+    lolLoginId: '',
+    email: ''
 }

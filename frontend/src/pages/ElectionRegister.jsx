@@ -70,7 +70,7 @@ export default function ElectionRegister() {
               min={1}
               max={72}
             />
-            <ChampionSelectBox />
+            <ChampionSelectBox name="champion"/>
             <OpinionBox name="opinion" maxLength={500} />
           </form>
         </FormProvider>

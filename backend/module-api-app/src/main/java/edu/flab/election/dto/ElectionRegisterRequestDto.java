@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ElectionRegisterRequestDto {
 	@NotBlank
+	@Length(max = 500)
 	private String opinion;
 
 	@NotBlank
@@ -34,5 +35,6 @@ public class ElectionRegisterRequestDto {
 	private int progressTime;
 
 	@NotBlank
+	@Length(max = 15)
 	private String champion;
 }

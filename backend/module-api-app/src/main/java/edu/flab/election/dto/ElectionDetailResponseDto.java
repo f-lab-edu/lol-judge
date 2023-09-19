@@ -30,4 +30,8 @@ public class ElectionDetailResponseDto {
 	private String participantChampion;
 
 	private String participantOpinion;
+
+	private Long hostId;
+
+	private Long participantId;
 }

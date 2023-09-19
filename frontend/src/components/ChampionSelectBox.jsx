@@ -1,17 +1,25 @@
 import { FormHelperText, Grid } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import Select from "react-select";
+import { ChampionListContext } from "../context/ChampionListContext";
 
-export default function ChampionSelectBox() {
-  const champions = [{ label: "쉬바나", value: "shivana" }];
-  const { control } = useFormContext();
+export default function ChampionSelectBox({ name, disabled, style }) {
+  const { champions } = useContext(ChampionListContext);
+  const { control, setValue } = useFormContext();
+
+  useEffect(() => {
+    setValue(
+      name,
+      champions.find((c) => c.value === control._defaultValues.hostChampion)
+    );
+  }, [champions]);
 
   return (
-    <Grid container spacing={1} className="pt-3 pb-3">
+    <Grid container spacing={1} className={style}>
       <Grid item xs={12}>
         <Controller
-          name="champion"
+          name={name}
           control={control}
           rules={{
             required: true,
@@ -22,16 +30,26 @@ export default function ChampionSelectBox() {
               return true;
             },
           }}
-          render={({ field: { value, onChange, defaultValue }, fieldState: { error }}) => (
+          render={({ field: { value, onChange }, fieldState: { error } }) => (
             <>
-              <Select
-                options={champions}
-                onChange={onChange}
-                value={champions.find((c) => c.value === value)}
-                defaultValue={champions.find((c) => c.value === defaultValue)}
-                required
-                placeholder="플레이한 챔피언을 선택하세요 *"
-              />
+              {disabled ? (
+                <Select
+                  menuIsOpen={false}
+                  options={champions}
+                  onChange={onChange}
+                  value={value}
+                  required
+                  placeholder="플레이한 챔피언을 선택하세요 *"
+                />
+              ) : (
+                <Select
+                  options={champions}
+                  onChange={onChange}
+                  value={value}
+                  required
+                  placeholder="플레이한 챔피언을 선택하세요 *"
+                />
+              )}
               <FormHelperText>{error?.message}</FormHelperText>
             </>
           )}

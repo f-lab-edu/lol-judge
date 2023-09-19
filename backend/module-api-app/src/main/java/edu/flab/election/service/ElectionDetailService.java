@@ -21,6 +21,8 @@ public class ElectionDetailService {
 		Candidate participant = election.getParticipant();
 		return ElectionDetailResponseDto.builder()
 			.id(electionId)
+			.hostId(host.getMemberId())
+			.participantId(participant.getMemberId())
 			.cost(election.getCost())
 			.youtubeUrl(election.getYoutubeUrl())
 			.hostChampion(host.getChampion())

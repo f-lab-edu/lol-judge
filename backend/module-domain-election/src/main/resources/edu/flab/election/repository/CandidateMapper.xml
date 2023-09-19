@@ -9,12 +9,19 @@
     </insert>
 
     <update id="updateById">
-        UPDATE INTO candidate
+        UPDATE candidate
         SET voted_status = #{votedStatus},
             member_id    = #{memberId},
             election_id  = #{electionId},
             opinion      = #{opinion},
             champion     = #{champion}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateOpinionById">
+        UPDATE candidate
+        SET opinion  = #{opinion},
+            champion = #{champion}
         WHERE id = #{id}
     </update>
 

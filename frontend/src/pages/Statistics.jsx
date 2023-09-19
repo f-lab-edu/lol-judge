@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Home() {
+export default function Statistics() {
     return (
         <div>
-            <p>Home page</p>
+            통계 페이지
         </div>
     );
 }
