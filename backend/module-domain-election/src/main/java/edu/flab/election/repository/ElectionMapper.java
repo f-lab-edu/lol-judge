@@ -36,5 +36,7 @@ public interface ElectionMapper {
 
 	List<Election> findAllElectionsByStatusWithPaging(ElectionPagingFindRequestDto dto);
 
+	List<Election> findLatestElectionsByStatusWithPaging(ElectionPagingFindRequestDto dto);
+
 	List<Election> findElectionsOrderByTotalVotedCount(ElectionPagingFindRequestDto dto);
 }

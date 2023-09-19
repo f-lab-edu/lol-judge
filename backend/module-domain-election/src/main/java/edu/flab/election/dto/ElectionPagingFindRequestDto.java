@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ElectionPagingFindRequestDto {
-	private long offset;
+	private long countOffset;
 	private long limit;
 	private ElectionStatus status;
 }
