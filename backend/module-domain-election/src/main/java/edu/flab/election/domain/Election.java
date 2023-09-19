@@ -67,6 +67,13 @@ public class Election {
 		return getCandidates(1);
 	}
 
+	public String getTitle() {
+		Candidate host = getHost();
+		Candidate participant = getParticipant();
+		return host.getChampion() + ":" + host.getOpinion() + " vs " +
+			participant.getChampion() + ":" + participant.getOpinion();
+	}
+
 	private Candidate getCandidates(int index) {
 		if (index < candidates.size()) {
 			return candidates.get(index);

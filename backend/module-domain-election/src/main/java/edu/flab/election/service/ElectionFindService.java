@@ -39,6 +39,10 @@ public class ElectionFindService {
 		return electionMapper.findAllElectionsByStatusWithPaging(dto);
 	}
 
+	public List<Election> findLatestElectionWithLimit(ElectionPagingFindRequestDto dto) {
+		return electionMapper.findLatestElectionsByStatusWithPaging(dto);
+	}
+
 	public List<Election> findAllElectionsOrderByTotalCount(ElectionPagingFindRequestDto dto) {
 		return electionMapper.findElectionsOrderByTotalVotedCount(dto);
 	}
