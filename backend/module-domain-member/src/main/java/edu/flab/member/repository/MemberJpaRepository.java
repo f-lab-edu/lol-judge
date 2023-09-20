@@ -1,6 +1,6 @@
 package edu.flab.member.repository;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
@@ -14,5 +14,7 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long> {
 
 	boolean existsByEmail(String email);
 
-	List<Member> findByIdAndActive(@NonNull Long id, boolean active);
+	Optional<Member> findByIdAndActive(Long id, boolean active);
+
+	Optional<Member> findByEmailAndActive(String email, boolean active);
 }

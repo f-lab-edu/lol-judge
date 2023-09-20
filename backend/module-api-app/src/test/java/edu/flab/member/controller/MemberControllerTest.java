@@ -1,6 +1,7 @@
 package edu.flab.member.controller;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import org.testcontainers.utility.DockerImageName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.flab.member.TestFixture;
+import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberLoginRequestDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.web.handler.GlobalExceptionHandler;
@@ -42,7 +45,8 @@ class MemberControllerTest {
 	private MockMvc mock;
 
 	@Container
-	private static GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
+	private static GenericContainer redis = new GenericContainer(
+		DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
 
 	@Container
 	private static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:latest").withExposedPorts(5672, 15672);
@@ -64,15 +68,26 @@ class MemberControllerTest {
 		registry.add("spring.rabbitmq.password", rabbitmq::getAdminPassword);
 	}
 
-	@Test
-	void 회원가입에_성공한다() throws Exception {
-		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
-			.email("admin@example.com")
-			.password("aB#12345")
-			.gameLoginId("lolId1234")
-			.position("MID")
-			.build();
+	/**
+	 * test fixture
+	 */
+	private final Member member = TestFixture.getMember();
 
+	private final MemberSignUpDto signUpDto = MemberSignUpDto.builder()
+		.email(member.getEmail())
+		.password(member.getPassword())
+		.lolId(member.getGameAccount().getLolId())
+		.position("MID")
+		.build();
+
+	private final MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
+		.email(signUpDto.getEmail())
+		.password(signUpDto.getPassword())
+		.build();
+
+	@Test
+	@DisplayName("회원가입에 성공한다")
+	void test1() throws Exception {
 		mock.perform(MockMvcRequestBuilders.post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(signUpDto)))
@@ -81,34 +96,21 @@ class MemberControllerTest {
 	}
 
 	@Test
-	void 비밀번호규칙을_어겨서_회원가입에_실패한다() throws Exception {
-		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
-			.email("admin@example.com")
-			.password("aB#")
-			.gameLoginId("lolId1234")
-			.build();
+	@DisplayName("비밀번호 규칙을 어겨서 회원가입에 실패한다")
+	void test2() throws Exception {
+		MemberSignUpDto passwordRuleViolation = signUpDto;
+		passwordRuleViolation.setPassword("pwd1234");
 
 		mock.perform(MockMvcRequestBuilders.post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(toJson(signUpDto)))
+				.content(toJson(passwordRuleViolation)))
 			.andExpect(MockMvcResultMatchers.status().is4xxClientError())
 			.andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
-	void 회원가입_이후_로그인에_성공한다() throws Exception {
-		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
-			.email("admin@example.com")
-			.password("aB#12345")
-			.gameLoginId("lolId1234")
-			.position("MID")
-			.build();
-
-		MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
-			.email(signUpDto.getEmail())
-			.password(signUpDto.getPassword())
-			.build();
-
+	@DisplayName("회원가입 이후 로그인에 성공한다")
+	void test3() throws Exception {
 		mock.perform(MockMvcRequestBuilders.post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(signUpDto)))
@@ -123,18 +125,10 @@ class MemberControllerTest {
 	}
 
 	@Test
-	void 회원가입_이후_비밀번호를_틀려_로그인에_실패한다() throws Exception {
-		MemberSignUpDto signUpDto = MemberSignUpDto.builder()
-			.email("admin@example.com")
-			.password("aB#12345")
-			.gameLoginId("lolId1234")
-			.position("MID")
-			.build();
-
-		MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
-			.email(signUpDto.getEmail())
-			.password("invalid password")
-			.build();
+	@DisplayName("회원가입 이후 비밀번호를 틀려 로그인에 실패한다")
+	void test4() throws Exception {
+		MemberLoginRequestDto wrongPasswordDto = loginDto;
+		wrongPasswordDto.setPassword("WrongPassword");
 
 		mock.perform(MockMvcRequestBuilders.post("/signUp")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -144,18 +138,14 @@ class MemberControllerTest {
 
 		mock.perform(MockMvcRequestBuilders.post("/login")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(toJson(loginDto)))
+				.content(toJson(wrongPasswordDto)))
 			.andExpect(MockMvcResultMatchers.status().is4xxClientError())
 			.andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
-	void 존재하지않는_이메일를_입력하여_로그인에_실패한다() throws Exception {
-		MemberLoginRequestDto loginDto = MemberLoginRequestDto.builder()
-			.email("admin@example.com")
-			.password("aB#12345")
-			.build();
-
+	@DisplayName("존재하지않는 이메일를 입력하여 로그인에 실패한다")
+	void test5() throws Exception {
 		mock.perform(MockMvcRequestBuilders.post("/login")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(loginDto)))

@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberSignUpService {
 	private final MemberJpaRepository memberJpaRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final RiotApiService riotApiService;
 
 	@Transactional
 	public Member signUp(MemberSignUpDto dto) {
@@ -35,6 +36,7 @@ public class MemberSignUpService {
 
 		GameAccount gameAccount = GameAccount.builder()
 			.lolId(dto.getLolId())
+			.nickname(riotApiService.getUserNickName())
 			.position(GamePosition.of(dto.getPosition()))
 			.build();
 
