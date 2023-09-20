@@ -1,6 +1,7 @@
 plugins {
     id 'spring-common-conventions'
     id 'junit-test-conventions'
+    id 'java-test-fixtures'
 }
 
 repositories {

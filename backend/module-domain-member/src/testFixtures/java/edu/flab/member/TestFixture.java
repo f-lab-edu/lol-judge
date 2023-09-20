@@ -1,4 +1,4 @@
-package edu.flab;
+package edu.flab.member;
 
 import static edu.flab.member.domain.LolTier.Color.*;
 
@@ -10,7 +10,7 @@ public class TestFixture {
 
 	public static Member getMember() {
 		GameAccount gameAccount = GameAccount.builder()
-			.lolLoginId("login12345")
+			.lolId("login12345")
 			.nickname("hide on bush")
 			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1000))
 			.build();
