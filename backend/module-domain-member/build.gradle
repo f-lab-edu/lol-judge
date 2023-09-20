@@ -8,10 +8,14 @@ repositories {
 }
 
 dependencies {
+    /**
+     * A→B→C 의존 관계를 성립할 때, A에서 C를 로드하려면 B에서 api 메서드를 이용하여 C를 로드해야 함
+     * implementation 사용시, A에서 C를 로드할 수 없음
+     */
     // database 의존성
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java:8.0.28'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
 }
 
 test {
