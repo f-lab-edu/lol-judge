@@ -30,10 +30,11 @@ public class MemberSignUpService {
 		Member member = Member.builder()
 			.email(dto.getEmail())
 			.password(encryptPassword(dto.getPassword()))
+			.profileUrl(dto.getProfileUrl())
 			.build();
 
 		GameAccount gameAccount = GameAccount.builder()
-			.lolId(dto.getGameLoginId())
+			.lolId(dto.getLolId())
 			.position(GamePosition.of(dto.getPosition()))
 			.build();
 
