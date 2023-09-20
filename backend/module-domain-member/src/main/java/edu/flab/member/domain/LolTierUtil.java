@@ -8,6 +8,10 @@ import edu.flab.member.domain.specification.LolTierSpecification;
 
 public non-sealed class LolTierUtil extends LolTier {
 
+	public static LolTier createUnRankTier() {
+		return new LolTier(NONE, 0, 0);
+	}
+
 	public static LolTier createNormalTier(LolTier.Color color, int level, int point) {
 		Set<LolTier.Color> normalTierColors = Set.of(IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND);
 		LolTierSpecification normalTierSpec = new LolTierSpecification(normalTierColors, 1, 4, 0, 100);
