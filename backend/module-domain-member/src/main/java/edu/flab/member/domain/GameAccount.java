@@ -16,13 +16,16 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
+@ToString
 @EqualsAndHashCode(exclude = "member")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,17 +40,19 @@ public class GameAccount {
 
 	@NotBlank
 	@Length(max = 16)
-	private String nickname;    // 리그오브레전드 닉네임
+	private String nickname;
 
 	@NotBlank
 	@Length(max = 24)
-	private String lolId;  // 리그오브레전드 계정 아이디
+	private String lolId;
 
+	@Default
 	@Enumerated(EnumType.STRING)
-	private GamePosition position;	// 리그오브레전드 포지션
+	private GamePosition position = GamePosition.NONE;
 
+	@Default
 	@Embedded
-	private LolTier lolTier;    // 리그오브레전드 랭크 티어 정보
+	private LolTier lolTier = LolTierUtil.createUnRankTier();
 
 	//== 연관관계 매핑 ==//
 	public void setMember(Member member) {
