@@ -9,8 +9,7 @@ import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.GamePosition;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberSignUpDto;
-import edu.flab.member.repository.GameAccountMapper;
-import edu.flab.member.repository.MemberMapper;
+import edu.flab.member.repository.MemberJpaRepository;
 import edu.flab.web.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class MemberSignUpService {
-	private final MemberMapper memberMapper;
-	private final GameAccountMapper gameAccountMapper;
+	private final MemberJpaRepository memberJpaRepository;
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public Member signUp(MemberSignUpDto dto) {
-		if (isAlreadyExist(dto.getEmail(), dto.getGameLoginId())) {
+		if (memberJpaRepository.existsByEmail(dto.getEmail())) {
 			throw new BusinessException(ErrorCode.DUPLICATE_ACCOUNT);
 		}
 
@@ -35,21 +33,13 @@ public class MemberSignUpService {
 			.build();
 
 		GameAccount gameAccount = GameAccount.builder()
-			.memberId(member.getId())
-			.lolLoginId(dto.getGameLoginId())
+			.lolId(dto.getGameLoginId())
 			.position(GamePosition.of(dto.getPosition()))
 			.build();
 
-		memberMapper.save(member);
 		member.setGameAccount(gameAccount);
-		gameAccountMapper.save(gameAccount);
 
-		return member;
-	}
-
-	private boolean isAlreadyExist(String email, String gameLoginId) {
-		return gameAccountMapper.findByLoginId(gameLoginId).isPresent() || memberMapper.findActiveMemberByEmail(email)
-			.isPresent();
+		return memberJpaRepository.save(member);
 	}
 
 	private String encryptPassword(String password) {
