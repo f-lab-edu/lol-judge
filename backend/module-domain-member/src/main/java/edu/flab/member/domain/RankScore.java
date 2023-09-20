@@ -2,6 +2,7 @@ package edu.flab.member.domain;
 
 import java.util.NoSuchElementException;
 
+import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,17 +17,11 @@ import lombok.ToString;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class RankScore {
 
 	private long score;
-
-	/**
-	 * 생성자 for Mybatis mapping
-	 */
-	public RankScore(Long score) {
-		this.score = score;
-	}
-
+	
 	public static RankScore zero() {
 		return new RankScore(0L);
 	}

@@ -1,11 +1,22 @@
 package edu.flab.member.domain;
 
+import static lombok.Builder.*;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.member.domain.specification.JudgePointSpecification;
 import edu.flab.member.validation.Password;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -14,15 +25,17 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @Builder
-@ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "gameAccount")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Member {
+	@Id
+	@Column(name = "member_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull
@@ -36,38 +49,27 @@ public class Member {
 	@Length(max = 200)
 	private String profileUrl;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "game_account_id")
 	private GameAccount gameAccount;
 
-	@Builder.Default
+	@Default
+	@Embedded
 	private RankScore rankScore = RankScore.zero();
 
 	@Range(min = JudgePointSpecification.MIN_VALUE, max = JudgePointSpecification.MAX_VALUE)
 	private int judgePoint;
 
-	private boolean deleted;
+	@Default
+	private boolean active = true;
 
-	public Member(Long id, String email, String password, String profileUrl, Integer judgePoint, Boolean deleted) {
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.profileUrl = profileUrl;
-		this.judgePoint = judgePoint;
-		this.deleted = deleted;
-	}
-
-	public RankScore updateRankScore() {
+	public RankScore refreshRankScore() {
 		return rankScore = RankScore.calc(this);
 	}
 
-	public void updateJudgePoint(int judgePoint) {
-		this.judgePoint = judgePoint;
-	}
-
+	//== 연관관계 매핑 ==//
 	public void setGameAccount(GameAccount gameAccount) {
-		if (this.gameAccount != null) {
-			this.gameAccount.setMemberId(null);
-		}
 		this.gameAccount = gameAccount;
-		gameAccount.setMemberId(id);
+		gameAccount.setMember(this);
 	}
 }
