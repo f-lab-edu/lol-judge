@@ -3,7 +3,6 @@ package edu.flab.member.dto;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
-import edu.flab.member.domain.LolTier;
 import edu.flab.member.validation.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,9 +26,13 @@ public class MemberSignUpDto {
 	@Password
 	private String password;
 
+	@URL
+	@Length(max = 450)
+	private String profileUrl;
+
 	@NotBlank
 	@Length(max = 16)
-	private String gameLoginId;
+	private String lolId;
 
 	@NotBlank
 	private String position;

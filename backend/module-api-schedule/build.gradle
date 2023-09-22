@@ -8,7 +8,7 @@ repositories {
 
 dependencies {
     implementation project(':module-core')
-    implementation project(':module-domain-election')
+    implementation project(':module-domain')
     implementation project(':module-client-rabbitmq')
 }
 
