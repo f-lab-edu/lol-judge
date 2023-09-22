@@ -8,8 +8,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import edu.flab.member.domain.Member;
 import edu.flab.member.domain.RankScore;
-import edu.flab.member.dto.MemberRankScoreUpdateDto;
-import edu.flab.member.repository.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class MemberRankScoreUpdateEventListener {
-
-	private final MemberMapper memberMapper;
 
 	@Async
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -29,9 +25,8 @@ public class MemberRankScoreUpdateEventListener {
 	}
 
 	public void updateRankScore(Member member) {
-		RankScore beforeRankScore = member.getRankScore();
-		RankScore updatedRankScore = member.updateRankScore();
-		memberMapper.updateRankScore(new MemberRankScoreUpdateDto(member.getId(), updatedRankScore.getScore()));
+		RankScore beforeRankScore = member.refreshRankScore();
+		RankScore updatedRankScore = member.refreshRankScore();
 		log.info("랭킹 점수 업데이트 완료 <회원 이메일: {}> <변경 내역: {} → {}>", member.getEmail(), beforeRankScore.getScore(),
 			updatedRankScore.getScore());
 	}

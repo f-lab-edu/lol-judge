@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.flab.member.domain.Member;
 import edu.flab.member.domain.specification.JudgePointSpecification;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
-import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.event.MemberRankScoreUpdateEventPublisher;
-import edu.flab.member.repository.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberJudgePointUpdateService {
 
-	private final MemberMapper memberMapper;
 	private final MemberFindService memberFindService;
 	private final MemberRankScoreUpdateEventPublisher memberRankScoreUpdateEventPublisher;
 
@@ -27,8 +24,7 @@ public class MemberJudgePointUpdateService {
 
 		int beforeUpdate = member.getJudgePoint();
 
-		memberMapper.updateJudgePoint(new MemberJudgePointUpdateDto(member.getId(), updatedJudgePoint));
-		member.updateJudgePoint(updatedJudgePoint);
+		member.setJudgePoint(updatedJudgePoint);
 
 		log.info("JudgePoint 업데이트 완료 <회원 이메일: {}> <변경 내역: {} → {}>", member.getEmail(), beforeUpdate,
 			updatedJudgePoint);

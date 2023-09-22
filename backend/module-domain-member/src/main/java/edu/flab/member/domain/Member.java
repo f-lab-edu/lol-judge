@@ -66,6 +66,10 @@ public class Member {
 		return rankScore = RankScore.calc(this);
 	}
 
+	public void setJudgePoint(int judgePoint) {
+		this.judgePoint = judgePoint;
+	}
+
 	//== 연관관계 매핑 ==//
 	public void setGameAccount(GameAccount gameAccount) {
 		this.gameAccount = gameAccount;

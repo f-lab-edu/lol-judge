@@ -14,16 +14,12 @@ import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.dto.MemberJudgePointUpdateDto;
 import edu.flab.member.event.MemberRankScoreUpdateEventPublisher;
-import edu.flab.member.repository.MemberMapper;
 
 @ExtendWith(MockitoExtension.class)
 class MemberJudgePointUpdateServiceTest {
 
 	@InjectMocks
 	private MemberJudgePointUpdateService sut;
-
-	@Mock
-	private MemberMapper memberMapper;
 
 	@Mock
 	private MemberFindService memberFindService;
@@ -47,7 +43,6 @@ class MemberJudgePointUpdateServiceTest {
 
 		// then
 		verify(memberFindService).findActiveMember(1L);
-		verify(memberMapper).updateJudgePoint(updateDto);
 		verify(eventPublisher).publishEvent(member);
 		assertThat(updatedMember.getJudgePoint()).isEqualTo(updateDto.getJudgePoint());
 	}
