@@ -1,12 +1,8 @@
 package edu.flab.vote.service;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.Duration;
-import java.time.OffsetDateTime;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,15 +11,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.election.domain.Candidate;
+import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
-import edu.flab.election.domain.ElectionStatus;
-import edu.flab.election.dto.ElectionFindRequestDto;
-import edu.flab.election.service.ElectionFindService;
+import edu.flab.election.domain.Vote;
+import edu.flab.election.repository.VoteJpaRepository;
+import edu.flab.election.service.CandidateFindService;
+import edu.flab.election.service.VoteFindService;
+import edu.flab.member.TestFixture;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.service.MemberJudgePointUpdateService;
-import edu.flab.vote.dto.VoteAddRequestDto;
-import edu.flab.vote.repository.VoteMapper;
 
 @ExtendWith(MockitoExtension.class)
 class VoteAddServiceTest {
@@ -35,134 +32,112 @@ class VoteAddServiceTest {
 	private VoteFindService voteFindService;
 
 	@Mock
-	private VoteMapper voteMapper;
+	private VoteJpaRepository voteJpaRepository;
 
 	@Mock
-	private ElectionFindService electionFindService;
+	private CandidateFindService candidateFindService;
 
 	@Mock
 	private MemberJudgePointUpdateService memberJudgePointUpdateService;
-
-	// Test fixture
-	private final Election election = Election.builder()
-		.id(1L)
-		.status(ElectionStatus.IN_PROGRESS)
-		.youtubeUrl("7I5SKTY-JXc")
-		.cost(100)
-		.createdAt(OffsetDateTime.now())
-		.endedAt(OffsetDateTime.now().plus(Duration.ofMinutes(60)))
-		.build();
-	private final Member member1 = Member.builder()
-		.id(1L)
-		.email("example1@example.com")
-		.password("1234")
-		.judgePoint(1000)
-		.build();
-	private final Member member2 = Member.builder()
-		.id(2L)
-		.email("example2@example.com")
-		.password("1234")
-		.judgePoint(1200)
-		.build();
-	private final Member member3 = Member.builder()
-		.id(3L)
-		.email("example3@example.com")
-		.password("1234")
-		.judgePoint(1100)
-		.build();
-	private final Candidate host = Candidate.builder()
-		.id(1L)
-		.memberId(member1.getId())
-		.electionId(election.getId())
-		.build();
-	private final Candidate participant = Candidate.builder()
-		.id(2L)
-		.memberId(member2.getId())
-		.electionId(election.getId())
-		.build();
-
-	@BeforeEach
-	void setUp() {
-		election.addCandidate(host);
-		election.addCandidate(participant);
-	}
 
 	@Test
 	@DisplayName("재판 후보자 중 한명에게 투표할 수 있다")
 	void test1() {
 		// given
-		when(memberJudgePointUpdateService.minusJudgePoint(any(MemberJudgePointCalcDto.class))).thenReturn(member3);
-		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
-		when(voteFindService.hasVotedBefore(any())).thenReturn(false);
+		Election election = TestFixture.getElection();
+
+		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
+
+		Member voter = TestFixture.getMember();
+		voter.setJudgePoint(100);
+
+		Vote vote = new Vote();
+		vote.setCandidate(candidate);
+		vote.setMember(voter);
+
+		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
+		when(memberJudgePointUpdateService.minusJudgePoint(any(MemberJudgePointCalcDto.class))).thenReturn(voter);
+		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(false);
+		when(voteJpaRepository.save(any(Vote.class))).thenReturn(vote);
 
 		// when
-		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), host.getId());
-		sut.add(member3, voteDto);
+		sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId());
 
 		// then
+		verify(candidateFindService).findById(candidate.getId());
 		verify(memberJudgePointUpdateService).minusJudgePoint(any());
-		verify(voteMapper).save(any());
+		verify(voteFindService).hasVotedBefore(voter.getId(), candidate.getId());
+		verify(voteJpaRepository).save(any(Vote.class));
 	}
 
 	@Test
 	@DisplayName("포인트가 부족하면 투표할 수 없다")
 	void test2() {
 		// given
-		member3.updateJudgePoint(0);
-		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
+		Election election = TestFixture.getElection();
 
-		// when
-		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), host.getId());
+		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
+
+		Member voter = TestFixture.getMember();
+		voter.setJudgePoint(0);
+
+		Vote vote = new Vote();
+		vote.setCandidate(candidate);
+		vote.setMember(voter);
+
+		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 
 		// then
-		assertThatThrownBy(() -> sut.add(member3, voteDto)).isInstanceOf(IllegalStateException.class);
-		verify(memberJudgePointUpdateService, never()).minusJudgePoint(any());
-		verify(voteMapper, never()).save(any());
+		Assertions.assertThatThrownBy(() -> sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId()))
+			.isInstanceOf(
+				IllegalStateException.class);
 	}
 
 	@Test
 	@DisplayName("이미 투표했다면 다시 투표할 수 없다")
 	void test3() {
 		// given
-		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
-		when(voteFindService.hasVotedBefore(any())).thenReturn(true);
+		Election election = TestFixture.getElection();
 
-		// when
-		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), host.getId());
+		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
 
-		// then
-		assertThatThrownBy(() -> sut.add(member3, voteDto)).isInstanceOf(IllegalStateException.class);
-		verify(memberJudgePointUpdateService, never()).minusJudgePoint(any());
-		verify(voteMapper, never()).save(any());
-	}
+		Member voter = TestFixture.getMember();
+		voter.setJudgePoint(100);
 
-	@Test
-	@DisplayName("투표 대상이 재판의 피고인 또는 고소인이 아닐 경우 예외가 발생한다")
-	void test4() {
-		// given
-		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
+		Vote vote = new Vote();
+		vote.setCandidate(candidate);
+		vote.setMember(voter);
 
-		// when
-		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), 100L);
+		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
+		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(true);
 
 		// then
-		assertThatThrownBy(() -> sut.add(member3, voteDto)).isInstanceOf(IllegalArgumentException.class);
-		verify(memberJudgePointUpdateService, never()).minusJudgePoint(any());
-		verify(voteMapper, never()).save(any());
+		Assertions.assertThatThrownBy(() -> sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId()))
+			.isInstanceOf(
+				IllegalStateException.class);
 	}
+
 
 	@Test
 	@DisplayName("피고인 또는 원고는 투표를 할 수 없다")
 	void test5() {
 		// given
-		when(electionFindService.findElection(any(ElectionFindRequestDto.class))).thenReturn(election);
+		Election election = TestFixture.getElection();
 
-		// when
-		VoteAddRequestDto voteDto = new VoteAddRequestDto(election.getId(), host.getId());
+		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
+
+		Member voter = candidate.getMember();
+		voter.setJudgePoint(100);
+
+		Vote vote = new Vote();
+		vote.setCandidate(candidate);
+		vote.setMember(voter);
+
+		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 
 		// then
-		assertThatThrownBy(() -> sut.add(member1, voteDto)).isInstanceOf(IllegalStateException.class);
-		verify(memberJudgePointUpdateService, never()).minusJudgePoint(any());
-		verify(voteMapper, never()).save(any());
+		Assertions.assertThatThrownBy(() -> sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId()))
+			.isInstanceOf(
+				IllegalStateException.class);
 	}
 }

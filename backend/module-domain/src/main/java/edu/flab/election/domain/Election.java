@@ -85,4 +85,9 @@ public class Election {
 		this.cost = cost;
 		return this;
 	}
+
+	public Election changeStatus(ElectionStatus status) {
+		this.status = status;
+		return this;
+	}
 }

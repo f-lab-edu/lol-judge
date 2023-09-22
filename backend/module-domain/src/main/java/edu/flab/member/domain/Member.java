@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.election.domain.Candidate;
+import edu.flab.election.domain.Vote;
 import edu.flab.member.domain.specification.JudgePointSpecification;
 import edu.flab.notification.domain.Notification;
 import jakarta.persistence.CascadeType;
@@ -32,7 +33,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@EqualsAndHashCode(exclude = "gameAccount")
+@EqualsAndHashCode(exclude = {"gameAccount", "candidates", "notifications", "votes"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -53,7 +54,7 @@ public class Member {
 	@Length(max = 200)
 	private String profileUrl;
 
-	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, optional = false)
 	private GameAccount gameAccount;
 
 	@Default
@@ -63,6 +64,10 @@ public class Member {
 	@Default
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<Notification> notifications = new ArrayList<>();
+
+	@Default
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private List<Vote> votes = new ArrayList<>();
 
 	@Default
 	@Embedded

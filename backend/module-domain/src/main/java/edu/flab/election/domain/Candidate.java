@@ -1,5 +1,8 @@
 package edu.flab.election.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.flab.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +26,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString(exclude = "election")
-@EqualsAndHashCode(exclude = {"member", "election"})
+@EqualsAndHashCode(exclude = {"member", "election", "votes"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -38,6 +42,10 @@ public class Candidate {
 	@JoinColumn(name = "election_id")
 	@ManyToOne
 	private Election election;
+
+	@Default
+	@OneToMany(mappedBy = "candidate")
+	private List<Vote> votes = new ArrayList<>();
 
 	@Default
 	@NotNull
@@ -56,6 +64,13 @@ public class Candidate {
 		this.opinion = opinion;
 		this.champion = champion;
 		return this;
+	}
+
+	public long calcVotedScore() {
+		return this.votes
+			.stream()
+			.mapToLong(Vote::calcScore)
+			.sum();
 	}
 
 	//== 연관관계 편의 메서드 ==//

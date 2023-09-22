@@ -3,17 +3,15 @@ package edu.flab.vote.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.flab.election.domain.Election;
-import edu.flab.election.domain.ElectionStatus;
-import edu.flab.election.dto.ElectionFindRequestDto;
-import edu.flab.election.service.ElectionFindService;
+import edu.flab.election.config.VoteRule;
+import edu.flab.election.domain.Candidate;
+import edu.flab.election.domain.Vote;
+import edu.flab.election.repository.VoteJpaRepository;
+import edu.flab.election.service.CandidateFindService;
+import edu.flab.election.service.VoteFindService;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.service.MemberJudgePointUpdateService;
-import edu.flab.vote.domain.Vote;
-import edu.flab.vote.domain.VoteRule;
-import edu.flab.vote.dto.VoteAddRequestDto;
-import edu.flab.vote.repository.VoteMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,43 +19,35 @@ import lombok.RequiredArgsConstructor;
 public class VoteAddService {
 
 	private final VoteFindService voteFindService;
-	private final VoteMapper voteMapper;
-	private final ElectionFindService electionFindService;
+	private final VoteJpaRepository voteJpaRepository;
+	private final CandidateFindService candidateFindService;
 	private final MemberJudgePointUpdateService memberJudgePointUpdateService;
 
 	@Transactional
-	public void add(Member member, VoteAddRequestDto dto) {
-		validate(member, dto);
+	public void add(Member voter, Long candidateId) {
 
-		memberJudgePointUpdateService.minusJudgePoint(new MemberJudgePointCalcDto(member.getId(), VoteRule.FEE));
+		Candidate candidate = candidateFindService.findById(candidateId);
 
-		Vote vote = Vote.builder()
-			.candidateId(dto.getCandidateId())
-			.electionId(dto.getElectionId())
-			.build();
+		validate(voter, candidate);
 
-		voteMapper.save(vote);
+		memberJudgePointUpdateService.minusJudgePoint(new MemberJudgePointCalcDto(voter.getId(), VoteRule.FEE));
+
+		Vote vote = new Vote();
+		vote.setMember(voter);
+		vote.setCandidate(candidate);
+
+		voteJpaRepository.save(vote);
 	}
 
-	private void validate(Member member, VoteAddRequestDto dto) {
-		Election election = electionFindService.findElection(
-			new ElectionFindRequestDto(dto.getElectionId(), ElectionStatus.IN_PROGRESS));
-
-		if (election.getCandidates().stream().noneMatch(c -> c.getId().equals(dto.getCandidateId()))) {
-			throw new IllegalArgumentException(
-				"재판에 속하는 후보가 아닙니다 "
-					+ "<재판 번호 = " + dto.getElectionId() + ">"
-					+ "<후보자 명단 = " + election.getCandidates() + ">"
-					+ "<투표 후보자번호 = " + dto.getCandidateId() + ">");
-		}
-
-		if (election.getCandidates().stream().anyMatch(c -> c.getId().equals(member.getId()))) {
+	private void validate(Member member, Candidate candidate) {
+		if (member.getId().equals(candidate.getMember().getId())) {
 			throw new IllegalStateException(
 				"재판 고소인/피고인은 투표를 할 수 없습니다 "
 					+ "<회원 번호 = " + member.getId() + ">"
-					+ "<재판 번호 = " + dto.getElectionId() + ">"
-					+ "<후보자 명단 = " + election.getCandidates() + ">"
-					+ "<투표 후보자번호 = " + dto.getCandidateId() + ">");
+					+ "<재판 번호 = " + candidate.getElection().getId() + ">"
+					+ "<후보자 명단 = " + candidate.getElection().getCandidates() + ">"
+					+ "<투표 대상 번호 = " + candidate.getId() + ">"
+					+ "<투표 대상 회원번호 = " + candidate.getMember().getId() + ">");
 		}
 
 		if (member.getJudgePoint() < VoteRule.FEE) {
@@ -68,7 +58,7 @@ public class VoteAddService {
 					+ "<보유 포인트 = " + member.getJudgePoint() + ">");
 		}
 
-		if (voteFindService.hasVotedBefore(member.getId())) {
+		if (voteFindService.hasVotedBefore(member.getId(), candidate.getId())) {
 			throw new IllegalStateException("이미 투표에 참여하였습니다");
 		}
 	}

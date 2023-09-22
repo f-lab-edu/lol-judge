@@ -1,22 +1,58 @@
 package edu.flab.election.domain;
 
-import lombok.AccessLevel;
+import edu.flab.member.domain.Member;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @Builder
-@ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"member", "candidate"})
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@Entity
 public class Vote {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Long memberId;
-	private Long electionId;
-	private Long candidateId;
+
+	@ManyToOne
+	@JoinColumn(name = "member_id")
+	private Member member;
+
+	@ManyToOne
+	@JoinColumn(name = "candidate_id")
+	private Candidate candidate;
+
+	public long calcScore() {
+		return member.getGameAccount()
+			.getLolTier()
+			.getColor()
+			.getScore();
+	}
+
+	//== 연관관계 편의 메서드 ==//
+	public void setMember(Member member) {
+		if (this.member != null) {
+			this.member.getVotes().remove(this);
+		}
+		this.member = member;
+		member.getVotes().add(this);
+	}
+
+	public void setCandidate(Candidate candidate) {
+		if (this.candidate != null) {
+			this.candidate.getVotes().remove(this);
+		}
+		this.candidate = candidate;
+		candidate.getVotes().add(this);
+	}
 }
