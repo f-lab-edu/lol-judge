@@ -38,8 +38,12 @@ public class ElectionController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/elections")
-	public SuccessResponse<ElectionInfoFindResponseDto> getElectionInfoWithPaging(ElectionPagingFindRequestDto dto) {
-		return SuccessResponse.of(electionInfoFindService.findAllElectionInfoWithPaging(dto));
+	public SuccessResponse<ElectionInfoFindResponseDto> getElectionInfo(ElectionPagingFindRequestDto dto) {
+		if (dto.getLastId() <= 0) {
+			return SuccessResponse.of(electionInfoFindService.findLatestElections(dto.getPageSize(), dto.getStatus()));
+		}
+		return SuccessResponse.of(
+			electionInfoFindService.findAllWithPagination(dto.getLastId(), dto.getPageSize(), dto.getStatus()));
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -53,7 +57,7 @@ public class ElectionController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/elections")
 	public SuccessResponse<Void> updateElection(@RequestBody @Valid ElectionEditRequestDto dto) {
-		electionEditService.update(dto);
+		electionEditService.edit(dto);
 		return SuccessResponse.ok();
 	}
 

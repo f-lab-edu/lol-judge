@@ -3,7 +3,7 @@ package edu.flab.election.dto;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
-import edu.flab.election.config.ElectionConstant;
+import edu.flab.election.config.ElectionRule;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class ElectionDetailResponseDto {
 	@Length(max = 50)
 	private String youtubeUrl;
 
-	@Range(min = ElectionConstant.MIN_COST, max = ElectionConstant.MAX_COST)
+	@Range(min = ElectionRule.MIN_COST, max = ElectionRule.MAX_COST)
 	private int cost;
 
 	private String hostChampion;

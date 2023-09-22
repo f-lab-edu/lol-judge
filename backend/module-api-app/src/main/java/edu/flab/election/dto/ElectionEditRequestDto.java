@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
-import edu.flab.election.config.ElectionConstant;
+import edu.flab.election.config.ElectionRule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ public class ElectionEditRequestDto {
 	@Length(max = 100)
 	private String youtubeUrl;
 
-	@Range(min = ElectionConstant.MIN_COST, max = ElectionConstant.MAX_COST)
+	@Range(min = ElectionRule.MIN_COST, max = ElectionRule.MAX_COST)
 	private int cost;
 
 	@NotBlank

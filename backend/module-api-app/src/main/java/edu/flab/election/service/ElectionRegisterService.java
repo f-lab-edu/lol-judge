@@ -10,8 +10,7 @@ import edu.flab.election.domain.Election;
 import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
-import edu.flab.election.repository.CandidateMapper;
-import edu.flab.election.repository.ElectionMapper;
+import edu.flab.election.repository.ElectionJpaRepository;
 import edu.flab.member.domain.Member;
 import edu.flab.member.service.MemberFindService;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
@@ -25,28 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ElectionRegisterService {
 	private final MemberFindService memberFindService;
-	private final CandidateMapper candidateMapper;
-	private final ElectionMapper electionMapper;
 	private final RabbitMqSender rabbitMqSender;
+	private final ElectionJpaRepository electionJpaRepository;
 
 	@Transactional
 	public ElectionRegisterResponseDto register(String hostEmail, ElectionRegisterRequestDto dto) {
-		Election election = saveElection(dto);
-		Candidate host = addCandidateToElection(election, hostEmail, dto.getChampion(), dto.getOpinion());
-		Candidate participant = addCandidateToElection(election, dto.getParticipantEmail());
-
-		rabbitMqSender.send(new RabbitMqMessage<>(election.getId(), RabbitMqQueueName.ELECTION_REGISTER));
-
-		log.info("재판이 생성되었습니다. <electionId={}><hostEmail={}><participantEmail={}>", election.getId(), hostEmail, dto.getParticipantEmail());
-
-		return ElectionRegisterResponseDto.builder()
-			.electionId(election.getId())
-			.hostId(host.getId())
-			.participantId(participant.getId())
-			.build();
-	}
-
-	private Election saveElection(ElectionRegisterRequestDto dto) {
 		Election election = Election.builder()
 			.status(ElectionStatus.PENDING)
 			.youtubeUrl(dto.getYoutubeUrl())
@@ -55,15 +37,31 @@ public class ElectionRegisterService {
 			.createdAt(OffsetDateTime.now())
 			.build();
 
-		electionMapper.save(election);
-		return election;
+		Candidate host = addCandidateToElection(election, hostEmail, dto.getChampion(), dto.getOpinion());
+		Candidate participant = addCandidateToElection(election, dto.getParticipantEmail());
+
+		electionJpaRepository.save(election);
+
+		rabbitMqSender.send(new RabbitMqMessage<>(election.getId(), RabbitMqQueueName.ELECTION_REGISTER));
+
+		log.info("재판이 생성되었습니다. <electionId={}><hostEmail={}><participantEmail={}>", election.getId(), hostEmail,
+			dto.getParticipantEmail());
+
+		return ElectionRegisterResponseDto.builder()
+			.electionId(election.getId())
+			.hostId(host.getId())
+			.participantId(participant.getId())
+			.build();
 	}
 
 	private Candidate addCandidateToElection(Election election, String email, String champion, String opinion) {
 		Member member = memberFindService.findActiveMember(email);
-		Candidate candidate = new Candidate(member.getId(), election.getId(), opinion, champion);
-		election.addCandidate(candidate);
-		candidateMapper.save(candidate);
+		Candidate candidate = Candidate.builder()
+			.opinion(opinion)
+			.champion(champion)
+			.build();
+		candidate.setMember(member);
+		candidate.setElection(election);
 		return candidate;
 	}
 
