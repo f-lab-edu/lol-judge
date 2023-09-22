@@ -36,7 +36,7 @@ public class MemberSignUpService {
 
 		GameAccount gameAccount = GameAccount.builder()
 			.lolId(dto.getLolId())
-			.nickname(riotApiService.getUserNickName())
+			.nickname(riotApiService.getUserNickName(dto.getLolId()))
 			.position(GamePosition.of(dto.getPosition()))
 			.build();
 
