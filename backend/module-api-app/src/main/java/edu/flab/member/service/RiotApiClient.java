@@ -7,7 +7,7 @@ public class RiotApiClient implements RiotApiService {
 
 	// TODO
 	@Override
-	public String getUserNickName() {
+	public String getUserNickName(String userId) {
 		return "NONE";
 	}
 }
