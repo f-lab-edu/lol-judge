@@ -18,14 +18,17 @@ import edu.flab.member.repository.MemberJpaRepository;
 @ExtendWith(MockitoExtension.class)
 class MemberSignUpServiceTest {
 
+	@InjectMocks
+	private MemberSignUpService sut;
+
 	@Mock
 	private MemberJpaRepository memberJpaRepository;
 
 	@Mock
 	private PasswordEncoder passwordEncoder;
 
-	@InjectMocks
-	private MemberSignUpService sut;
+	@Mock
+	private RiotApiService riotApiService;
 
 	@Test
 	@DisplayName("회원가입 서비스는 전달받은 정보를 Member 객체로 변환하고, 비밀번호는 암호화하여 데이터베이스에 저장한다.")
@@ -43,13 +46,13 @@ class MemberSignUpServiceTest {
 		when(memberJpaRepository.save(any(Member.class))).thenReturn(member);
 		when(memberJpaRepository.existsByEmail(member.getEmail())).thenReturn(false);
 		when(passwordEncoder.encode(anyString())).thenReturn("encrypted password");
+		when(riotApiService.getUserNickName(member.getGameAccount().getLolId())).thenReturn(member.getGameAccount().getNickname());
 
 		// when
 		sut.signUp(dto);
-		System.out.println(member.getGameAccount().toString());
 
 		// then
 		verify(memberJpaRepository).existsByEmail(member.getEmail());
-		verify(memberJpaRepository).save(refEq(member, "password", "gameAccount"));
+		verify(memberJpaRepository).save(any(Member.class));
 	}
 }

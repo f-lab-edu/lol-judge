@@ -3,6 +3,7 @@ package edu.flab.member.domain;
 import java.util.Set;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,7 +16,8 @@ class MemberValidationTest {
 	private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
 	@Test
-	void 비밀번호가_8글자이상이_아니라면_규칙위반이다() {
+	@DisplayName("비밀번호가 8글자이상이 아니라면 규칙위반이다")
+	void test1() {
 		// given
 		Member member = Member.builder()
 			.email("admin@example")
@@ -33,7 +35,8 @@ class MemberValidationTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"aaa!1234", "AAA!1234", "aaAA1234"})
-	void 비밀번호가_최소1개의_영문소문자_영문대문자_특수문자_숫자조합이_아니라면_규칙위반이다(String myPassword) {
+	@DisplayName("비밀번호가 최소1개의 영문소문자 영문대문자, 특수문자, 숫자조합이 아니라면 규칙위반이다")
+	void test2(String myPassword) {
 		// given
 		Member member = Member.builder()
 			.email("admin@example")
@@ -50,7 +53,8 @@ class MemberValidationTest {
 	}
 
 	@Test
-	void 프로필링크가_URL_형식이_아니라면_유효성체크에_규칙위반이다() {
+	@DisplayName("프로필링크가 URL 형식이 아니라면 유효성체크에 규칙위반이다")
+	void test3() {
 		// given
 		Member member = Member.builder()
 			.email("admin@example")
@@ -68,7 +72,8 @@ class MemberValidationTest {
 	}
 
 	@Test
-	void 이메일이_이메일형식이_아니라면_규칙위반이다() {
+	@DisplayName("이메일이 이메일형식이 아니라면 규칙위반이다")
+	void test4() {
 		// given
 		Member member = Member.builder()
 			.email("admin.example")

@@ -28,8 +28,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.flab.election.domain.ElectionStatus;
-import edu.flab.election.dto.ElectionFindRequestDto;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionFindService;
@@ -96,13 +94,13 @@ class ElectionControllerTest {
 		MemberSignUpDto hostSignUpDto = MemberSignUpDto.builder()
 			.email("host@example.com")
 			.password("aB#12345")
-			.gameLoginId("lolId1111")
+			.lolId("lolId1111")
 			.build();
 
 		MemberSignUpDto participantSignUpDto = MemberSignUpDto.builder()
 			.email("participant@example.com")
 			.password("aB#12345")
-			.gameLoginId("lolId2222")
+			.lolId("lolId2222")
 			.build();
 
 		Member hostMember = memberSignUpService.signUp(hostSignUpDto);
@@ -110,7 +108,7 @@ class ElectionControllerTest {
 
 		ElectionRegisterRequestDto electionAddDto = ElectionRegisterRequestDto.builder()
 			.opinion("원딜이 쌍둥이 포탑을 계속 쳤으면 게임을 끝낼 수 있었다 vs 카밀의 압박 때문에 할 수 없다")
-			.youtubeUrl("7I5SKTY-JXc")
+			.youtubeUrl("https://youtube.com/7I5SKTY-JXc")
 			.participantEmail(participantMember.getEmail())
 			.cost(1000)
 			.progressTime(60)
@@ -137,8 +135,7 @@ class ElectionControllerTest {
 			mvcResult.getResponse().getContentAsString(), javaType);
 
 		Assertions.assertThatNoException()
-			.isThrownBy(() -> electionFindService.findElection(
-				new ElectionFindRequestDto(result.data().getElectionId(), ElectionStatus.PENDING)));
+			.isThrownBy(() -> electionFindService.findElection(result.data().getElectionId()));
 	}
 
 	public <T> String toJson(T data) throws JsonProcessingException {
