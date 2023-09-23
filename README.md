@@ -55,8 +55,16 @@
 
 
 - #4 로그인, 로그아웃 구현
-    - [롤문철 닷컴 구현기 2탄 - 로그인 기능 구현](https://cookie-dev.tistory.com/23)
+    - [롤문철 닷컴 구현기 2탄 - 로그인 기능 구현 (세션 vs JWT토큰)](https://cookie-dev.tistory.com/23)
     - [롤문철 닷컴 구현기 3탄 - 로그인 체크 (AOP vs 필터 vs 인터셉터)](https://cookie-dev.tistory.com/24)
+
+
+- #50 CORS 정책 적용
+    - [CORS를 알아보자](https://cookie-dev.tistory.com/36)
+
+
+- #63 MyBatis → JPA 마이그레이션
+    - [스프링 세션 + JPA 환경에서 LazyInitializationException 발생](https://cookie-dev.tistory.com/35)
 
 <br/>
 
