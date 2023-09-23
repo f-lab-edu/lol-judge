@@ -24,13 +24,6 @@ export default function ElectionEdit() {
   const { loginState } = useContext(LoginContext);
   const { champions } = useContext(ChampionListContext);
   const navigate = useNavigate();
-
-  const isGuest = () => {
-    return ![election.hostId, election.participantId].includes(
-      loginState.memberId
-    );
-  };
-
   const isHost = () => {
     return election.hostId === loginState.memberId;
   };
@@ -49,7 +42,6 @@ export default function ElectionEdit() {
         const participantChampion = champions.find(
           (c) => c.value === data.participantChampion
         );
-        console.log(data);
         const defaultData = {
           ...data,
           id: electionId,
@@ -75,7 +67,6 @@ export default function ElectionEdit() {
       )
       .catch((e) => console.error("네트워크에러"))
       .then(() => {
-        console.log('aa');
         alert("재판이 등록되었습니다!");
         navigate("/");
       });

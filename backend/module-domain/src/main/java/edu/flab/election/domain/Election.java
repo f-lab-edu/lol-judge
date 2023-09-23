@@ -17,6 +17,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
@@ -52,6 +53,9 @@ public class Election {
 	@Length(max = 50)
 	private String youtubeUrl;
 
+	@Lob
+	private String thumbnailUrl;
+
 	@Range(min = ElectionRule.MIN_COST, max = ElectionRule.MAX_COST)
 	private int cost;
 
@@ -84,14 +88,16 @@ public class Election {
 					+ "<candidates: " + candidates + ">"));
 	}
 
-	public Election changeContents(String youtubeUrl, int cost) {
+	public void setContents(String youtubeUrl, int cost) {
 		this.youtubeUrl = youtubeUrl;
 		this.cost = cost;
-		return this;
 	}
 
-	public Election changeStatus(ElectionStatus status) {
+	public void setThumbnailUrl(String thumbnailUrl) {
+		this.thumbnailUrl = thumbnailUrl;
+	}
+
+	public void setStatus(ElectionStatus status) {
 		this.status = status;
-		return this;
 	}
 }

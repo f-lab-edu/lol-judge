@@ -43,15 +43,15 @@ export default function ElectionList() {
     axios
       .get(convertUrl("/elections"), {
         params: {
-          countOffset: 0,
-          limit: 30,
+          lastId: 0,
+          pageSize: 30,
           status: "IN_PROGRESS",
         },
       })
       .catch((e) => console.error(e))
       .then((res) => res?.data)
       .then((payload) => payload?.data)
-      .then((data) => setElectionList(data));
+        .then((data) => setElectionList(data?.electionInfoDtoList));
   }, [pageOffset]);
 
   return (
@@ -70,7 +70,9 @@ export default function ElectionList() {
             
             {electionList?.map((e, number) => (
               <StyledTableRow key={number}>
-                <StyledTableCell align="left" scope="row">{e.thumbnail}</StyledTableCell>
+                <StyledTableCell align="left" scope="row">
+                  <img src={e.thumbnail} style={{height: 80, width: 80}}/>
+                </StyledTableCell>
                 <StyledTableCell align="center">{e.title}</StyledTableCell>
                 <StyledTableCell align="center">{e.totalVotedCount}</StyledTableCell>
                 <StyledTableCell align="center">{e.createdAt}</StyledTableCell>

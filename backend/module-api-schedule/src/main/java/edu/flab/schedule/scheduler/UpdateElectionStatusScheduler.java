@@ -31,7 +31,7 @@ public class UpdateElectionStatusScheduler {
 		List<Election> elections = electionFindService.findAllByStatus(ElectionStatus.READY);
 
 		elections.forEach(e -> {
-			e.changeStatus(ElectionStatus.IN_PROGRESS);
+			e.setStatus(ElectionStatus.IN_PROGRESS);
 			rabbitMqSender.send(new RabbitMqMessage<>(e.getId(), RabbitMqQueueName.ELECTION_IN_PROGRESS));
 		});
 	}

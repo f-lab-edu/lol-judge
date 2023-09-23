@@ -12,6 +12,7 @@ import edu.flab.log.ExceptionLogTrace;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
 import edu.flab.rabbitmq.domain.RabbitMqSender;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
+import edu.flab.util.YoutubeThumbnailExtractor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,8 +30,9 @@ public class ElectionEditService {
 		Candidate host = election.getCandidate(CandidateStatus.HOST);
 		Candidate participant = election.getCandidate(CandidateStatus.PARTICIPANT);
 
-		election.changeContents(dto.getYoutubeUrl(), dto.getCost());
-		election.changeStatus(ElectionStatus.IN_PROGRESS);
+		election.setContents(dto.getYoutubeUrl(), dto.getCost());
+		election.setStatus(ElectionStatus.IN_PROGRESS);
+		election.setThumbnailUrl(YoutubeThumbnailExtractor.getThumbnailUrl(election.getYoutubeUrl()));
 		host.changeContents(dto.getHostOpinion(), dto.getHostChampion());
 		participant.changeContents(dto.getParticipantOpinion(), dto.getParticipantChampion());
 

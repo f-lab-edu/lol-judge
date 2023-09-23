@@ -24,7 +24,7 @@ public class ElectionInfoDto {
 
 	public ElectionInfoDto(Election election) {
 		this.id = election.getId();
-		this.thumbnail = election.getYoutubeUrl();
+		this.thumbnail = election.getThumbnailUrl();
 		this.totalVotedCount = election.getTotalVotedCount();
 		this.createdAt = election.getCreatedAt().format(DateTimeFormatter.ISO_DATE);
 		this.title = election.getTitle();
