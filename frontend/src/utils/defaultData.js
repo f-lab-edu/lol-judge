@@ -1,6 +1,6 @@
 export const defaultSignUpFormData = {
     email: '',
-    gameLoginId: '',
+    lolId: '',
     password: '',
     repassword: '',
     position: ''
@@ -29,6 +29,6 @@ export const defaultElectionEditData = {
 
 export const defaultLoginState = {
     memberId: 0,
-    lolLoginId: '',
+    lolId: '',
     email: ''
 }

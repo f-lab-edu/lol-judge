@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
+import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionEditRequestDto;
 import edu.flab.log.ExceptionLogTrace;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
@@ -29,6 +30,7 @@ public class ElectionEditService {
 		Candidate participant = election.getCandidate(CandidateStatus.PARTICIPANT);
 
 		election.changeContents(dto.getYoutubeUrl(), dto.getCost());
+		election.changeStatus(ElectionStatus.IN_PROGRESS);
 		host.changeContents(dto.getHostOpinion(), dto.getHostChampion());
 		participant.changeContents(dto.getParticipantOpinion(), dto.getParticipantChampion());
 

@@ -11,7 +11,8 @@ import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 export default function ProfileBox() {
-  const { control, getValues } = useFormContext();
+  const { control, watch } = useFormContext();
+  const password = watch("password");
 
   return (
     <Grid container spacing={1}>
@@ -48,7 +49,7 @@ export default function ProfileBox() {
       <Grid item xs={12}>
         <Controller
           control={control}
-          name="gameLoginId"
+          name="lolId"
           rules={{
             required: true,
             maxLength: { value: 20, message: "20글자 이하로 입력해주세요." },
@@ -90,6 +91,7 @@ export default function ProfileBox() {
           }) => (
             <TextField
               required
+              type="password"
               label="비밀번호"
               value={value}
               onChange={onChange}
@@ -107,7 +109,6 @@ export default function ProfileBox() {
           rules={{
             required: true,
             validate: (value) => {
-              const password = getValues("password");
               if (password !== value) {
                 return "비밀번호와 일치하지 않습니다";
               }
@@ -120,6 +121,7 @@ export default function ProfileBox() {
           }) => (
             <TextField
               required
+              type="password"
               label="비밀번호 확인"
               value={value}
               onChange={onChange}

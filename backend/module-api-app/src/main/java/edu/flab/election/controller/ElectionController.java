@@ -19,7 +19,7 @@ import edu.flab.election.service.ElectionDetailService;
 import edu.flab.election.service.ElectionEditService;
 import edu.flab.election.service.ElectionInfoFindService;
 import edu.flab.election.service.ElectionRegisterService;
-import edu.flab.member.domain.Member;
+import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.web.annotation.Login;
 import edu.flab.web.response.SuccessResponse;
 import jakarta.validation.Valid;
@@ -48,7 +48,7 @@ public class ElectionController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/elections")
-	public SuccessResponse<ElectionRegisterResponseDto> addElection(@Login Member member,
+	public SuccessResponse<ElectionRegisterResponseDto> addElection(@Login MemberLoginResponseDto member,
 		@RequestBody @Valid ElectionRegisterRequestDto dto) {
 		ElectionRegisterResponseDto response = electionRegisterService.register(member.getEmail(), dto);
 		return SuccessResponse.of(response);

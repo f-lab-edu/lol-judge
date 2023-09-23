@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.election.domain.Candidate;
+import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
@@ -37,8 +38,10 @@ public class ElectionRegisterService {
 			.createdAt(OffsetDateTime.now())
 			.build();
 
-		Candidate host = addCandidateToElection(election, hostEmail, dto.getChampion(), dto.getOpinion());
-		Candidate participant = addCandidateToElection(election, dto.getParticipantEmail());
+		Candidate host = addCandidateToElection(election, CandidateStatus.HOST, hostEmail, dto.getChampion(),
+			dto.getOpinion());
+		Candidate participant = addCandidateToElection(election, CandidateStatus.PARTICIPANT, dto.getParticipantEmail(),
+			"", "");
 
 		electionJpaRepository.save(election);
 
@@ -54,19 +57,17 @@ public class ElectionRegisterService {
 			.build();
 	}
 
-	private Candidate addCandidateToElection(Election election, String email, String champion, String opinion) {
+	private Candidate addCandidateToElection(Election election, CandidateStatus status, String email, String champion,
+		String opinion) {
 		Member member = memberFindService.findActiveMember(email);
 		Candidate candidate = Candidate.builder()
 			.opinion(opinion)
 			.champion(champion)
+			.candidateStatus(status)
 			.build();
 		candidate.setMember(member);
 		candidate.setElection(election);
 		return candidate;
-	}
-
-	private Candidate addCandidateToElection(Election election, String email) {
-		return addCandidateToElection(election, email, "", "");
 	}
 }
 
