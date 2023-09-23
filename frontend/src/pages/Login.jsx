@@ -29,7 +29,7 @@ export default function Login() {
             .then((res) => res?.data)
             .then((payload) => {
                 if (payload?.status === "success") {
-                    setLoginState({lolLoginId: payload.data.lolLoginId});
+                    setLoginState({lolId: payload.data.lolId});
                     navigate("/");
                 }
             });

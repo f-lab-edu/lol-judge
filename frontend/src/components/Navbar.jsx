@@ -24,13 +24,13 @@ export default function Navbar() {
       <nav className="flex items-center gap-6 text-2xl">
         <Link to="/ranking">랭킹</Link>
         <Link to="/statistics">통계</Link>
-        {loginState.lolLoginId === "" ? (
+        {loginState.lolId === "" ? (
           <Link to="/login">
             <Button variant="contained">로그인</Button>
           </Link>
         ) : (
           <>
-            <Typography>{`${loginState.lolLoginId}님`}</Typography>
+            <Typography>{`${loginState.lolId}님`}</Typography>
             <Button variant="contained" onClick={logout}>
               로그아웃
             </Button>

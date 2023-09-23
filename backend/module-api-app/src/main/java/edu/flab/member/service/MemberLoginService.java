@@ -2,6 +2,7 @@ package edu.flab.member.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.exception.AuthenticationException;
 import edu.flab.log.ExceptionLogTrace;
@@ -22,13 +23,15 @@ public class MemberLoginService {
 	private final MemberFindService memberFindService;
 	private final PasswordEncoder passwordEncoder;
 
+	@Transactional
 	@ExceptionLogTrace
 	public MemberLoginResponseDto login(HttpServletRequest request, MemberLoginRequestDto dto) {
 		Member member = memberFindService.findActiveMember(dto.getEmail());
+		MemberLoginResponseDto sessionData = new MemberLoginResponseDto(member);
 		validatePassword(dto.getPassword(), member.getPassword());
 		HttpSession session = request.getSession(true);
-		session.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, member);
-		return new MemberLoginResponseDto(member.getId(), member.getGameAccount().getLolId(), member.getEmail());
+		session.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, sessionData);
+		return sessionData;
 	}
 
 	public MemberLoginResponseDto getLoginMember(HttpServletRequest request) {
@@ -36,8 +39,8 @@ public class MemberLoginService {
 		if (session == null) {
 			return null;
 		}
-		Member member = (Member)session.getAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE);
-		return new MemberLoginResponseDto(member.getId(), member.getGameAccount().getLolId(), member.getEmail());
+		return (MemberLoginResponseDto)session.getAttribute(
+			LoginConstant.LOGIN_SESSION_ATTRIBUTE);
 	}
 
 	public void logout(HttpServletRequest request) {

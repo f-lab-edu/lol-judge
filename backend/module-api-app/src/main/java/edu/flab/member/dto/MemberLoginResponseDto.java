@@ -1,5 +1,6 @@
 package edu.flab.member.dto;
 
+import edu.flab.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,4 +15,10 @@ public class MemberLoginResponseDto {
 	private Long memberId;
 	private String lolId;
 	private String email;
+
+	public MemberLoginResponseDto(Member member) {
+		this.memberId = member.getId();
+		this.lolId = member.getGameAccount().getLolId();
+		this.email = member.getEmail();
+	}
 }
