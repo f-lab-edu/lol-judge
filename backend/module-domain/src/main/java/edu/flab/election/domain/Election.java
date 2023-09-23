@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.election.config.ElectionRule;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -40,7 +41,7 @@ public class Election {
 	private Long id;
 
 	@Default
-	@OneToMany(mappedBy = "election")
+	@OneToMany(mappedBy = "election", cascade = CascadeType.PERSIST)
 	List<Candidate> candidates = new ArrayList<>();
 
 	@Default
@@ -77,7 +78,10 @@ public class Election {
 		return candidates.stream()
 			.filter(c -> c.getCandidateStatus() == candidateStatus)
 			.findFirst()
-			.orElseThrow(() -> new NoSuchElementException("선거의 후보자를 조회했으나 존재하지 않습니다."));
+			.orElseThrow(() -> new NoSuchElementException(
+				"선거의 후보자를 조회했으나 존재하지 않습니다."
+					+ "<electionId: " + id + "> "
+					+ "<candidates: " + candidates + ">"));
 	}
 
 	public Election changeContents(String youtubeUrl, int cost) {
