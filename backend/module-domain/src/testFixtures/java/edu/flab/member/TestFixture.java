@@ -7,8 +7,8 @@ import java.time.OffsetDateTime;
 import com.github.javafaker.Faker;
 
 import edu.flab.election.domain.Candidate;
-import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
+import edu.flab.election.domain.Opinion;
 import edu.flab.member.domain.GameAccount;
 import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
@@ -39,33 +39,29 @@ public class TestFixture {
 	}
 
 	public static Election getElection() {
-		Candidate host = Candidate.builder()
+		Member writer = getMember();
+
+		Candidate candidate1 = Candidate.builder()
 			.id(candidateId++)
-			.candidateStatus(CandidateStatus.HOST)
-			.opinion("쌍둥이 포탑을 쳤으면 게임을 끝냈다")
-			.champion(faker.leagueOfLegends().champion())
+			.opinion(new Opinion("쉬바나", "쌍둥이 포탑을 쳤으면 게임을 끝냈다"))
 			.build();
 
-		Candidate participant = Candidate.builder()
+		Candidate candidate2 = Candidate.builder()
 			.id(candidateId++)
-			.candidateStatus(CandidateStatus.PARTICIPANT)
-			.opinion("시간이 부족해서 끝낼 수 없었다")
-			.champion(faker.leagueOfLegends().champion())
+			.opinion(new Opinion("판테온", "시간이 부족해서 끝낼 수 없었다"))
 			.build();
 
 		Election election = Election.builder()
 			.id(electionId++)
-			.cost(100)
 			.youtubeUrl("https://youtube.com/example")
 			.progressTime(72)
 			.createdAt(OffsetDateTime.now())
 			.endedAt(OffsetDateTime.now().plusHours(72))
 			.build();
 
-		host.setMember(getMember());
-		host.setElection(election);
-		participant.setMember(getMember());
-		participant.setElection(election);
+		election.addCandidate(candidate1);
+		election.addCandidate(candidate2);
+		writer.addElection(election);
 
 		return election;
 	}

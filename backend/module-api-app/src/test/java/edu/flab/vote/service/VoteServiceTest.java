@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.election.domain.Candidate;
-import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.Vote;
 import edu.flab.election.repository.VoteJpaRepository;
@@ -23,10 +22,10 @@ import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.service.MemberJudgePointUpdateService;
 
 @ExtendWith(MockitoExtension.class)
-class VoteAddServiceTest {
+class VoteServiceTest {
 
 	@InjectMocks
-	private VoteAddService sut;
+	private VoteService sut;
 
 	@Mock
 	private VoteFindService voteFindService;
@@ -46,7 +45,7 @@ class VoteAddServiceTest {
 		// given
 		Election election = TestFixture.getElection();
 
-		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
+		Candidate candidate = election.getCandidates().get(0);
 
 		Member voter = TestFixture.getMember();
 		voter.setJudgePoint(100);
@@ -61,7 +60,7 @@ class VoteAddServiceTest {
 		when(voteJpaRepository.save(any(Vote.class))).thenReturn(vote);
 
 		// when
-		sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId());
+		sut.vote(voter, candidate.getId());
 
 		// then
 		verify(candidateFindService).findById(candidate.getId());
@@ -76,7 +75,7 @@ class VoteAddServiceTest {
 		// given
 		Election election = TestFixture.getElection();
 
-		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
+		Candidate candidate = election.getCandidates().get(0);
 
 		Member voter = TestFixture.getMember();
 		voter.setJudgePoint(0);
@@ -88,7 +87,7 @@ class VoteAddServiceTest {
 		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 
 		// then
-		Assertions.assertThatThrownBy(() -> sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId()))
+		Assertions.assertThatThrownBy(() -> sut.vote(voter, candidate.getId()))
 			.isInstanceOf(
 				IllegalStateException.class);
 	}
@@ -99,7 +98,7 @@ class VoteAddServiceTest {
 		// given
 		Election election = TestFixture.getElection();
 
-		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
+		Candidate candidate = election.getCandidates().get(0);
 
 		Member voter = TestFixture.getMember();
 		voter.setJudgePoint(100);
@@ -112,31 +111,7 @@ class VoteAddServiceTest {
 		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(true);
 
 		// then
-		Assertions.assertThatThrownBy(() -> sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId()))
-			.isInstanceOf(
-				IllegalStateException.class);
-	}
-
-
-	@Test
-	@DisplayName("피고인 또는 원고는 투표를 할 수 없다")
-	void test5() {
-		// given
-		Election election = TestFixture.getElection();
-
-		Candidate candidate = election.getCandidate(CandidateStatus.HOST);
-
-		Member voter = candidate.getMember();
-		voter.setJudgePoint(100);
-
-		Vote vote = new Vote();
-		vote.setCandidate(candidate);
-		vote.setMember(voter);
-
-		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
-
-		// then
-		Assertions.assertThatThrownBy(() -> sut.add(voter, election.getCandidate(CandidateStatus.HOST).getId()))
+		Assertions.assertThatThrownBy(() -> sut.vote(voter, candidate.getId()))
 			.isInstanceOf(
 				IllegalStateException.class);
 	}

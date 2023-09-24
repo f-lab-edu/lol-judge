@@ -2,31 +2,29 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import ElectionList from "./pages/ElectionList";
-import ElectionDetail from "./pages/ElectionDetail";
-import Error from "./pages/Error";
-import ScoreRanking from "./pages/ScoreRanking";
-import SignUp from "./pages/SignUp";
-import Login from "./pages/Login";
 import "./index.css";
-import ElectionRegister from "./pages/ElectionRegister";
-import ElectionEdit from "./pages/ElectionEdit";
-import Statistics from "./pages/Statistics";
+import ElectionListPage from "./pages/ElectionListPage";
+import ElectionDetailPage from "./pages/ElectionDetailPage";
+import ElectionRegisterPage from "./pages/ElectionRegisterPage";
+import ScoreRankingPage from "./pages/ScoreRankingPage";
+import SignUpPage from "./pages/SignUpPage";
+import StatisticsPage from "./pages/StatisticsPage";
+import LoginPage from "./pages/LoginPage";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <Error />,
+    errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <ElectionList /> },
-      { path: "/elections/:electionId", element: <ElectionDetail /> },
-      { path: "/elections/register", element: <ElectionRegister /> },
-      { path: "/elections/edit/:electionId", element: <ElectionEdit /> },
-      { path: "/ranking", element: <ScoreRanking /> },
-      { path: "/signUp", element: <SignUp /> },
-      { path: "/statistics", element: <Statistics /> },
-      { path: "/login", element: <Login /> },
+      { index: true, element: <ElectionListPage /> },
+      { path: "/elections/:electionId", element: <ElectionDetailPage /> },
+      { path: "/elections/register", element: <ElectionRegisterPage /> },
+      { path: "/ranking", element: <ScoreRankingPage /> },
+      { path: "/signUp", element: <SignUpPage /> },
+      { path: "/statistics", element: <StatisticsPage /> },
+      { path: "/login", element: <LoginPage /> },
     ],
   },
 ]);

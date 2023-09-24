@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
-import edu.flab.election.domain.Candidate;
+import edu.flab.election.domain.Election;
 import edu.flab.election.domain.Vote;
 import edu.flab.member.domain.specification.JudgePointSpecification;
 import edu.flab.notification.domain.Notification;
@@ -55,19 +55,19 @@ public class Member {
 	@Length(max = 200)
 	private String profileUrl;
 
-	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, optional = false)
+	@OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST, optional = false, orphanRemoval = true)
 	private GameAccount gameAccount;
 
 	@Default
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-	private List<Candidate> candidates = new ArrayList<>();
+	private List<Election> elections = new ArrayList<>();
 
 	@Default
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Notification> notifications = new ArrayList<>();
 
 	@Default
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Vote> votes = new ArrayList<>();
 
 	@Default
@@ -92,5 +92,13 @@ public class Member {
 	public void setGameAccount(GameAccount gameAccount) {
 		this.gameAccount = gameAccount;
 		gameAccount.setMember(this);
+	}
+
+	public void addElection(Election election) {
+		if (election.getMember() != null) {
+			election.getMember().getElections().remove(election);
+		}
+		this.elections.add(election);
+		election.setMember(this);
 	}
 }

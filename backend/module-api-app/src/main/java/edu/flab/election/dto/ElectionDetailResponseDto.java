@@ -1,9 +1,13 @@
 package edu.flab.election.dto;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
+import java.time.OffsetDateTime;
+import java.util.List;
 
-import edu.flab.election.config.ElectionRule;
+import org.hibernate.validator.constraints.Length;
+
+import edu.flab.election.domain.Opinion;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,18 +24,19 @@ public class ElectionDetailResponseDto {
 	@Length(max = 50)
 	private String youtubeUrl;
 
-	@Range(min = ElectionRule.MIN_COST, max = ElectionRule.MAX_COST)
-	private int cost;
+	@NotBlank
+	private String title;
 
-	private String hostChampion;
+	@NotBlank
+	private String writer;
 
-	private String hostOpinion;
+	@NotNull
+	private OffsetDateTime createdAt;
 
-	private String participantChampion;
+	@NotNull
+	private OffsetDateTime endedAt;
 
-	private String participantOpinion;
+	private long totalVotedCount;
 
-	private Long hostId;
-
-	private Long participantId;
+	private List<Opinion> opinions;
 }

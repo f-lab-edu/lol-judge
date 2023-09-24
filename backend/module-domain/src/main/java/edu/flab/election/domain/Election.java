@@ -3,13 +3,13 @@ package edu.flab.election.domain;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
 import edu.flab.election.config.ElectionRule;
+import edu.flab.member.domain.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,8 +17,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,23 +44,29 @@ public class Election {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@ManyToOne
+	@JoinColumn(name = "member_id")
+	private Member member;
+
 	@Default
 	@OneToMany(mappedBy = "election", cascade = CascadeType.PERSIST)
-	List<Candidate> candidates = new ArrayList<>();
+	private List<Candidate> candidates = new ArrayList<>();
 
 	@Default
 	@Enumerated(EnumType.STRING)
-	private ElectionStatus status = ElectionStatus.PENDING;
+	private ElectionStatus status = ElectionStatus.IN_PROGRESS;
+
+	@NotBlank
+	@Length(max = 150)
+	private String title;
 
 	@URL
 	@Length(max = 50)
 	private String youtubeUrl;
 
-	@Lob
+	@URL
+	@Length(max = 300)
 	private String thumbnailUrl;
-
-	@Range(min = ElectionRule.MIN_COST, max = ElectionRule.MAX_COST)
-	private int cost;
 
 	@PositiveOrZero
 	private long totalVotedCount;
@@ -65,39 +74,28 @@ public class Election {
 	@Range(min = ElectionRule.MIN_PROGRESS_HOUR, max = ElectionRule.MAX_PROGRESS_HOUR)
 	private int progressTime;
 
+	@NotNull
 	private OffsetDateTime createdAt;
 
+	@NotNull
 	private OffsetDateTime endedAt;
 
 	private boolean deleted;
 
-	public String getTitle() {
-		Candidate host = getCandidate(CandidateStatus.HOST);
-		Candidate participant = getCandidate(CandidateStatus.PARTICIPANT);
-		return host.getChampion() + ":" + host.getOpinion() + " vs " +
-			participant.getChampion() + ":" + participant.getOpinion();
-	}
-
-	public Candidate getCandidate(CandidateStatus candidateStatus) {
-		return candidates.stream()
-			.filter(c -> c.getCandidateStatus() == candidateStatus)
-			.findFirst()
-			.orElseThrow(() -> new NoSuchElementException(
-				"선거의 후보자를 조회했으나 존재하지 않습니다."
-					+ "<electionId: " + id + "> "
-					+ "<candidates: " + candidates + ">"));
-	}
-
-	public void setContents(String youtubeUrl, int cost) {
-		this.youtubeUrl = youtubeUrl;
-		this.cost = cost;
-	}
-
-	public void setThumbnailUrl(String thumbnailUrl) {
-		this.thumbnailUrl = thumbnailUrl;
-	}
-
 	public void setStatus(ElectionStatus status) {
 		this.status = status;
+	}
+
+	//== 연관 관계 편의 메서드 ==//
+	public void addCandidate(Candidate candidate) {
+		if (candidate.getElection() != null) {
+			candidate.getElection().getCandidates().remove(candidate);
+		}
+		candidate.setElection(this);
+		this.candidates.add(candidate);
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }

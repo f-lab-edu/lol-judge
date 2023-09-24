@@ -39,7 +39,7 @@ class ElectionInfoFindServiceTest {
 			List.of(election1, election0));
 
 		// when
-		ElectionInfoFindResponseDto electionInfo = sut.findLatestElections(5L, ElectionStatus.PENDING);
+		ElectionInfoFindResponseDto electionInfo = sut.findLatestElections(5L, ElectionStatus.IN_PROGRESS);
 
 		// then
 		SoftAssertions.assertSoftly(softly -> {
@@ -65,7 +65,7 @@ class ElectionInfoFindServiceTest {
 
 		// when
 		// ID 값이 3L 미만인 재판 3개 조회한다.
-		ElectionInfoFindResponseDto electionInfo = sut.findAllWithPagination(3L, 3L, ElectionStatus.PENDING);
+		ElectionInfoFindResponseDto electionInfo = sut.findAllWithPagination(3L, 3L, ElectionStatus.IN_PROGRESS);
 
 		// then
 		SoftAssertions.assertSoftly(softly -> {

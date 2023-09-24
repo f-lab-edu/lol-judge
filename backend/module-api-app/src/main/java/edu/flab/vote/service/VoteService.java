@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class VoteAddService {
+public class VoteService {
 
 	private final VoteFindService voteFindService;
 	private final VoteJpaRepository voteJpaRepository;
@@ -24,7 +24,7 @@ public class VoteAddService {
 	private final MemberJudgePointUpdateService memberJudgePointUpdateService;
 
 	@Transactional
-	public void add(Member voter, Long candidateId) {
+	public void vote(Member voter, Long candidateId) {
 
 		Candidate candidate = candidateFindService.findById(candidateId);
 
@@ -40,16 +40,6 @@ public class VoteAddService {
 	}
 
 	private void validate(Member member, Candidate candidate) {
-		if (member.getId().equals(candidate.getMember().getId())) {
-			throw new IllegalStateException(
-				"재판 고소인/피고인은 투표를 할 수 없습니다 "
-					+ "<회원 번호 = " + member.getId() + ">"
-					+ "<재판 번호 = " + candidate.getElection().getId() + ">"
-					+ "<후보자 명단 = " + candidate.getElection().getCandidates() + ">"
-					+ "<투표 대상 번호 = " + candidate.getId() + ">"
-					+ "<투표 대상 회원번호 = " + candidate.getMember().getId() + ">");
-		}
-
 		if (member.getJudgePoint() < VoteRule.FEE) {
 			throw new IllegalStateException(
 				"회원의 포인트가 참가 비용보다 적습니다 "

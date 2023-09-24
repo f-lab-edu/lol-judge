@@ -31,7 +31,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function ElectionList() {
+export default function ElectionListPage() {
   const [pageOffset, setPageOffset] = React.useState(1);
   const [electionList, setElectionList] = React.useState([]);
 

@@ -3,7 +3,7 @@ package edu.flab.election.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.flab.member.domain.Member;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,7 +26,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString(exclude = "election")
-@EqualsAndHashCode(exclude = {"member", "election", "votes"})
+@EqualsAndHashCode(exclude = {"election", "votes"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -35,16 +35,12 @@ public class Candidate {
 	@GeneratedValue
 	private Long id;
 
-	@JoinColumn(name = "member_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Member member;
-
 	@JoinColumn(name = "election_id")
 	@ManyToOne
 	private Election election;
 
 	@Default
-	@OneToMany(mappedBy = "candidate")
+	@OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY)
 	private List<Vote> votes = new ArrayList<>();
 
 	@Default
@@ -52,18 +48,15 @@ public class Candidate {
 	@Enumerated(EnumType.STRING)
 	private VotedStatus votedStatus = VotedStatus.UNKNOWN;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private CandidateStatus candidateStatus;
+	@Embedded
+	private Opinion opinion;
 
-	private String opinion;
-
-	private String champion;
-
-	public Candidate changeContents(String opinion, String champion) {
+	public Candidate(Opinion opinion) {
 		this.opinion = opinion;
-		this.champion = champion;
-		return this;
+	}
+
+	public void changeOpinion(Opinion opinion) {
+		this.opinion = opinion;
 	}
 
 	public long calcVotedScore() {
@@ -75,18 +68,6 @@ public class Candidate {
 
 	//== 연관관계 편의 메서드 ==//
 	public void setElection(Election election) {
-		if (this.election != null) {
-			this.election.getCandidates().remove(this);
-		}
 		this.election = election;
-		election.getCandidates().add(this);
-	}
-
-	public void setMember(Member member) {
-		if (this.member != null) {
-			this.member.getCandidates().remove(this);
-		}
-		this.member = member;
-		member.getCandidates().add(this);
 	}
 }

@@ -15,6 +15,11 @@ export const defaultElectionFormData = {
     champion: '',
 }
 
+export const defaultOpinionData = {
+    champion: '',
+    opinion: '',
+}
+
 export const defaultElectionEditData = {
     id: 0,
     hostId: 0,

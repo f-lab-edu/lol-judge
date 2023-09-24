@@ -3,7 +3,6 @@ package edu.flab.election.service;
 import org.springframework.stereotype.Service;
 
 import edu.flab.election.domain.Candidate;
-import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
 import edu.flab.election.dto.ElectionDetailResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +17,16 @@ public class ElectionDetailService {
 
 	public ElectionDetailResponseDto findElectionDetail(Long electionId) {
 		Election election = electionFindService.findElection(electionId);
-		Candidate host = election.getCandidate(CandidateStatus.HOST);
-		Candidate participant = election.getCandidate(CandidateStatus.PARTICIPANT);
 
 		return ElectionDetailResponseDto.builder()
 			.id(electionId)
-			.hostId(host.getId())
-			.participantId(participant.getId())
-			.cost(election.getCost())
+			.writer(election.getMember().getGameAccount().getNickname())
+			.title(election.getTitle())
 			.youtubeUrl(election.getYoutubeUrl())
-			.hostChampion(host.getChampion())
-			.hostOpinion(host.getOpinion())
-			.participantChampion(participant.getChampion())
-			.participantOpinion(participant.getOpinion())
+			.totalVotedCount(election.getTotalVotedCount())
+			.createdAt(election.getCreatedAt())
+			.endedAt(election.getEndedAt())
+			.opinions(election.getCandidates().stream().map(Candidate::getOpinion).toList())
 			.build();
 	}
 }

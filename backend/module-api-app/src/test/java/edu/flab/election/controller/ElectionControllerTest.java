@@ -1,5 +1,7 @@
 package edu.flab.election.controller;
 
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,11 +30,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.flab.election.domain.Opinion;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionFindService;
 import edu.flab.member.controller.MemberController;
 import edu.flab.member.domain.Member;
+import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.service.MemberSignUpService;
 import edu.flab.web.config.LoginConstant;
@@ -64,10 +68,12 @@ class ElectionControllerTest {
 	private MockMvc mock;
 
 	@Container
-	private static final GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
+	private static final GenericContainer redis = new GenericContainer(
+		DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
 
 	@Container
-	private static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:latest").withExposedPorts(5672, 15672);
+	private static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:latest").withExposedPorts(5672,
+		15672);
 
 	@BeforeEach
 	void setUp() {
@@ -91,32 +97,24 @@ class ElectionControllerTest {
 	@DisplayName("로그인 회원은 재판을 신청할 수 있고, 관련자에게 메시지가 전송된다")
 	void test1() throws Exception {
 		// given
-		MemberSignUpDto hostSignUpDto = MemberSignUpDto.builder()
+		MemberSignUpDto writerSignUpDto = MemberSignUpDto.builder()
 			.email("host@example.com")
 			.password("aB#12345")
 			.lolId("lolId1111")
 			.build();
 
-		MemberSignUpDto participantSignUpDto = MemberSignUpDto.builder()
-			.email("participant@example.com")
-			.password("aB#12345")
-			.lolId("lolId2222")
-			.build();
-
-		Member hostMember = memberSignUpService.signUp(hostSignUpDto);
-		Member participantMember = memberSignUpService.signUp(participantSignUpDto);
+		Member writer = memberSignUpService.signUp(writerSignUpDto);
 
 		ElectionRegisterRequestDto electionAddDto = ElectionRegisterRequestDto.builder()
-			.opinion("원딜이 쌍둥이 포탑을 계속 쳤으면 게임을 끝낼 수 있었다 vs 카밀의 압박 때문에 할 수 없다")
+			.title("원딜이 쌍둥이 포탑을 계속 쳤으면 게임을 끝낼 수 있었다 vs 카밀의 압박 때문에 할 수 없다")
 			.youtubeUrl("https://youtube.com/7I5SKTY-JXc")
-			.participantEmail(participantMember.getEmail())
-			.cost(1000)
 			.progressTime(60)
-			.champion("shivana")
+			.opinions(List.of(new Opinion("쉬바나", "원딜이 쌍둥이 포탑을 계속 쳤으면 게임 끝냈다"), new Opinion("시비르", "카밀 압박 때문에 할 수 없다")))
 			.build();
 
 		MockHttpSession mockHttpSession = new MockHttpSession();
-		mockHttpSession.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, hostMember);
+		mockHttpSession.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE,
+			new MemberLoginResponseDto(writer.getId(), writerSignUpDto.getLolId(), writer.getEmail()));
 
 		// when
 		MvcResult mvcResult = mock.perform(MockMvcRequestBuilders.post("/elections")

@@ -16,8 +16,5 @@ public class ElectionRegisterResponseDto {
 	private Long electionId;
 
 	@Positive
-	private Long hostId;
-
-	@Positive
-	private Long participantId;
+	private String writerEmail;
 }

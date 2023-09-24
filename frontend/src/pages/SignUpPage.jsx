@@ -1,12 +1,11 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import LinkBox from "../components/LinkBox";
 import ProfileBox from "../components/ProfileBox";
 import { FormProvider, useForm } from "react-hook-form";
 import { defaultSignUpFormData } from "../utils/defaultData";
-import { useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import { convertUrl } from "../utils/urlUtil";
 
@@ -45,7 +44,7 @@ export default function SignUp() {
 
   const onError = (e) => {
     alert("모든 입력란를 채워주세요");
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs" className="mt-10 pt-10">
@@ -66,7 +65,9 @@ export default function SignUp() {
       >
         가입하기
       </Button>
-      <LinkBox to="/login"> 회원이신가요? 로그인 </LinkBox>
+      <Grid Container>
+        <Link to="/login" className="text-sky-600 underline">회원이신가요? 로그인</Link>
+      </Grid>
     </Container>
   );
 }

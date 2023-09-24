@@ -2,6 +2,8 @@ package edu.flab.election.service;
 
 import static edu.flab.election.domain.QCandidate.*;
 import static edu.flab.election.domain.QElection.*;
+import static edu.flab.election.domain.QVote.*;
+import static edu.flab.member.domain.QGameAccount.*;
 import static edu.flab.member.domain.QMember.*;
 
 import java.util.List;
@@ -40,9 +42,11 @@ public class ElectionFindService {
 
 	public List<Election> findAllByStatus(long pageSize, ElectionStatus status) {
 		return jpaQueryFactory.selectFrom(election)
+			.innerJoin(election.member, member)
+			.innerJoin(member.gameAccount, gameAccount)
 			.leftJoin(election.candidates, candidate)
-			.leftJoin(candidate.member,
-				member)
+			.leftJoin(candidate.votes, vote)
+			.leftJoin(vote.member, member)
 			.where(eqStatus(status))
 			.orderBy(election.id.desc())
 			.limit(pageSize)
@@ -51,9 +55,11 @@ public class ElectionFindService {
 
 	public List<Election> findAllByStatus(long lastId, long pageSize, ElectionStatus status) {
 		return jpaQueryFactory.selectFrom(election)
+			.innerJoin(election.member, member)
+			.innerJoin(member.gameAccount, gameAccount)
 			.leftJoin(election.candidates, candidate)
-			.leftJoin(candidate.member,
-				member)
+			.leftJoin(candidate.votes, vote)
+			.leftJoin(vote.member, member)
 			.where(eqStatus(status), ltElectionId(lastId))
 			.orderBy(election.id.desc())
 			.limit(pageSize)
@@ -63,9 +69,11 @@ public class ElectionFindService {
 	public List<Election> findAllByStatusOrderByTotalVotedCount(long totalVotedCount, long pageSize,
 		ElectionStatus status) {
 		return jpaQueryFactory.selectFrom(election)
+			.innerJoin(election.member, member)
+			.innerJoin(member.gameAccount, gameAccount)
 			.leftJoin(election.candidates, candidate)
-			.leftJoin(candidate.member,
-				member)
+			.leftJoin(candidate.votes, vote)
+			.leftJoin(vote.member, member)
 			.where(eqStatus(status), ltVotedCount(totalVotedCount))
 			.orderBy(election.totalVotedCount.desc())
 			.limit(pageSize)

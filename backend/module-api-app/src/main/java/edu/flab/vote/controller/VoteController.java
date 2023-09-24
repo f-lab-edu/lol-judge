@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.flab.member.domain.Member;
-import edu.flab.vote.service.VoteAddService;
+import edu.flab.vote.service.VoteService;
 import edu.flab.web.annotation.Login;
 import lombok.RequiredArgsConstructor;
 
@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteController {
 
-	private final VoteAddService voteAddService;
+	private final VoteService voteService;
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/api/vote")
 	public void vote(@Login Member member, @RequestBody Long candidateId) {
-		voteAddService.add(member, candidateId);
+		voteService.vote(member, candidateId);
 	}
 }

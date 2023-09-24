@@ -2,7 +2,6 @@ package edu.flab.election.dto;
 
 import java.time.format.DateTimeFormatter;
 
-import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,6 +27,6 @@ public class ElectionInfoDto {
 		this.totalVotedCount = election.getTotalVotedCount();
 		this.createdAt = election.getCreatedAt().format(DateTimeFormatter.ISO_DATE);
 		this.title = election.getTitle();
-		this.writer = election.getCandidate(CandidateStatus.HOST).getMember().getGameAccount().getLolId();
+		this.writer = election.getMember().getGameAccount().getNickname();
 	}
 }

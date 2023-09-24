@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.election.domain.Candidate;
-import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
 import edu.flab.election.dto.ElectionDetailResponseDto;
 import edu.flab.member.TestFixture;
@@ -37,18 +36,15 @@ class ElectionDetailServiceTest {
 		ElectionDetailResponseDto electionDetail = sut.findElectionDetail(election.getId());
 
 		// then
-		Candidate host = election.getCandidate(CandidateStatus.HOST);
-		Candidate participant = election.getCandidate(CandidateStatus.PARTICIPANT);
 		ElectionDetailResponseDto expect = ElectionDetailResponseDto.builder()
 			.id(election.getId())
+			.writer(election.getMember().getGameAccount().getNickname())
+			.title(election.getTitle())
 			.youtubeUrl(election.getYoutubeUrl())
-			.cost(election.getCost())
-			.hostChampion(host.getChampion())
-			.hostOpinion(host.getOpinion())
-			.participantChampion(participant.getChampion())
-			.participantOpinion(participant.getOpinion())
-			.hostId(host.getId())
-			.participantId(participant.getId())
+			.totalVotedCount(election.getTotalVotedCount())
+			.createdAt(election.getCreatedAt())
+			.endedAt(election.getEndedAt())
+			.opinions(election.getCandidates().stream().map(Candidate::getOpinion).toList())
 			.build();
 
 		Assertions.assertThat(electionDetail).isEqualTo(expect);

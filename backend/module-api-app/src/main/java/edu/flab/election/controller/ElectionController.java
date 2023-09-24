@@ -4,19 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.flab.election.dto.ElectionDetailResponseDto;
-import edu.flab.election.dto.ElectionEditRequestDto;
 import edu.flab.election.dto.ElectionInfoFindResponseDto;
 import edu.flab.election.dto.ElectionPagingFindRequestDto;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionDetailService;
-import edu.flab.election.service.ElectionEditService;
 import edu.flab.election.service.ElectionInfoFindService;
 import edu.flab.election.service.ElectionRegisterService;
 import edu.flab.member.dto.MemberLoginResponseDto;
@@ -33,7 +30,6 @@ public class ElectionController {
 
 	private final ElectionRegisterService electionRegisterService;
 	private final ElectionDetailService electionDetailService;
-	private final ElectionEditService electionEditService;
 	private final ElectionInfoFindService electionInfoFindService;
 
 	@ResponseStatus(HttpStatus.OK)
@@ -52,13 +48,6 @@ public class ElectionController {
 		@RequestBody @Valid ElectionRegisterRequestDto dto) {
 		ElectionRegisterResponseDto response = electionRegisterService.register(member.getEmail(), dto);
 		return SuccessResponse.of(response);
-	}
-
-	@ResponseStatus(HttpStatus.OK)
-	@PutMapping("/elections")
-	public SuccessResponse<Void> updateElection(@RequestBody @Valid ElectionEditRequestDto dto) {
-		electionEditService.edit(dto);
-		return SuccessResponse.ok();
 	}
 
 	@ResponseStatus(HttpStatus.OK)

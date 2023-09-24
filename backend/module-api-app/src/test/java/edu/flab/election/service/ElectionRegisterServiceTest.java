@@ -10,13 +10,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.election.domain.Candidate;
-import edu.flab.election.domain.CandidateStatus;
 import edu.flab.election.domain.Election;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.repository.ElectionJpaRepository;
 import edu.flab.member.TestFixture;
 import edu.flab.member.domain.Member;
-import edu.flab.member.service.MemberFindService;
+import edu.flab.member.repository.MemberJpaRepository;
 import edu.flab.rabbitmq.domain.RabbitMqSender;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
 
@@ -27,7 +26,7 @@ class ElectionRegisterServiceTest {
 	private ElectionRegisterService sut;
 
 	@Mock
-	private MemberFindService memberFindService;
+	private MemberJpaRepository memberJpaRepository;
 
 	@Mock
 	private ElectionJpaRepository electionJpaRepository;
@@ -40,31 +39,24 @@ class ElectionRegisterServiceTest {
 	void test1() {
 		// given
 		Election election = TestFixture.getElection();
-		Candidate host = election.getCandidate(CandidateStatus.HOST);
-		Candidate participant = election.getCandidate(CandidateStatus.PARTICIPANT);
-		Member hostMember = host.getMember();
-		Member participantMember = participant.getMember();
+		Member writer = election.getMember();
 
 		ElectionRegisterRequestDto dto = ElectionRegisterRequestDto.builder()
-			.cost(election.getCost())
-			.opinion(host.getOpinion())
-			.champion(host.getChampion())
-			.participantEmail(participantMember.getEmail())
+			.title(election.getTitle())
 			.progressTime(election.getProgressTime())
 			.youtubeUrl(election.getYoutubeUrl())
+			.opinions(election.getCandidates().stream().map(Candidate::getOpinion).toList())
 			.build();
 
-		when(memberFindService.findActiveMember(hostMember.getEmail())).thenReturn(hostMember);
-		when(memberFindService.findActiveMember(participantMember.getEmail())).thenReturn(participantMember);
+		when(memberJpaRepository.existsByEmail(writer.getEmail())).thenReturn(true);
 		when(electionJpaRepository.save(any(Election.class))).thenReturn(election);
 		doNothing().when(rabbitMqSender).send(any(RabbitMqMessage.class));
 
 		// when
-		sut.register(hostMember.getEmail(), dto);
+		sut.register(writer.getEmail(), dto);
 
 		// then
-		verify(memberFindService).findActiveMember(hostMember.getEmail());
-		verify(memberFindService).findActiveMember(participantMember.getEmail());
+		verify(memberJpaRepository).existsByEmail(writer.getEmail());
 		verify(electionJpaRepository).save(any(Election.class));
 		verify(rabbitMqSender).send(any(RabbitMqMessage.class));
 	}
