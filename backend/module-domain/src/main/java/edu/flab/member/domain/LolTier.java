@@ -1,16 +1,21 @@
 package edu.flab.member.domain;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Access(AccessType.FIELD)
 @Embeddable
 public sealed class LolTier permits LolTierUtil {
 
@@ -35,13 +40,15 @@ public sealed class LolTier permits LolTierUtil {
 		}
 	}
 
-	private Color color;
-	private int level;
-	private int point;
-
-	protected LolTier(Color color, Integer level, Integer point) {
-		this.color = color;
-		this.level = level;
-		this.point = point;
+	public enum Level {
+		NONE, I, II, III, IV
 	}
+
+	@Enumerated(EnumType.STRING)
+	private Color color;
+
+	@Enumerated(EnumType.STRING)
+	private Level level;
+
+	private int point;
 }

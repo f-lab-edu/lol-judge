@@ -14,17 +14,17 @@ public class LolTierSpecification {
 	private final int lolTierMinPoint;
 	private final int lolTierMaxPoint;
 
-	public boolean isSatisfied(LolTier candidate) {
-		return isValidColor(candidate.getColor()) && isValidLevel(candidate.getLevel()) && isValidPoint(
-			candidate.getPoint());
+	public boolean isSatisfied(LolTier lolTier) {
+		return isValidColor(lolTier.getColor()) && isValidLevel(lolTier.getLevel()) && isValidPoint(
+			lolTier.getPoint());
 	}
 
 	private boolean isValidColor(LolTier.Color color) {
 		return lolTierColors.contains(color);
 	}
 
-	private boolean isValidLevel(int level) {
-		return lolTierMinLevel <= level && level <= lolTierMaxLevel;
+	private boolean isValidLevel(LolTier.Level level) {
+		return lolTierMinLevel <= level.ordinal() && level.ordinal() <= lolTierMaxLevel;
 	}
 
 	private boolean isValidPoint(int point) {

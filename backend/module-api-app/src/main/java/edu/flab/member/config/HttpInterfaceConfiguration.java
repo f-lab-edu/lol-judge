@@ -1,5 +1,6 @@
 package edu.flab.member.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,11 +12,14 @@ import edu.flab.member.api.RiotHttpApiClient;
 @Configuration
 public class HttpInterfaceConfiguration {
 
+	@Value("${riot.apiKey}")
+	private String apiKey;
+
 	@Bean
 	public RiotHttpApiClient riotHttpApiClient() {
 		WebClient webClient = WebClient.builder()
 			.baseUrl("https://kr.api.riotgames.com")
-			.defaultHeader("X-Riot-Token", "RGAPI-498e7a69-0231-4c6a-9c72-448cb4bedd13")
+			.defaultHeader("X-Riot-Token", apiKey)
 			.build();
 		HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builder(
 			WebClientAdapter.forClient(webClient)).build();

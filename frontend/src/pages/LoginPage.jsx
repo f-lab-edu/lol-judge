@@ -12,7 +12,7 @@ import axios from "axios";
 import { convertUrl } from "../utils/urlUtil";
 import { LoginContext } from "../context/LoginContext";
 
-export default function Login() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const { setLoginState } = React.useContext(LoginContext);
 

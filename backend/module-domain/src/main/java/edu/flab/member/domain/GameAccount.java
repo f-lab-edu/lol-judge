@@ -40,11 +40,10 @@ public class GameAccount {
 
 	@NotBlank
 	@Length(max = 16)
-	private String nickname;
+	private String summonerName;
 
 	@NotBlank
-	@Length(max = 24)
-	private String lolId;
+	private String encryptedId;
 
 	@Default
 	@Enumerated(EnumType.STRING)

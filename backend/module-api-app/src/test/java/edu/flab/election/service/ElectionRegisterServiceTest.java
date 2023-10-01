@@ -15,7 +15,7 @@ import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.repository.ElectionJpaRepository;
 import edu.flab.member.TestFixture;
 import edu.flab.member.domain.Member;
-import edu.flab.member.repository.MemberJpaRepository;
+import edu.flab.member.service.MemberFindService;
 import edu.flab.rabbitmq.domain.RabbitMqSender;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
 
@@ -26,7 +26,7 @@ class ElectionRegisterServiceTest {
 	private ElectionRegisterService sut;
 
 	@Mock
-	private MemberJpaRepository memberJpaRepository;
+	private MemberFindService memberFindService;
 
 	@Mock
 	private ElectionJpaRepository electionJpaRepository;
@@ -48,7 +48,7 @@ class ElectionRegisterServiceTest {
 			.opinions(election.getCandidates().stream().map(Candidate::getOpinion).toList())
 			.build();
 
-		when(memberJpaRepository.existsByEmail(writer.getEmail())).thenReturn(true);
+		when(memberFindService.findActiveMember(writer.getEmail())).thenReturn(writer);
 		when(electionJpaRepository.save(any(Election.class))).thenReturn(election);
 		doNothing().when(rabbitMqSender).send(any(RabbitMqMessage.class));
 
@@ -56,7 +56,7 @@ class ElectionRegisterServiceTest {
 		sut.register(writer.getEmail(), dto);
 
 		// then
-		verify(memberJpaRepository).existsByEmail(writer.getEmail());
+		verify(memberFindService).findActiveMember(writer.getEmail());
 		verify(electionJpaRepository).save(any(Election.class));
 		verify(rabbitMqSender).send(any(RabbitMqMessage.class));
 	}

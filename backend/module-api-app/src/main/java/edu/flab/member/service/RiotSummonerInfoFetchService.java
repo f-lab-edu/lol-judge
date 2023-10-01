@@ -6,10 +6,12 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import edu.flab.exception.BusinessException;
 import edu.flab.member.api.RiotHttpApiClient;
 import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.dto.RiotSummonerInfoDto;
+import edu.flab.web.response.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class RiotSummonerInfoFetchService {
 
-	private static final String SOLO_QUEUE = "RANKED_SOLO_5x5";
+	public static final String SOLO_QUEUE = "RANKED_SOLO_5x5";
 
 	private final RiotHttpApiClient client;
 
@@ -34,8 +36,9 @@ public class RiotSummonerInfoFetchService {
 		} catch (WebClientResponseException e) {
 			if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
 				log.error("Riot API 연결에 문제가 발생하였습니다.");
+				throw new BusinessException(ErrorCode.SUMMONER_NOT_FOUND, e);
 			}
-			throw e;
+			throw new BusinessException(ErrorCode.RIOT_SERVER_ERROR, e);
 		}
 	}
 

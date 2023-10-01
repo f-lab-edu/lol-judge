@@ -38,7 +38,7 @@ class ElectionDetailServiceTest {
 		// then
 		ElectionDetailResponseDto expect = ElectionDetailResponseDto.builder()
 			.id(election.getId())
-			.writer(election.getMember().getGameAccount().getNickname())
+			.writer(election.getMember().getGameAccount().getSummonerName())
 			.title(election.getTitle())
 			.youtubeUrl(election.getYoutubeUrl())
 			.totalVotedCount(election.getTotalVotedCount())

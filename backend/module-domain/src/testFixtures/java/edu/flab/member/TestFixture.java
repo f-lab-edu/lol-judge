@@ -10,6 +10,7 @@ import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.Opinion;
 import edu.flab.member.domain.GameAccount;
+import edu.flab.member.domain.LolTier;
 import edu.flab.member.domain.LolTierUtil;
 import edu.flab.member.domain.Member;
 
@@ -24,9 +25,9 @@ public class TestFixture {
 	public static Member getMember() {
 		GameAccount gameAccount = GameAccount.builder()
 			.id(gameAccountId++)
-			.lolId("guest" + faker.number().digits(10))
-			.nickname("user" + faker.number().digits(10))
-			.lolTier(LolTierUtil.createHighTier(CHALLENGER, 1000))
+			.summonerName("guest" + faker.number().digits(10))
+			.encryptedId("id" + faker.number().digits(10))
+			.lolTier(LolTierUtil.createTier(CHALLENGER, LolTier.Level.I, 1000))
 			.build();
 
 		return Member.builder()
@@ -53,7 +54,7 @@ public class TestFixture {
 
 		Election election = Election.builder()
 			.id(electionId++)
-			.youtubeUrl("https://youtube.com/example")
+			.youtubeUrl("https://youtube.com/live/eLlxrBmD3H4")
 			.progressTime(72)
 			.createdAt(OffsetDateTime.now())
 			.endedAt(OffsetDateTime.now().plusHours(72))

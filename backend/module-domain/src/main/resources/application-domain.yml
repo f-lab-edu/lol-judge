@@ -13,12 +13,17 @@ spring:
   config:
     activate:
       on-profile: local
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL;
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/lol_judge
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 --- # production 설정
 

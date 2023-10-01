@@ -8,28 +8,31 @@ import edu.flab.member.domain.specification.LolTierSpecification;
 
 public non-sealed class LolTierUtil extends LolTier {
 
+	private static final Set<LolTier.Color> NORMAL_TIER_COLORS = Set.of(IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND);
+
+	private static final Set<LolTier.Color> HIGH_TIER_COLORS = Set.of(MASTER, GRAND_MASTER, CHALLENGER);
+
+	private static final LolTierSpecification NORMAL_TIER_SPEC = new LolTierSpecification(NORMAL_TIER_COLORS, 1, 4, 0,
+		100);
+
+	private static final LolTierSpecification HIGH_TIER_SPEC = new LolTierSpecification(HIGH_TIER_COLORS, 1, 1, 0,
+		10000);
+
 	public static LolTier createUnRankTier() {
-		return new LolTier(NONE, 0, 0);
+		return new LolTier(NONE, Level.NONE, 0);
 	}
 
-	public static LolTier createNormalTier(LolTier.Color color, int level, int point) {
-		Set<LolTier.Color> normalTierColors = Set.of(IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND);
-		LolTierSpecification normalTierSpec = new LolTierSpecification(normalTierColors, 1, 4, 0, 100);
-		return getInstance(normalTierSpec, color, level, point);
-	}
+	public static LolTier createTier(Color color, Level level, int point) {
+		LolTier lolTier = new LolTier(color, level, point);
 
-	public static LolTier createHighTier(LolTier.Color color, int point) {
-		Set<LolTier.Color> highTierColors = Set.of(MASTER, GRAND_MASTER, CHALLENGER);
-		LolTierSpecification highTierSpec = new LolTierSpecification(highTierColors, 0, 0, 0, Integer.MAX_VALUE);
-		return getInstance(highTierSpec, color, 0, point);
-	}
-
-	public static LolTier getInstance(LolTierSpecification spec, LolTier.Color color, int level, int point) {
-		LolTier instance = new LolTier(color, level, point);
-		if (spec.isSatisfied(instance)) {
-			return instance;
+		if (HIGH_TIER_SPEC.isSatisfied(lolTier) || NORMAL_TIER_SPEC.isSatisfied(lolTier)) {
+			return lolTier;
 		}
 		throw new IllegalArgumentException(
 			String.format("LolTier 인스턴스 생성 과정에서 문제가 발생하였습니다. <color:%s> <level:%d> <point:%d>", color, level, point));
+	}
+
+	public static LolTier createTier(String color, String level, int point) {
+		return createTier(Color.valueOf(color), Level.valueOf(level), point);
 	}
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import ProfileBox from "../components/ProfileBox";
+import ProfileBox from "../containers/ProfileBox";
 import { FormProvider, useForm } from "react-hook-form";
 import { defaultSignUpFormData } from "../utils/defaultData";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import { convertUrl } from "../utils/urlUtil";
 
-export default function SignUp() {
+export default function SignUpPage() {
   const navigate = useNavigate();
 
   const signUpForm = useForm({
@@ -23,12 +23,21 @@ export default function SignUp() {
       .post(url, data)
       .catch((e) => {
         signUpForm.setError("root.serverError", { type: "400" });
-        if (e.response?.data?.message === "Member Already Exists") {
-          alert("이미 가입한 회원입니다");
-          return;
+        switch (e.response?.data?.message) {
+          case "Member Alreay Exists":
+            alert("이미 가입한 회원입니다");
+            break;
+          case "Summoner name already used":
+            alert("이미 가입된 소환사입니다");
+            break;
+          case "Summoner not found":
+            alert("존재하지 않는 소환사입니다");
+          case "Riot API server error":
+            alert("존재하지 않는 소환사입니다");
+            break;
+          default:
+            alert("네트워크 오류가 발생하였습니다");
         }
-        console.log(e);
-        alert("네트워크 오류가 발생하였습니다");
       })
       .then((res) => {
         if (res?.data.status === "success") {
@@ -65,8 +74,10 @@ export default function SignUp() {
       >
         가입하기
       </Button>
-      <Grid Container>
-        <Link to="/login" className="text-sky-600 underline">회원이신가요? 로그인</Link>
+      <Grid>
+        <Link to="/login" className="text-sky-600 underline">
+          회원이신가요? 로그인
+        </Link>
       </Grid>
     </Container>
   );

@@ -3,12 +3,19 @@ package edu.flab.election.controller;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.integration.ClientAndServer;
+import org.mockserver.model.HttpRequest;
+import org.mockserver.model.HttpResponse;
+import org.mockserver.verify.VerificationTimes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -40,7 +47,7 @@ import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.service.MemberSignUpService;
 import edu.flab.web.config.LoginConstant;
-import edu.flab.web.handler.GlobalExceptionHandler;
+import edu.flab.GlobalExceptionHandler;
 import edu.flab.web.response.SuccessResponse;
 import edu.flab.web.supoort.LoginArgumentResolver;
 
@@ -67,6 +74,8 @@ class ElectionControllerTest {
 
 	private MockMvc mock;
 
+	private ClientAndServer mockServer;
+
 	@Container
 	private static final GenericContainer redis = new GenericContainer(
 		DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
@@ -77,12 +86,18 @@ class ElectionControllerTest {
 
 	@BeforeEach
 	void setUp() {
+		mockServer = ClientAndServer.startClientAndServer(443);
 		redis.start();
 		rabbitmq.start();
 		mock = MockMvcBuilders.standaloneSetup(memberController, electionController)
 			.setControllerAdvice(new GlobalExceptionHandler())
 			.setCustomArgumentResolvers(new LoginArgumentResolver())
 			.build();
+	}
+
+	@AfterEach
+	void shutDown() {
+		mockServer.stop();
 	}
 
 	@DynamicPropertySource
@@ -100,7 +115,7 @@ class ElectionControllerTest {
 		MemberSignUpDto writerSignUpDto = MemberSignUpDto.builder()
 			.email("host@example.com")
 			.password("aB#12345")
-			.lolId("lolId1111")
+			.summonerName("lolId1111")
 			.build();
 
 		Member writer = memberSignUpService.signUp(writerSignUpDto);
@@ -114,7 +129,29 @@ class ElectionControllerTest {
 
 		MockHttpSession mockHttpSession = new MockHttpSession();
 		mockHttpSession.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE,
-			new MemberLoginResponseDto(writer.getId(), writerSignUpDto.getLolId(), writer.getEmail()));
+			new MemberLoginResponseDto(writer.getId(), writerSignUpDto.getSummonerName(), writer.getEmail()));
+
+		new MockServerClient("kr.api.riotgames.com", 443).when(HttpRequest.request()
+				.withMethod(HttpMethod.GET.name())
+				.withPath("/lol/summoner/v4/summoners/by-name/" + writerSignUpDto.getSummonerName()))
+			.respond(HttpResponse.response().withStatusCode(200).withBody("AA"));
+
+		// // riot api server mocking
+		// BDDMockito.given(webClient.method(HttpMethod.GET)
+		// 		.uri("https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + writerSignUpDto.getSummonerName())
+		// 		.retrieve()
+		// 		.bodyToMono(
+		// 			new ParameterizedTypeReference<RiotApiSummonerInfoResponseDto>() {
+		// 			}))
+		// 	.willReturn(Mono.just(RiotApiSummonerInfoResponseDto.builder()
+		// 		.id("id")
+		// 		.accountId("accountId")
+		// 		.puuid("puuid")
+		// 		.name(writerSignUpDto.getSummonerName())
+		// 		.revisionDate(100)
+		// 		.profileIconId(100)
+		// 		.summonerLevel(57)
+		// 		.build()));
 
 		// when
 		MvcResult mvcResult = mock.perform(MockMvcRequestBuilders.post("/elections")
@@ -134,6 +171,13 @@ class ElectionControllerTest {
 
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> electionFindService.findElection(result.data().getElectionId()));
+
+		mockServer.verify(
+			HttpRequest.request()
+				.withMethod(HttpMethod.GET.name())
+				.withPath("/lol/summoner/v4/summoners/by-name/" + writerSignUpDto.getSummonerName()),
+			VerificationTimes.exactly(1)
+		);
 	}
 
 	public <T> String toJson(T data) throws JsonProcessingException {

@@ -20,7 +20,7 @@ public class ElectionDetailService {
 
 		return ElectionDetailResponseDto.builder()
 			.id(electionId)
-			.writer(election.getMember().getGameAccount().getNickname())
+			.writer(election.getMember().getGameAccount().getSummonerName())
 			.title(election.getTitle())
 			.youtubeUrl(election.getYoutubeUrl())
 			.totalVotedCount(election.getTotalVotedCount())

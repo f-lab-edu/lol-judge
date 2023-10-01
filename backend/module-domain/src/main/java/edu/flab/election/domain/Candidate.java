@@ -43,7 +43,6 @@ public class Candidate {
 	@OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY)
 	private List<Vote> votes = new ArrayList<>();
 
-	@Default
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private VotedStatus votedStatus = VotedStatus.UNKNOWN;
@@ -52,10 +51,6 @@ public class Candidate {
 	private Opinion opinion;
 
 	public Candidate(Opinion opinion) {
-		this.opinion = opinion;
-	}
-
-	public void changeOpinion(Opinion opinion) {
 		this.opinion = opinion;
 	}
 

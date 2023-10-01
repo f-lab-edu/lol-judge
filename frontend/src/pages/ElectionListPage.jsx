@@ -51,7 +51,7 @@ export default function ElectionListPage() {
       .catch((e) => console.error(e))
       .then((res) => res?.data)
       .then((payload) => payload?.data)
-        .then((data) => setElectionList(data?.electionInfoDtoList));
+      .then((data) => setElectionList(data?.electionInfoDtoList));
   }, [pageOffset]);
 
   return (
@@ -63,26 +63,38 @@ export default function ElectionListPage() {
               <StyledTableCell align="left">썸네일</StyledTableCell>
               <StyledTableCell align="center">제목</StyledTableCell>
               <StyledTableCell align="center">투표수</StyledTableCell>
+              <StyledTableCell align="center">작성자</StyledTableCell>
               <StyledTableCell align="center">날짜</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            
             {electionList?.map((e, number) => (
               <StyledTableRow key={number}>
                 <StyledTableCell align="left" scope="row">
-                  <img src={e.thumbnail} style={{height: 80, width: 80}}/>
+                  <img src={e.thumbnail} style={{ height: 80, width: 80 }} />
                 </StyledTableCell>
-                <StyledTableCell align="center">{e.title}</StyledTableCell>
-                <StyledTableCell align="center">{e.totalVotedCount}</StyledTableCell>
-                <StyledTableCell align="center">{e.createdAt}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {e.title}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {e.totalVotedCount}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {e.writer}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {e.createdAt}
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
       <div className="flex justify-between pt-3">
-        <Pagination count={Math.ceil(electionList?.length / 30)} onChange={handleChangePage} />
+        <Pagination
+          count={Math.ceil(electionList?.length / 30)}
+          onChange={handleChangePage}
+        />
         <Link to="/elections/register">
           <Button variant="contained" className="p-3">
             등록하기

@@ -17,13 +17,13 @@ export default function ElectionRegisterPage() {
 
   const onSubmit = (data) => {
     const url = convertUrl("/elections");
-    const payload = {
-      ...data,
-      participantEmail: data.participantEmail.value,
-      champion: data.champion.value,
-    };
+    const opinions = data.opinions.map((opinion) => ({
+      ...opinion,
+      champion: opinion.champion.value,
+    }));
+    const formData = {...data, opinions};
     axios
-      .post(url, payload, { withCredentials: true })
+      .post(url, formData, { withCredentials: true })
       .catch(() => console.log("network error"))
       .then((res) => res?.data)
       .then((payload) => {

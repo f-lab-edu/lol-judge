@@ -7,3 +7,6 @@ spring:
       - redis
       - rabbitmq
 
+riot:
+  apiKey: RGAPI-13860348-9c6e-43e9-9703-a4c03acac3af
+

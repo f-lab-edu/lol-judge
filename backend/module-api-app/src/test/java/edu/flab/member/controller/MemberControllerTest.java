@@ -28,7 +28,7 @@ import edu.flab.member.TestFixture;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberLoginRequestDto;
 import edu.flab.member.dto.MemberSignUpDto;
-import edu.flab.web.handler.GlobalExceptionHandler;
+import edu.flab.GlobalExceptionHandler;
 
 @Tag("integration")
 @Transactional
@@ -76,7 +76,7 @@ class MemberControllerTest {
 	private final MemberSignUpDto signUpDto = MemberSignUpDto.builder()
 		.email(member.getEmail())
 		.password(member.getPassword())
-		.lolId(member.getGameAccount().getLolId())
+		.summonerName(member.getGameAccount().getEncryptedId())
 		.position("MID")
 		.build();
 

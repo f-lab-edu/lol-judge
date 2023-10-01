@@ -5,7 +5,7 @@ import { champions } from "../utils/championsData";
 
 export default function OpinionCard({ index, opinionRemove }) {
   const { control, watch } = useFormContext();
-  const count = watch(`opinions.${index}.contents`)?.length;
+  const count = watch(`opinions.${index}.description`)?.length;
   const maxLength = 300;
 
   return (
@@ -32,7 +32,7 @@ export default function OpinionCard({ index, opinionRemove }) {
                 required
                 placeholder="플레이한 챔피언을 선택하세요 *"
                 menuPortalTarget={document.body}
-                styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
               />
               <FormHelperText>{error?.message}</FormHelperText>
             </>
@@ -42,7 +42,7 @@ export default function OpinionCard({ index, opinionRemove }) {
       <Grid item xs={12} md={12}>
         <Controller
           control={control}
-          name={`opinions.${index}.contents`}
+          name={`opinions.${index}.description`}
           rules={{
             required: true,
             validate: () => {

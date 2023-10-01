@@ -1,6 +1,7 @@
 package edu.flab.member.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,11 +15,11 @@ import edu.flab.member.service.MemberLoginService;
 import edu.flab.member.service.MemberSignUpService;
 import edu.flab.web.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
@@ -27,14 +28,14 @@ public class MemberController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/signUp")
-	public SuccessResponse<Void> signUp(@RequestBody @Valid MemberSignUpDto dto) {
+	public SuccessResponse<Void> signUp(@RequestBody MemberSignUpDto dto) {
 		memberSignUpService.signUp(dto);
 		return SuccessResponse.ok();
 	}
 
 	@PostMapping("/login")
 	public SuccessResponse<MemberLoginResponseDto> login(HttpServletRequest request,
-		@RequestBody @Valid MemberLoginRequestDto dto) {
+		@RequestBody MemberLoginRequestDto dto) {
 		MemberLoginResponseDto loginSuccessDto = memberLoginService.login(request, dto);
 		return SuccessResponse.of(loginSuccessDto);
 	}

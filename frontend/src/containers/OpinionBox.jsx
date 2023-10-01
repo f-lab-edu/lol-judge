@@ -17,7 +17,7 @@ export default function OpinionBox() {
       return;
     }
     append(defaultOpinionData);
-  }
+  };
 
   return (
     <Grid container spacing={1}>

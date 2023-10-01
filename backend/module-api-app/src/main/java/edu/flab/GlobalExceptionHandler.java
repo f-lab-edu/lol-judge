@@ -1,4 +1,4 @@
-package edu.flab.web.handler;
+package edu.flab;
 
 import java.util.NoSuchElementException;
 
@@ -14,6 +14,7 @@ import edu.flab.exception.AuthenticationException;
 import edu.flab.exception.BusinessException;
 import edu.flab.web.response.ErrorCode;
 import edu.flab.web.response.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -71,8 +72,17 @@ public class GlobalExceptionHandler {
 	 * 조회 서비스를 수행했으나, 결과를 찾지 못했을 경우 발생
 	 */
 	@ExceptionHandler(NoSuchElementException.class)
-	protected ResponseEntity<ErrorResponse> handleNoSuchException(Exception e) {
+	protected ResponseEntity<ErrorResponse> handleNoSuchException(NoSuchElementException e) {
 		ErrorResponse errorResponse = ErrorResponse.of(e.getMessage());
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+	}
+
+	/**
+	 * Java bean validation 실패시 발생
+	 */
+	@ExceptionHandler(ConstraintViolationException.class)
+	protected ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 }

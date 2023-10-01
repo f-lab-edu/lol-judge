@@ -10,4 +10,9 @@ public class BusinessException extends RuntimeException {
 	public BusinessException(ErrorCode errorCode) {
 		this.errorCode = errorCode;
 	}
+
+	public BusinessException(ErrorCode errorCode, Throwable t) {
+		super(t);
+		this.errorCode = errorCode;
+	}
 }

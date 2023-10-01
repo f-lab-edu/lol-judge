@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.validation.BindingResult;
 
+import jakarta.validation.ConstraintViolationException;
+
 /**
  * 필드 관련 오류가 발생했을 때 뿐만 아니라 오류가 발생하는 경우는 다양하다.
  * 각 상황마다 보여줘야 할 정보는 다르다.
@@ -19,6 +21,11 @@ public record ErrorResponse(String status, String message, List<? extends ErrorD
 		if (bindingResult != null && bindingResult.hasErrors()) {
 			fieldErrorDetails = FieldErrorDetail.of(bindingResult);
 		}
+		return new ErrorResponse(ERROR_STATUS, errorCode.getMessage(), fieldErrorDetails);
+	}
+
+	public static ErrorResponse of(ErrorCode errorCode, ConstraintViolationException constraintViolationException) {
+		List<FieldErrorDetail> fieldErrorDetails = FieldErrorDetail.of(constraintViolationException);
 		return new ErrorResponse(ERROR_STATUS, errorCode.getMessage(), fieldErrorDetails);
 	}
 

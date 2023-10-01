@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 
-export default function ElectionDetail() {
-    return (
-        <div>
-            <p>Election Detail</p>
-        </div>
-    );
+export default function ElectionDetailPage() {
+  return (
+    <div>
+      <p>Election Detail</p>
+    </div>
+  );
 }
-

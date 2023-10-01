@@ -50,7 +50,7 @@ class MemberLoginServiceTest {
 		// then
 		MemberLoginResponseDto expect = MemberLoginResponseDto.builder()
 			.memberId(member.getId())
-			.lolId(member.getGameAccount().getLolId())
+			.lolId(member.getGameAccount().getEncryptedId())
 			.email(member.getEmail())
 			.build();
 

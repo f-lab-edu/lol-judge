@@ -32,7 +32,7 @@ public class MemberSignUpDto {
 
 	@NotBlank
 	@Length(max = 16)
-	private String lolId;
+	private String summonerName;
 
 	@NotBlank
 	private String position;

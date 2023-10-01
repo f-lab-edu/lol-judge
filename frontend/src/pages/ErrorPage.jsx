@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 
-export default function Error() {
-    return (
-        <div>
-            <p>Error</p>
-        </div>
-    );
+export default function ErrorPage() {
+  return (
+    <div>
+      <p>Error</p>
+    </div>
+  );
 }
-

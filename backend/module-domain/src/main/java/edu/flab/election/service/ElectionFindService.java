@@ -44,11 +44,7 @@ public class ElectionFindService {
 		return jpaQueryFactory.selectFrom(election)
 			.innerJoin(election.member, member)
 			.innerJoin(member.gameAccount, gameAccount)
-			.leftJoin(election.candidates, candidate)
-			.leftJoin(candidate.votes, vote)
-			.leftJoin(vote.member, member)
 			.where(eqStatus(status))
-			.orderBy(election.id.desc())
 			.limit(pageSize)
 			.fetch();
 	}

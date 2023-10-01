@@ -27,6 +27,6 @@ public class ElectionInfoDto {
 		this.totalVotedCount = election.getTotalVotedCount();
 		this.createdAt = election.getCreatedAt().format(DateTimeFormatter.ISO_DATE);
 		this.title = election.getTitle();
-		this.writer = election.getMember().getGameAccount().getNickname();
+		this.writer = election.getMember().getGameAccount().getSummonerName();
 	}
 }

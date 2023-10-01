@@ -16,19 +16,17 @@ export default function ProfileBox() {
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={12}>
+      <Grid item xs={12} md={12}>
         <Controller
           control={control}
           name="email"
           rules={{
             required: true,
-            validate: (value) => {
-              const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-              if (!regex.test(value)) {
-                return "이메일 형식을 확인해주세요";
-              }
-              return true;
+            pattern: {
+              value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+              message: "이메일 형식만 입력 가능합니다",
             },
+            maxLength: { value: 20, message: "20글자 이하로 입력해주세요." },
           }}
           render={({
             field: { value, onChange },
@@ -36,7 +34,7 @@ export default function ProfileBox() {
           }) => (
             <TextField
               required
-              label="이메일 주소"
+              label="이메일"
               value={value}
               onChange={onChange}
               error={!!(value && invalid)}
@@ -46,10 +44,10 @@ export default function ProfileBox() {
           )}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} md={12}>
         <Controller
           control={control}
-          name="lolId"
+          name="summonerName"
           rules={{
             required: true,
             maxLength: { value: 20, message: "20글자 이하로 입력해주세요." },
@@ -60,7 +58,7 @@ export default function ProfileBox() {
           }) => (
             <TextField
               required
-              label="롤 로그인 계정"
+              label="소환사 닉네임"
               value={value}
               onChange={onChange}
               error={!!(value && invalid)}
@@ -70,7 +68,7 @@ export default function ProfileBox() {
           )}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} md={12}>
         <Controller
           control={control}
           name="password"
@@ -102,7 +100,7 @@ export default function ProfileBox() {
           )}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} md={12}>
         <Controller
           control={control}
           name="repassword"
@@ -132,7 +130,7 @@ export default function ProfileBox() {
           )}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} md={12}>
         <Controller
           control={control}
           name="position"

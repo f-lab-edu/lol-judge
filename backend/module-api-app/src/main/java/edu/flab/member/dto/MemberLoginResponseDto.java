@@ -18,7 +18,7 @@ public class MemberLoginResponseDto {
 
 	public MemberLoginResponseDto(Member member) {
 		this.memberId = member.getId();
-		this.lolId = member.getGameAccount().getLolId();
+		this.lolId = member.getGameAccount().getEncryptedId();
 		this.email = member.getEmail();
 	}
 }
