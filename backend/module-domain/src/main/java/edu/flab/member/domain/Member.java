@@ -78,7 +78,10 @@ public class Member {
 	private int judgePoint;
 
 	@Default
-	private boolean active = true;
+	private boolean deleted = false;
+
+	@Default
+	private boolean authenticated = false;
 
 	public RankScore refreshRankScore() {
 		return rankScore = RankScore.calc(this);
@@ -86,6 +89,10 @@ public class Member {
 
 	public void setJudgePoint(int judgePoint) {
 		this.judgePoint = judgePoint;
+	}
+
+	public void setAuthenticated(boolean authenticated) {
+		this.authenticated = authenticated;
 	}
 
 	//== 연관관계 매핑 ==//

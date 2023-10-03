@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberLoginResponseDto {
 	private Long memberId;
-	private String lolId;
+	private String summonerName;
 	private String email;
 
 	public MemberLoginResponseDto(Member member) {
 		this.memberId = member.getId();
-		this.lolId = member.getGameAccount().getEncryptedId();
+		this.summonerName = member.getGameAccount().getSummonerName();
 		this.email = member.getEmail();
 	}
 }

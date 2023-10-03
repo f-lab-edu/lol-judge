@@ -20,8 +20,16 @@ export default function LoginPage() {
     const url = convertUrl("/login");
     axios
       .post(url, { email, password }, { withCredentials: true })
-      .catch(() => {
-        alert("이메일, 패스워드를 확인하세요");
+      .catch((e) => {
+        const message = e?.response?.data?.message;
+        console.log(message);
+        if (message === "Access is Denied") {
+          alert("이메일, 패스워드를 확인하세요");
+        } else if (message === "Email not authenticated") {
+          alert("인증 메일을 확인하세요");
+        } else {
+          alert("네트워크 오류가 발생하였습니다");
+        }
       })
       .then((res) => res?.data)
       .then((payload) => {

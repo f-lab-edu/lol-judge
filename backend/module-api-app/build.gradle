@@ -17,7 +17,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto:6.1.0'
     implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'org.springframework:spring-webflux:6.0.12'
-
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     testImplementation(testFixtures(project(':module-domain')))
 
     // 외부 API 서버 mock
@@ -27,6 +27,8 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers:1.19.0'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
     testImplementation 'org.testcontainers:rabbitmq:1.19.0'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 test {

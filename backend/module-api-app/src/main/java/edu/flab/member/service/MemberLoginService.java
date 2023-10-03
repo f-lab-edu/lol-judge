@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.exception.AuthenticationException;
+import edu.flab.exception.BusinessException;
 import edu.flab.log.ExceptionLogTrace;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberLoginRequestDto;
@@ -27,11 +28,9 @@ public class MemberLoginService {
 	@ExceptionLogTrace
 	public MemberLoginResponseDto login(HttpServletRequest request, MemberLoginRequestDto dto) {
 		Member member = memberFindService.findActiveMember(dto.getEmail());
-		MemberLoginResponseDto sessionData = new MemberLoginResponseDto(member);
 		validatePassword(dto.getPassword(), member.getPassword());
-		HttpSession session = request.getSession(true);
-		session.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, sessionData);
-		return sessionData;
+		validateAccount(member);
+		return createSession(request.getSession(true), member);
 	}
 
 	public MemberLoginResponseDto getLoginMember(HttpServletRequest request) {
@@ -51,9 +50,21 @@ public class MemberLoginService {
 		}
 	}
 
+	private MemberLoginResponseDto createSession(HttpSession session, Member member) {
+		MemberLoginResponseDto sessionData = new MemberLoginResponseDto(member);
+		session.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE, sessionData);
+		return sessionData;
+	}
+
 	private void validatePassword(String rawPassword, String encryptedPassword) {
 		if (!passwordEncoder.matches(rawPassword, encryptedPassword)) {
 			throw new AuthenticationException(ErrorCode.WRONG_ACCOUNT);
+		}
+	}
+
+	private void validateAccount(Member member) {
+		if (!member.isAuthenticated()) {
+			throw new BusinessException(ErrorCode.NOT_AUTHENTICATED);
 		}
 	}
 }

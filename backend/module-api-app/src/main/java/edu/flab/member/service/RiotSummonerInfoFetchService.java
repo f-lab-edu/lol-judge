@@ -36,9 +36,9 @@ public class RiotSummonerInfoFetchService {
 		} catch (WebClientResponseException e) {
 			if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
 				log.error("Riot API 연결에 문제가 발생하였습니다.");
-				throw new BusinessException(ErrorCode.SUMMONER_NOT_FOUND, e);
+				throw new BusinessException(ErrorCode.RIOT_SERVER_ERROR, e);
 			}
-			throw new BusinessException(ErrorCode.RIOT_SERVER_ERROR, e);
+			throw new BusinessException(ErrorCode.SUMMONER_NOT_FOUND, e);
 		}
 	}
 

@@ -21,7 +21,7 @@ export default function ElectionRegisterPage() {
       ...opinion,
       champion: opinion.champion.value,
     }));
-    const formData = {...data, opinions};
+    const formData = { ...data, opinions };
     axios
       .post(url, formData, { withCredentials: true })
       .catch(() => console.log("network error"))

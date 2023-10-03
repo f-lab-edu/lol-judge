@@ -23,24 +23,19 @@ export default function SignUpPage() {
       .post(url, data)
       .catch((e) => {
         signUpForm.setError("root.serverError", { type: "400" });
-        switch (e.response?.data?.message) {
-          case "Member Alreay Exists":
-            alert("이미 가입한 회원입니다");
-            break;
-          case "Summoner name already used":
-            alert("이미 가입된 소환사입니다");
-            break;
-          case "Summoner not found":
-            alert("존재하지 않는 소환사입니다");
-          case "Riot API server error":
-            alert("존재하지 않는 소환사입니다");
-            break;
-          default:
-            alert("네트워크 오류가 발생하였습니다");
+        const message = e.response.data.message;
+        if (message === "Member Already Exists") {
+          alert("이미 가입한 회원입니다");
+        } else if(message === "Summoner not found") {
+          alert("존재하지 않는 소환사입니다");
+        } else if (message === "Riot API server error") {
+          alert("라이엇 시스템에 문제가 발생하였습니다");
+        } else {
+          alert("네트워크 오류가 발생하였습니다");
         }
       })
       .then((res) => {
-        if (res?.data.status === "success") {
+        if (res?.data?.status === "success") {
           alert("회원가입 완료");
           navigate("/login");
         }

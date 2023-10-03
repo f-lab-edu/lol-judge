@@ -6,7 +6,31 @@ spring:
       - domain
       - redis
       - rabbitmq
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: corojoon93@gmail.com
+    password: aebr ywlm vsod sapw
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 50000
+          starttls:
+            enable: true
+
+my-server:
+  backend:
+    schme: http
+    host: localhost
+    port: 8080
+  frontend:
+    schme: http
+    host: localhost
+    port: 3000
 
 riot:
-  apiKey: RGAPI-13860348-9c6e-43e9-9703-a4c03acac3af
+  apiKey: RGAPI-56a99dd0-2288-4069-b4ad-3070e97c7f88
+
 

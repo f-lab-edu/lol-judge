@@ -19,6 +19,6 @@ export const defaultOpinionData = {
 
 export const defaultLoginState = {
     memberId: 0,
-    lolId: '',
+    summonerName: '',
     email: ''
 }
