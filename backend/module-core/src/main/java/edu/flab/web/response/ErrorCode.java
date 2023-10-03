@@ -14,6 +14,7 @@ public enum ErrorCode {
 
 	// Member
 	WRONG_ACCOUNT(HttpStatus.UNAUTHORIZED, "Wrong Email or Password"),
+	NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "Email not authenticated"),
 	DUPLICATE_ACCOUNT(HttpStatus.CONFLICT, "Member Already Exists"),
 	DUPLICATE_SUMMONER_NAME(HttpStatus.CONFLICT, "Summoner name already used"),
 
