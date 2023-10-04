@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
-import edu.flab.election.domain.Opinion;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -38,5 +37,5 @@ public class ElectionDetailResponseDto {
 
 	private long totalVotedCount;
 
-	private List<Opinion> opinions;
+	private List<CandidateDetailDto> candidateDetails;
 }

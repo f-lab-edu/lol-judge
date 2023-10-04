@@ -16,7 +16,7 @@ import edu.flab.member.service.MemberFindService;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
 import edu.flab.rabbitmq.domain.RabbitMqSender;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
-import edu.flab.util.YoutubeThumbnailExtractor;
+import edu.flab.util.YoutubeVideoIdExtractor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,8 +36,8 @@ public class ElectionRegisterService {
 		Election election = Election.builder()
 			.title(dto.getTitle())
 			.status(ElectionStatus.IN_PROGRESS)
-			.youtubeUrl(dto.getYoutubeUrl())
-			.thumbnailUrl(YoutubeThumbnailExtractor.getThumbnailUrl(dto.getYoutubeUrl()))
+			.youtubeUrl(YoutubeVideoIdExtractor.getVideoId(dto.getYoutubeUrl()))
+			.thumbnailUrl(YoutubeVideoIdExtractor.getThumbnailUrl(dto.getYoutubeUrl()))
 			.progressTime(dto.getProgressTime())
 			.createdAt(OffsetDateTime.now())
 			.endedAt(OffsetDateTime.now().plusHours(dto.getProgressTime()))

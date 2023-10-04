@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.flab.election.dto.ElectionDetailResponseDto;
+import edu.flab.election.dto.ElectionInfoFindRequestDto;
 import edu.flab.election.dto.ElectionInfoFindResponseDto;
-import edu.flab.election.dto.ElectionPagingFindRequestDto;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionDetailService;
@@ -34,12 +34,9 @@ public class ElectionController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/elections")
-	public SuccessResponse<ElectionInfoFindResponseDto> getElectionInfo(ElectionPagingFindRequestDto dto) {
-		if (dto.getLastId() <= 0) {
-			return SuccessResponse.of(electionInfoFindService.findLatestElections(dto.getPageSize(), dto.getStatus()));
-		}
+	public SuccessResponse<ElectionInfoFindResponseDto> getElectionInfo(ElectionInfoFindRequestDto dto) {
 		return SuccessResponse.of(
-			electionInfoFindService.findAllWithPagination(dto.getLastId(), dto.getPageSize(), dto.getStatus()));
+			electionInfoFindService.findWithPaging(dto.getPageNumber(), dto.getPageSize(), dto.getStatus()));
 	}
 
 	@ResponseStatus(HttpStatus.OK)

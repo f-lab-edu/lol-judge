@@ -32,27 +32,32 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function ElectionListPage() {
-  const [pageOffset, setPageOffset] = React.useState(1);
+  const [pageNumber, setPageNumber] = React.useState(1);
   const [electionList, setElectionList] = React.useState([]);
+  const [electionSize, setElectionSize] = React.useState(0);
+  const pageSize = 10;
 
   const handleChangePage = (event, page) => {
-    setPageOffset(page);
+    setPageNumber(page);
   };
 
   React.useEffect(() => {
     axios
       .get(convertUrl("/elections"), {
         params: {
-          lastId: 0,
-          pageSize: 30,
+          pageNumber: pageNumber - 1,
+          pageSize: pageSize,
           status: "IN_PROGRESS",
         },
       })
       .catch((e) => console.error(e))
       .then((res) => res?.data)
       .then((payload) => payload?.data)
-      .then((data) => setElectionList(data?.electionInfoDtoList));
-  }, [pageOffset]);
+      .then((data) => {
+        setElectionList(data?.electionInfoDtoList);
+        setElectionSize(data?.entireSize);
+      });
+  }, [pageNumber]);
 
   return (
     <div>
@@ -68,8 +73,8 @@ export default function ElectionListPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {electionList?.map((e, number) => (
-              <StyledTableRow key={number}>
+            {electionList?.map((e) => (
+              <StyledTableRow key={e.id} component={Link} to={`elections/${e.id}`}>
                 <StyledTableCell align="left" scope="row">
                   <img src={e.thumbnail} style={{ height: 80, width: 80 }} />
                 </StyledTableCell>
@@ -92,7 +97,7 @@ export default function ElectionListPage() {
       </TableContainer>
       <div className="flex justify-between pt-3">
         <Pagination
-          count={Math.ceil(electionList?.length / 30)}
+          count={Math.ceil(electionSize / pageSize)}
           onChange={handleChangePage}
         />
         <Link to="/elections/register">

@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
+import edu.flab.election.dto.CandidateDetailDto;
 import edu.flab.election.dto.ElectionDetailResponseDto;
 import edu.flab.member.TestFixture;
 
@@ -44,7 +44,8 @@ class ElectionDetailServiceTest {
 			.totalVotedCount(election.getTotalVotedCount())
 			.createdAt(election.getCreatedAt())
 			.endedAt(election.getEndedAt())
-			.opinions(election.getCandidates().stream().map(Candidate::getOpinion).toList())
+			.candidateDetails(
+				election.getCandidates().stream().map(c -> new CandidateDetailDto(c.getId(), c.getOpinion())).toList())
 			.build();
 
 		Assertions.assertThat(electionDetail).isEqualTo(expect);

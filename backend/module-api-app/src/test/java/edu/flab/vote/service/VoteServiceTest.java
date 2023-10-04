@@ -60,7 +60,7 @@ class VoteServiceTest {
 		when(voteJpaRepository.save(any(Vote.class))).thenReturn(vote);
 
 		// when
-		sut.vote(voter, candidate.getId());
+		sut.vote(voter.getId(), candidate.getId());
 
 		// then
 		verify(candidateFindService).findById(candidate.getId());
@@ -87,7 +87,7 @@ class VoteServiceTest {
 		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 
 		// then
-		Assertions.assertThatThrownBy(() -> sut.vote(voter, candidate.getId()))
+		Assertions.assertThatThrownBy(() -> sut.vote(voter.getId(), candidate.getId()))
 			.isInstanceOf(
 				IllegalStateException.class);
 	}
@@ -111,7 +111,7 @@ class VoteServiceTest {
 		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(true);
 
 		// then
-		Assertions.assertThatThrownBy(() -> sut.vote(voter, candidate.getId()))
+		Assertions.assertThatThrownBy(() -> sut.vote(voter.getId(), candidate.getId()))
 			.isInstanceOf(
 				IllegalStateException.class);
 	}

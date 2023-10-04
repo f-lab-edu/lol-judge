@@ -13,7 +13,7 @@ export default function OpinionBox() {
   const addOpinion = () => {
     const maxOpinionLength = 5;
     if (fields.length >= maxOpinionLength) {
-      alert(`최대 ${maxOpinionLength}개의 의견만 등록할 수 있습니다.`);
+      alert(`최소 최대 ${maxOpinionLength}개의 의견만 등록할 수 있습니다.`);
       return;
     }
     append(defaultOpinionData);

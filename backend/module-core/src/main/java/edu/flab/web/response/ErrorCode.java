@@ -18,6 +18,10 @@ public enum ErrorCode {
 	DUPLICATE_ACCOUNT(HttpStatus.CONFLICT, "Member Already Exists"),
 	DUPLICATE_SUMMONER_NAME(HttpStatus.CONFLICT, "Summoner name already used"),
 
+	// Election
+	POINT_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "JudgePoint not enough"),
+	ALREADY_VOTED(HttpStatus.CONFLICT, "Already voted"),
+
 	// API
 	SUMMONER_NOT_FOUND(HttpStatus.NOT_FOUND, "Summoner not found"),
 	RIOT_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Riot API server error");

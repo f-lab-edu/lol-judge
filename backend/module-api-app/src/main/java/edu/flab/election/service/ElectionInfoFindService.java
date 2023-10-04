@@ -1,13 +1,15 @@
 package edu.flab.election.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionInfoDto;
 import edu.flab.election.dto.ElectionInfoFindResponseDto;
+import edu.flab.election.repository.ElectionJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,31 +18,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ElectionInfoFindService {
 
-	private final ElectionFindService electionFindService;
+	private final ElectionJpaRepository electionJpaRepository;
 
-	public ElectionInfoFindResponseDto findLatestElections(long pageSize, ElectionStatus status) {
-		List<ElectionInfoDto> electionInfoDtoList = electionFindService.findAllByStatus(pageSize, status)
-			.stream()
-			.map(ElectionInfoDto::new)
-			.toList();
-		return buildResult(electionInfoDtoList);
-	}
-
-	public ElectionInfoFindResponseDto findAllWithPagination(long lastId, long pageSize, ElectionStatus status) {
-		List<ElectionInfoDto> electionInfoDtoList = electionFindService.findAllByStatus(lastId, pageSize, status)
-			.stream()
+	public ElectionInfoFindResponseDto findWithPaging(int pageNumber, int pageSize, ElectionStatus status) {
+		List<ElectionInfoDto> electionInfos = electionJpaRepository.findByStatus(status,
+				PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "id"))
+			.get()
 			.map(ElectionInfoDto::new)
 			.toList();
 
-		return buildResult(electionInfoDtoList);
-	}
+		Long entireSize = electionJpaRepository.count();
 
-	public ElectionInfoFindResponseDto buildResult(List<ElectionInfoDto> electionInfoList) {
-		long newLastId = electionInfoList.stream()
-			.mapToLong(ElectionInfoDto::getId)
-			.min()
-			.orElseThrow(() -> new NoSuchElementException("재판 정보가 존재하지 않습니다."));
-
-		return new ElectionInfoFindResponseDto(newLastId, electionInfoList);
+		return new ElectionInfoFindResponseDto(entireSize, electionInfos);
 	}
 }

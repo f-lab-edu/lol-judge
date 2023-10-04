@@ -1,19 +1,19 @@
 package edu.flab.election.dto;
 
-import java.util.List;
-
+import edu.flab.election.domain.Opinion;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ElectionInfoFindResponseDto {
-	private Long entireSize;
+public class CandidateDetailDto {
+	@NotNull
+	private Long candidateId;
 
-	private List<ElectionInfoDto> electionInfoDtoList;
+	@NotNull
+	private Opinion opinion;
 }

@@ -34,7 +34,7 @@ export default function LoginPage() {
       .then((res) => res?.data)
       .then((payload) => {
         if (payload?.status === "success") {
-          setLoginState({ lolId: payload.data.lolId });
+          setLoginState({ summonerName: payload.data.summonerName });
           navigate("/");
         }
       });

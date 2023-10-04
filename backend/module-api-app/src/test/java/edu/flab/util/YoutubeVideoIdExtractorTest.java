@@ -8,11 +8,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class YoutubeThumbnailExtractorTest {
+class YoutubeVideoIdExtractorTest {
 	@ParameterizedTest
 	@MethodSource("testParameter")
 	void test1(String youtubeUrl, String videoId) {
-		assertThat(YoutubeThumbnailExtractor.getVideoId(youtubeUrl)).isEqualTo(videoId);
+		assertThat(YoutubeVideoIdExtractor.getVideoId(youtubeUrl)).isEqualTo(videoId);
 	}
 
 	private static Stream<Arguments> testParameter() {

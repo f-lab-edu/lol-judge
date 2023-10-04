@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Service;
 
 @Service
-public class YoutubeThumbnailExtractor {
+public class YoutubeVideoIdExtractor {
 
 	public static String getThumbnailUrl(String youtubeUrl) {
 		return "https://img.youtube.com/vi/" + getVideoId(youtubeUrl) + "/0.jpg";

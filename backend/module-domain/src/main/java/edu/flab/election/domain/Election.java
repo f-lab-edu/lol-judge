@@ -60,7 +60,6 @@ public class Election {
 	@Length(max = 150)
 	private String title;
 
-	@URL
 	@Length(max = 50)
 	private String youtubeUrl;
 

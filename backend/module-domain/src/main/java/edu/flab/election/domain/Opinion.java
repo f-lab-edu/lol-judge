@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 public class Opinion {
 	@Length(max = 10)
 	@NotBlank
-	String champion;
+	private String champion;
 
 	@Length(max = 300)
 	@NotBlank
-	String description;
+	private String description;
 }

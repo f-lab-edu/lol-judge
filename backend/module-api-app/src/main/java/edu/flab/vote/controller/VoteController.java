@@ -1,14 +1,15 @@
 package edu.flab.vote.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.flab.member.domain.Member;
+import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.vote.service.VoteService;
 import edu.flab.web.annotation.Login;
+import edu.flab.web.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -18,8 +19,9 @@ public class VoteController {
 	private final VoteService voteService;
 
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping("/api/vote")
-	public void vote(@Login Member member, @RequestBody Long candidateId) {
-		voteService.vote(member, candidateId);
+	@GetMapping("/vote/{candidateId}")
+	public SuccessResponse<Void> vote(@Login MemberLoginResponseDto sessionMember, @PathVariable Long candidateId) {
+		voteService.vote(sessionMember.getMemberId(), candidateId);
+		return SuccessResponse.ok();
 	}
 }

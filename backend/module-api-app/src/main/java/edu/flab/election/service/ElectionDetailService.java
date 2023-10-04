@@ -2,8 +2,8 @@ package edu.flab.election.service;
 
 import org.springframework.stereotype.Service;
 
-import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
+import edu.flab.election.dto.CandidateDetailDto;
 import edu.flab.election.dto.ElectionDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class ElectionDetailService {
 			.totalVotedCount(election.getTotalVotedCount())
 			.createdAt(election.getCreatedAt())
 			.endedAt(election.getEndedAt())
-			.opinions(election.getCandidates().stream().map(Candidate::getOpinion).toList())
+			.candidateDetails(election.getCandidates().stream().map(c -> new CandidateDetailDto(c.getId(), c.getOpinion())).toList())
 			.build();
 	}
 }

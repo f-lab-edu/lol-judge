@@ -21,6 +21,10 @@ export default function ElectionRegisterPage() {
       ...opinion,
       champion: opinion.champion.value,
     }));
+    if (opinions.length < 2) {
+      alert("최소 2개의 의견을 입력해주세요");
+      return;
+    }
     const formData = { ...data, opinions };
     axios
       .post(url, formData, { withCredentials: true })
