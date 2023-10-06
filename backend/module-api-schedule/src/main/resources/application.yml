@@ -2,5 +2,8 @@ spring:
   profiles:
     active: local
     include:
-      - election
+      - domain
+      - core
       - rabbitmq
+server:
+  port: 8081

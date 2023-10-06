@@ -18,8 +18,6 @@ import edu.flab.election.service.CandidateFindService;
 import edu.flab.election.service.VoteFindService;
 import edu.flab.member.TestFixture;
 import edu.flab.member.domain.Member;
-import edu.flab.member.dto.MemberJudgePointCalcDto;
-import edu.flab.member.service.MemberJudgePointUpdateService;
 
 @ExtendWith(MockitoExtension.class)
 class VoteServiceTest {
@@ -35,9 +33,6 @@ class VoteServiceTest {
 
 	@Mock
 	private CandidateFindService candidateFindService;
-
-	@Mock
-	private MemberJudgePointUpdateService memberJudgePointUpdateService;
 
 	@Test
 	@DisplayName("재판 후보자 중 한명에게 투표할 수 있다")
@@ -55,7 +50,6 @@ class VoteServiceTest {
 		vote.setMember(voter);
 
 		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
-		when(memberJudgePointUpdateService.minusJudgePoint(any(MemberJudgePointCalcDto.class))).thenReturn(voter);
 		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(false);
 		when(voteJpaRepository.save(any(Vote.class))).thenReturn(vote);
 
@@ -64,7 +58,6 @@ class VoteServiceTest {
 
 		// then
 		verify(candidateFindService).findById(candidate.getId());
-		verify(memberJudgePointUpdateService).minusJudgePoint(any());
 		verify(voteFindService).hasVotedBefore(voter.getId(), candidate.getId());
 		verify(voteJpaRepository).save(any(Vote.class));
 	}

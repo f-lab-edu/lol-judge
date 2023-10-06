@@ -2,6 +2,7 @@ package edu.flab.election.domain;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
@@ -83,6 +84,19 @@ public class Election {
 
 	public void setStatus(ElectionStatus status) {
 		this.status = status;
+	}
+
+	public Candidate getWinner() {
+		Candidate winner = candidates.stream().max(Comparator.naturalOrder()).orElseThrow();
+
+		winner.setVotedStatus(VotedStatus.WIN);
+
+		getCandidates()
+			.stream()
+			.filter(c -> !c.equals(winner))
+			.forEach(c -> c.setVotedStatus(VotedStatus.LOSE));
+
+		return winner;
 	}
 
 	//== 연관 관계 편의 메서드 ==//

@@ -9,6 +9,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -30,9 +31,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Candidate {
+public class Candidate implements Comparable<Candidate> {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@JoinColumn(name = "election_id")
@@ -54,11 +55,20 @@ public class Candidate {
 		this.opinion = opinion;
 	}
 
+	public void setVotedStatus(VotedStatus votedStatus) {
+		this.votedStatus = votedStatus;
+	}
+
 	public long calcVotedScore() {
 		return this.votes
 			.stream()
 			.mapToLong(Vote::calcScore)
 			.sum();
+	}
+
+	@Override
+	public int compareTo(Candidate other) {
+		return Long.compare(this.calcVotedScore(), other.calcVotedScore());
 	}
 
 	//== 연관관계 편의 메서드 ==//

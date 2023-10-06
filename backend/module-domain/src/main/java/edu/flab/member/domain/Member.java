@@ -31,10 +31,12 @@ import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Builder
-@EqualsAndHashCode(exclude = {"gameAccount", "candidates", "notifications", "votes"})
+@EqualsAndHashCode(exclude = {"gameAccount", "notifications", "votes"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -88,7 +90,13 @@ public class Member {
 	}
 
 	public void setJudgePoint(int judgePoint) {
+		if (!JudgePointSpecification.isSatisfied(judgePoint)) {
+			log.warn("judgePoint 범위를 벗어났습니다. <email = {}> <judgePoint = {}>", email, judgePoint);
+			throw new IllegalArgumentException("judgePoint 범위를 벗어났습니다");
+		}
+		int beforeUpdate = this.judgePoint;
 		this.judgePoint = judgePoint;
+		log.info("JudgePoint 업데이트 완료 <회원 이메일: {}> <변경 내역: {} → {}>", email, beforeUpdate, this.judgePoint);
 	}
 
 	public void setAuthenticated(boolean authenticated) {

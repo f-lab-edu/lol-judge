@@ -11,9 +11,7 @@ import edu.flab.election.service.CandidateFindService;
 import edu.flab.election.service.VoteFindService;
 import edu.flab.exception.BusinessException;
 import edu.flab.member.domain.Member;
-import edu.flab.member.dto.MemberJudgePointCalcDto;
 import edu.flab.member.service.MemberFindService;
-import edu.flab.member.service.MemberJudgePointUpdateService;
 import edu.flab.web.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,6 @@ public class VoteService {
 	private final VoteFindService voteFindService;
 	private final VoteJpaRepository voteJpaRepository;
 	private final CandidateFindService candidateFindService;
-	private final MemberJudgePointUpdateService memberJudgePointUpdateService;
 
 	@Transactional
 	public void vote(Long voterMemberId, Long candidateId) {
@@ -38,7 +35,7 @@ public class VoteService {
 
 		validate(voter, candidate);
 
-		memberJudgePointUpdateService.minusJudgePoint(new MemberJudgePointCalcDto(voter.getId(), VoteRule.FEE));
+		voter.setJudgePoint(voter.getJudgePoint() - VoteRule.FEE);
 
 		Vote vote = new Vote();
 		vote.setMember(voter);

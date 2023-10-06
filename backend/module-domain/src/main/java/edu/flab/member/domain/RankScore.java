@@ -42,7 +42,7 @@ public class RankScore {
 
 		String judgePoint = String.format("%08d", member.getJudgePoint());
 		String lolTierColor = String.format("%02d", lolTier.getColor().ordinal());
-		String lolTierLevel = String.format("%02d", lolTier.getLevel());
+		String lolTierLevel = String.format("%02d", lolTier.getLevel().ordinal());
 		String lolTierPoint = String.format("%04d", lolTier.getPoint());
 
 		long totalScore = Long.parseLong(judgePoint + lolTierColor + lolTierLevel + lolTierPoint);
