@@ -17,6 +17,7 @@ public enum ErrorCode {
 	NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "Email not authenticated"),
 	DUPLICATE_ACCOUNT(HttpStatus.CONFLICT, "Member Already Exists"),
 	DUPLICATE_SUMMONER_NAME(HttpStatus.CONFLICT, "Summoner name already used"),
+	AUTHENTICATION_CODE_TIME_OUT(HttpStatus.REQUEST_TIMEOUT, "Authentication Code is expired"),
 
 	// Election
 	POINT_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "JudgePoint not enough"),

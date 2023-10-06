@@ -1,5 +1,6 @@
 package edu.flab.member.eventlistener;
 
+import java.time.OffsetDateTime;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -11,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import edu.flab.exception.BusinessException;
 import edu.flab.mail.domain.Mail;
 import edu.flab.mail.repository.MailJpaRepository;
 import edu.flab.member.config.MailProperties;
 import edu.flab.member.config.ServerAddressProperties;
 import edu.flab.member.domain.Member;
 import edu.flab.member.event.MemberSignUpEvent;
+import edu.flab.web.response.ErrorCode;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +36,14 @@ public class AuthenticationCodeMailService {
 
 	@Transactional
 	public void validateAuthenticationCode(String authenticationCode) {
-		Member member = mailJpaRepository.findByUuid(authenticationCode)
-			.orElseThrow(() -> new NoSuchElementException("유효한 인증코드가 아닙니다"))
-			.getMember();
+		Mail mail = mailJpaRepository.findByUuid(authenticationCode)
+			.orElseThrow(() -> new NoSuchElementException("유효한 인증코드가 아닙니다"));
 
-		member.setAuthenticated(true);
+		if (mail.getEndedAt().isBefore(OffsetDateTime.now())) {
+			throw new BusinessException(ErrorCode.AUTHENTICATION_CODE_TIME_OUT);
+		}
+
+		mail.getMember().setAuthenticated(true);
 	}
 
 	@Async
@@ -51,7 +57,8 @@ public class AuthenticationCodeMailService {
 			mimeMessageHelper.setTo(event.member().getEmail());
 			mimeMessageHelper.setSubject("회원가입 인증 메일");
 			body += "<h1>회원가입 인증 메일<h1>";
-			body += "<p><a href=" + backendServer.fullAddress() + "/auth-agree/" + saveUUID(event.member()) + ">";
+			body +=
+				"<p><a href=" + backendServer.fullAddress() + "/auth-agree/" + saveAuthCodeMail(event.member()) + ">";
 			body += "동의하기";
 			body += "</a></p>";
 			mimeMessageHelper.setText(body, true);
@@ -62,9 +69,9 @@ public class AuthenticationCodeMailService {
 		}
 	}
 
-	private String saveUUID(Member member) {
+	private String saveAuthCodeMail(Member member) {
 		String uuid = UUID.randomUUID().toString();
-		Mail mail = new Mail(uuid);
+		Mail mail = new Mail(uuid, OffsetDateTime.now().plusMinutes(30));
 		mail.setMember(member);
 		mailJpaRepository.save(mail);
 		return uuid;

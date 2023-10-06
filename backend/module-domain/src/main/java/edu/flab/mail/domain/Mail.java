@@ -1,5 +1,7 @@
 package edu.flab.mail.domain;
 
+import java.time.OffsetDateTime;
+
 import edu.flab.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,12 +28,16 @@ public class Mail {
 	@NotBlank
 	private String uuid;
 
+	@NotNull
+	private OffsetDateTime endedAt;
+
 	@ManyToOne
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	public Mail(String uuid) {
+	public Mail(String uuid, OffsetDateTime endedAt) {
 		this.uuid = uuid;
+		this.endedAt = endedAt;
 	}
 
 	//== 연관관계 편의 메서드 ==//
