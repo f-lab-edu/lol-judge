@@ -31,7 +31,7 @@ import edu.flab.rabbitmq.message.RabbitMqMessage;
 @SpringBootTest
 @Testcontainers
 @ExtendWith(MockitoExtension.class)
-class ElectionNotificationServiceTest {
+class NotifyServiceTest {
 
 	@Autowired
 	private RabbitMqSender sender;
@@ -43,7 +43,8 @@ class ElectionNotificationServiceTest {
 	private ElectionFindService electionFindService;
 
 	@Container
-	private static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:latest").withExposedPorts(5672, 15672);
+	private static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:latest").withExposedPorts(5672,
+		15672);
 
 	@BeforeEach
 	void setUp() {
@@ -63,7 +64,8 @@ class ElectionNotificationServiceTest {
 	void test1() throws Exception {
 		// given
 		Election election = TestFixture.getElection();
-		RabbitMqMessage<Long> rabbitMqMessage = new RabbitMqMessage<>(election.getId(), RabbitMqQueueName.ELECTION_REGISTER);
+		RabbitMqMessage<Long> rabbitMqMessage = new RabbitMqMessage<>(election.getId(),
+			RabbitMqQueueName.ELECTION_FINISHED);
 
 		when(electionFindService.findElection(election.getId())).thenReturn(election);
 
@@ -72,23 +74,6 @@ class ElectionNotificationServiceTest {
 		Thread.sleep(100);
 
 		// then
-		verify(sut, atLeastOnce()).listenRegistration(ArgumentMatchers.any());
-	}
-
-	@Test
-	@DisplayName("메시지 큐에 재판이 시작됐다는 데이터가 삽입되면, 재판 당사자들에게 전송될 알림 정보가 데이터베이스에 저장된다")
-	void test2() throws Exception {
-		// given
-		Election election = TestFixture.getElection();
-		RabbitMqMessage<Long> rabbitMqMessage = new RabbitMqMessage<>(1L, RabbitMqQueueName.ELECTION_IN_PROGRESS);
-
-		when(electionFindService.findElection(election.getId())).thenReturn(election);
-
-		// when
-		sender.send(rabbitMqMessage);
-		Thread.sleep(100);
-
-		// then
-		verify(sut, atLeastOnce()).listenInProgress(ArgumentMatchers.any());
+		verify(sut, atLeastOnce()).listenFinish(ArgumentMatchers.any());
 	}
 }

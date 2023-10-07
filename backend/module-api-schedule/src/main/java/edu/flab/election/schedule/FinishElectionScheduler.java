@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.repository.ElectionJpaRepository;
-import edu.flab.election.service.JudgeElectionService;
+import edu.flab.election.service.FinishElectionService;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
 import edu.flab.rabbitmq.domain.RabbitMqSender;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
@@ -20,11 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JudgeElectionScheduler {
+public class FinishElectionScheduler {
 
 	private final ElectionJpaRepository electionJpaRepository;
 	private final RabbitMqSender rabbitMqSender;
-	private final JudgeElectionService judgeElectionService;
+	private final FinishElectionService finishElectionService;
 
 	@Scheduled(cron = "0 * * * * *")
 	@Transactional
@@ -34,8 +34,8 @@ public class JudgeElectionScheduler {
 			OffsetDateTime.now());
 
 		elections.forEach(e -> {
-			judgeElectionService.judge(e);
-			rabbitMqSender.send(new RabbitMqMessage<>(e.getId(), RabbitMqQueueName.ELECTION_IN_PROGRESS));
+			finishElectionService.judge(e);
+			rabbitMqSender.send(new RabbitMqMessage<>(e.getId(), RabbitMqQueueName.ELECTION_FINISHED));
 		});
 	}
 }

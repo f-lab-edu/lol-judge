@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import edu.flab.election.domain.ElectionStatus;
 import edu.flab.election.dto.ElectionInfoDto;
 import edu.flab.election.dto.ElectionInfoFindResponseDto;
 import edu.flab.election.repository.ElectionJpaRepository;
@@ -20,8 +19,8 @@ public class ElectionInfoFindService {
 
 	private final ElectionJpaRepository electionJpaRepository;
 
-	public ElectionInfoFindResponseDto findWithPaging(int pageNumber, int pageSize, ElectionStatus status) {
-		List<ElectionInfoDto> electionInfos = electionJpaRepository.findByStatus(status,
+	public ElectionInfoFindResponseDto findWithPaging(int pageNumber, int pageSize) {
+		List<ElectionInfoDto> electionInfos = electionJpaRepository.findAll(
 				PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "id"))
 			.get()
 			.map(ElectionInfoDto::new)

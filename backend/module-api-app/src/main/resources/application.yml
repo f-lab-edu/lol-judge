@@ -20,17 +20,14 @@ spring:
           starttls:
             enable: true
 
-my-server:
-  backend:
-    schme: http
-    host: localhost
-    port: 8080
-  frontend:
-    schme: http
-    host: localhost
-    port: 3000
 
 riot:
-  apiKey: RGAPI-56a99dd0-2288-4069-b4ad-3070e97c7f88
-
+  host: https://kr.api.riotgames.com
+  apiKey: RGAPI-8948584d-3586-46e0-9615-958b724f51f6
+logging:
+  level:
+    org:
+      springframework:
+        transaction:
+          interceptor: trace
 

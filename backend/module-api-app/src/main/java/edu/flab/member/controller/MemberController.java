@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.flab.member.config.ServerAddressProperties;
 import edu.flab.member.dto.MemberLoginRequestDto;
 import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.eventlistener.AuthenticationCodeMailService;
 import edu.flab.member.service.MemberLoginService;
 import edu.flab.member.service.MemberSignUpService;
+import edu.flab.web.config.ServerAddressProperties;
 import edu.flab.web.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

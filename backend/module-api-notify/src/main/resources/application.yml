@@ -3,8 +3,10 @@ spring:
     active: local
     include:
       - core
-      - election
+      - domain
       - rabbitmq
+server:
+  port: 8082
 
 --- # local
 
@@ -13,18 +15,10 @@ spring:
     activate:
       on-profile: local
 
-api-url:
-  host: localhost
-  port: 8080
-
 --- # production
 
 spring:
   config:
     activate:
       on-profile: production
-
-api-url:
-  host: 118.67.134.233
-  port: 8080
 

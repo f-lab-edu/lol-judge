@@ -7,11 +7,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import edu.flab.member.config.MailProperties;
+import edu.flab.member.config.RiotApiProperties;
 
 @EnableAsync
 @EnableRedisHttpSession
 @EnableConfigurationProperties({
 	MailProperties.class,
+	RiotApiProperties.class
 })
 @SpringBootApplication
 public class WebApplication {

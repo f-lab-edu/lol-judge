@@ -1,4 +1,4 @@
-package edu.flab.member.config;
+package edu.flab.web.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
