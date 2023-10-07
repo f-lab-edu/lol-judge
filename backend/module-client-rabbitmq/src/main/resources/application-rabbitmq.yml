@@ -1,7 +1,9 @@
+--- #local and test
+
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: local, test
 
   rabbitmq:
     host: localhost

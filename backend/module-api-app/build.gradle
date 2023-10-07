@@ -20,9 +20,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     testImplementation(testFixtures(project(':module-domain')))
 
-    // 외부 API 서버 mock
-    testImplementation 'org.mock-server:mockserver-netty:5.15.0'
-
     // rabbitmq, redis 테스트 환경
     testImplementation 'org.testcontainers:testcontainers:1.19.0'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
