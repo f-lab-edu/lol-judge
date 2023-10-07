@@ -25,7 +25,7 @@ public class MemberRankScoreUpdateEventListener {
 	}
 
 	public void updateRankScore(Member member) {
-		RankScore beforeRankScore = member.refreshRankScore();
+		RankScore beforeRankScore = member.getRankScore();
 		RankScore updatedRankScore = member.refreshRankScore();
 		log.info("랭킹 점수 업데이트 완료 <회원 이메일: {}> <변경 내역: {} → {}>", member.getEmail(), beforeRankScore.getScore(),
 			updatedRankScore.getScore());

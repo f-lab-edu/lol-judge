@@ -39,6 +39,10 @@ public class Vote {
 			.getScore();
 	}
 
+	public boolean isGroupOfWinner() {
+		return candidate.getVotedStatus() == VotedStatus.WIN;
+	}
+
 	//== 연관관계 편의 메서드 ==//
 	public void setMember(Member member) {
 		if (this.member != null) {

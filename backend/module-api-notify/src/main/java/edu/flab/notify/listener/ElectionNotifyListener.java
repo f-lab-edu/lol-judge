@@ -1,39 +1,51 @@
 package edu.flab.notify.listener;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import edu.flab.notify.service.ElectionNotificationService;
-import edu.flab.notify.util.ApiUrlUtil;
+import edu.flab.election.domain.Election;
+import edu.flab.election.service.ElectionFindService;
+import edu.flab.notify.service.NotifyService;
 import edu.flab.rabbitmq.config.RabbitMqQueueName;
 import edu.flab.rabbitmq.message.RabbitMqMessage;
+import edu.flab.web.config.ServerAddressProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class ElectionNotifyListener {
 
-	private final ElectionNotificationService electionNotificationService;
-	private final ApiUrlUtil apiUrlUtil;
+	private final ElectionFindService electionFindService;
+	private final NotifyService notifyService;
+	private final ServerAddressProperties frontendServer;
 
-	@RabbitListener(queues = RabbitMqQueueName.ELECTION_REGISTER, ackMode = "AUTO")
-	public void listenRegistration(RabbitMqMessage<Long> message) {
-		Long electionId = message.getObject();
-		String notification = "재판이 생성되었습니다. 자신의 의견을 작성하세요. 링크 = " + apiUrlUtil.getElectionApiUrl(electionId);
-		electionNotificationService.notifyToCandidates(electionId, notification);
-	}
-
-	@RabbitListener(queues = RabbitMqQueueName.ELECTION_IN_PROGRESS, ackMode = "AUTO")
-	public void listenInProgress(RabbitMqMessage<Long> message) {
-		Long electionId = message.getObject();
-		String notification = "재판이 시작되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(electionId);
-		electionNotificationService.notifyToCandidates(electionId, notification);
-	}
-
+	@Transactional
 	@RabbitListener(queues = RabbitMqQueueName.ELECTION_FINISHED, ackMode = "AUTO")
 	public void listenFinish(RabbitMqMessage<Long> rabbitMqMessage) {
 		Long electionId = rabbitMqMessage.getObject();
-		String notification = "재판이 종료되었습니다. 링크 = " + apiUrlUtil.getElectionApiUrl(electionId);
-		electionNotificationService.notifyToCandidates(electionId, notification);
+
+		log.info("[알림 시스템] 재판 판결에 대한 알림 처리를 시작합니다. electionId = {}", electionId);
+
+		Election election = electionFindService.findElection(electionId);
+		election.getCandidates().stream()
+			.flatMap(cs -> cs.getVotes().stream())
+			.forEach(v -> {
+				if (v.isGroupOfWinner()) {
+					notifyService.notify(v.getMember(),
+						"재판에서 승리하셨습니다. 재판링크=" + getElectionDetailUrl(election.getId()));
+				} else {
+					notifyService.notify(v.getMember(),
+						"재판에서 패배하셨습니다 재판링크=" + getElectionDetailUrl(election.getId()));
+				}
+			});
+
+		log.info("[알림 시스템] 재판 판결에 대한 알림 처리 종료...!");
+	}
+
+	private String getElectionDetailUrl(long electionId) {
+		return frontendServer.fullAddress() + "elections" + "/" + electionId;
 	}
 }

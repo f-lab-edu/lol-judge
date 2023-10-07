@@ -17,5 +17,5 @@ public interface ElectionJpaRepository extends JpaRepository<Election, Long> {
 
 	List<Election> findByStatus(ElectionStatus electionStatus);
 
-	Page<Election> findByStatus(ElectionStatus electionStatus, Pageable pageable);
+	Page<Election> findAll(Pageable pageable);
 }

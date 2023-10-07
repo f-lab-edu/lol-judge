@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -86,17 +87,21 @@ public class Election {
 		this.status = status;
 	}
 
-	public Candidate getWinner() {
+	public Optional<Candidate> getWinner() {
 		Candidate winner = candidates.stream().max(Comparator.naturalOrder()).orElseThrow();
+
+		if (winner.getVotes().isEmpty()) {
+			return Optional.empty();
+		}
 
 		winner.setVotedStatus(VotedStatus.WIN);
 
-		getCandidates()
+		candidates
 			.stream()
 			.filter(c -> !c.equals(winner))
 			.forEach(c -> c.setVotedStatus(VotedStatus.LOSE));
 
-		return winner;
+		return Optional.of(winner);
 	}
 
 	//== 연관 관계 편의 메서드 ==//

@@ -36,7 +36,7 @@ public class ElectionController {
 	@GetMapping("/elections")
 	public SuccessResponse<ElectionInfoFindResponseDto> getElectionInfo(ElectionInfoFindRequestDto dto) {
 		return SuccessResponse.of(
-			electionInfoFindService.findWithPaging(dto.getPageNumber(), dto.getPageSize(), dto.getStatus()));
+			electionInfoFindService.findWithPaging(dto.getPageNumber(), dto.getPageSize()));
 	}
 
 	@ResponseStatus(HttpStatus.OK)
