@@ -88,7 +88,7 @@ public class Member {
 	private boolean authenticated = false;
 
 	public void vote(Candidate candidate) {
-		Vote vote = new Vote(this, candidate);
+		Vote vote = new Vote();
 		vote.setMember(this);
 		vote.setCandidate(candidate);
 		this.setJudgePoint(judgePoint - VoteRule.FEE);

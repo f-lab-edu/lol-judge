@@ -18,10 +18,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class RankScore {
+public class RankScore implements Comparable<RankScore> {
 
 	private long score;
-	
+
 	public static RankScore zero() {
 		return new RankScore(0L);
 	}
@@ -34,19 +34,24 @@ public class RankScore {
 	 * 회원의 judgePoint, lolTier 정보가 변경될 때마다, 이 함수를 호출하여 rankScore 를 갱신한다.
 	 */
 	public static RankScore calc(Member member) {
-		LolTier lolTier = member.getGameAccount().getLolTier();
-
-		if (lolTier == null) {
+		if (member.getGameAccount() == null) {
 			throw new NoSuchElementException("리그오브레전드 계정이 없는 회원은 랭킹에서 제외됩니다");
 		}
 
+		LolTier lolTier = member.getGameAccount().getLolTier();
+
 		String judgePoint = String.format("%08d", member.getJudgePoint());
-		String lolTierColor = String.format("%02d", lolTier.getColor().ordinal());
-		String lolTierLevel = String.format("%02d", lolTier.getLevel().ordinal());
+		String lolTierColor = String.format("%02d", lolTier.getColor().getScore());
+		String lolTierLevel = String.format("%02d", lolTier.getLevel().getScore());
 		String lolTierPoint = String.format("%04d", lolTier.getPoint());
 
 		long totalScore = Long.parseLong(judgePoint + lolTierColor + lolTierLevel + lolTierPoint);
 
 		return new RankScore(totalScore);
+	}
+
+	@Override
+	public int compareTo(RankScore o) {
+		return Long.compare(this.score, o.score);
 	}
 }
