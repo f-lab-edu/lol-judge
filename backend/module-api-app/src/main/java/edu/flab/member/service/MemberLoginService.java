@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.flab.exception.AuthenticationException;
-import edu.flab.exception.BusinessException;
 import edu.flab.log.ExceptionLogTrace;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberLoginRequestDto;
@@ -29,7 +28,6 @@ public class MemberLoginService {
 	public MemberLoginResponseDto login(HttpServletRequest request, MemberLoginRequestDto dto) {
 		Member member = memberFindService.findActiveMember(dto.getEmail());
 		validatePassword(dto.getPassword(), member.getPassword());
-		validateAccount(member);
 		return createSession(request.getSession(true), member);
 	}
 
@@ -59,12 +57,6 @@ public class MemberLoginService {
 	private void validatePassword(String rawPassword, String encryptedPassword) {
 		if (!passwordEncoder.matches(rawPassword, encryptedPassword)) {
 			throw new AuthenticationException(ErrorCode.WRONG_ACCOUNT);
-		}
-	}
-
-	private void validateAccount(Member member) {
-		if (!member.isAuthenticated()) {
-			throw new BusinessException(ErrorCode.NOT_AUTHENTICATED);
 		}
 	}
 }
