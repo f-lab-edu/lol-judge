@@ -2,6 +2,8 @@ package edu.flab.member.service;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +35,14 @@ class MemberLoginServiceTest {
 	private MemberLoginService sut;
 
 	@Test
-	@DisplayName("올바른 비밀번호를 입력하면 세션에 로그인 정보가 저장된다")
+	@DisplayName("이메일 인증을 통과한 회원의 경우, 올바른 비밀번호를 입력하고, 로그인을 시도하면 세션에 로그인 정보가 저장된다")
 	void test1() {
 		// given
 		Member member = TestFixture.getMember();
+		member.setAuthenticated(true);
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
+
 		MemberLoginRequestDto dto = MemberLoginRequestDto.builder()
 			.email(member.getEmail())
 			.password(member.getPassword())
@@ -60,11 +65,35 @@ class MemberLoginServiceTest {
 	}
 
 	@Test
-	@DisplayName("로그아웃시 세션이 만료된다")
+	@DisplayName("이메일 인증을 통과하지 않은 회원의 경우, 올바른 비밀번호를 입력하고, 로그인을 시도하면 예외가 발생한다")
 	void test2() {
 		// given
 		Member member = TestFixture.getMember();
+		member.setAuthenticated(false);
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
+
+		MemberLoginRequestDto dto = MemberLoginRequestDto.builder()
+			.email(member.getEmail())
+			.password(member.getPassword())
+			.build();
+
+		// when
+		Mockito.when(memberFindService.findActiveMember(dto.getEmail())).thenThrow(NoSuchElementException.class);
+
+		// then
+		assertThatThrownBy(() -> sut.login(request, dto)).isInstanceOf(NoSuchElementException.class);
+	}
+
+	@Test
+	@DisplayName("로그아웃시 세션이 만료된다")
+	void test3() {
+		// given
+		Member member = TestFixture.getMember();
+		member.setAuthenticated(true);
+
+		MockHttpServletRequest request = new MockHttpServletRequest();
+
 		MemberLoginRequestDto dto = MemberLoginRequestDto.builder()
 			.email(member.getEmail())
 			.password(member.getPassword())
@@ -72,9 +101,9 @@ class MemberLoginServiceTest {
 
 		Mockito.when(memberFindService.findActiveMember(dto.getEmail())).thenReturn(member);
 		Mockito.when(passwordEncoder.matches(dto.getPassword(), member.getPassword())).thenReturn(true);
-		sut.login(request, dto);
 
 		// when
+		sut.login(request, dto);
 		sut.logout(request);
 
 		// then
@@ -85,10 +114,13 @@ class MemberLoginServiceTest {
 
 	@Test
 	@DisplayName("틀린 비밀번호를 입력하면 로그인에 실패한다")
-	void test3() {
+	void test4() {
 		// given
-		MockHttpServletRequest request = new MockHttpServletRequest();
 		Member member = TestFixture.getMember();
+		member.setAuthenticated(true);
+
+		MockHttpServletRequest request = new MockHttpServletRequest();
+
 		MemberLoginRequestDto dto = MemberLoginRequestDto.builder()
 			.email(member.getEmail())
 			.password(member.getPassword())

@@ -19,19 +19,23 @@ public class TestFixture {
 
 	public static final Faker faker = Faker.instance();
 
-	public static Member getMember() {
+	public static Member getMember(LolTier lolTier) {
 		GameAccount gameAccount = GameAccount.builder()
 			.summonerName("guest" + faker.number().digits(10))
 			.encryptedId("id" + faker.number().digits(10))
-			.lolTier(LolTierUtil.createTier(CHALLENGER, LolTier.Level.I, 1000))
+			.lolTier(lolTier)
 			.build();
 
 		return Member.builder()
 			.email(faker.internet().emailAddress())
 			.password("passWORD1234!")
-			.profileUrl("example-cloud.storage/profile.jpg")
+			.profileUrl("https://example-cloud.storage/profile.jpg")
 			.gameAccount(gameAccount)
 			.build();
+	}
+
+	public static Member getMember() {
+		return getMember(LolTierUtil.createTier(CHALLENGER, LolTier.Level.I, 1000));
 	}
 
 	public static Election getElection() {
