@@ -12,12 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
-import edu.flab.election.domain.Vote;
-import edu.flab.election.repository.VoteJpaRepository;
 import edu.flab.election.service.CandidateFindService;
 import edu.flab.election.service.VoteFindService;
+import edu.flab.exception.BusinessException;
 import edu.flab.member.TestFixture;
 import edu.flab.member.domain.Member;
+import edu.flab.member.service.MemberFindService;
 
 @ExtendWith(MockitoExtension.class)
 class VoteServiceTest {
@@ -26,86 +26,67 @@ class VoteServiceTest {
 	private VoteService sut;
 
 	@Mock
-	private VoteFindService voteFindService;
+	private MemberFindService memberFindService;
 
 	@Mock
-	private VoteJpaRepository voteJpaRepository;
+	private VoteFindService voteFindService;
 
 	@Mock
 	private CandidateFindService candidateFindService;
 
 	@Test
-	@DisplayName("재판 후보자 중 한명에게 투표할 수 있다")
+	@DisplayName("후보자 중 한명에게 투표할 수 있으며, 참여 비용 10포인트 차감된다")
 	void test1() {
 		// given
 		Election election = TestFixture.getElection();
 
 		Candidate candidate = election.getCandidates().get(0);
 
-		Member voter = TestFixture.getMember();
-		voter.setJudgePoint(100);
+		Member member = TestFixture.getMember();
+		member.setJudgePoint(100);
 
-		Vote vote = new Vote();
-		vote.setCandidate(candidate);
-		vote.setMember(voter);
-
+		when(memberFindService.findActiveMember(anyLong())).thenReturn(member);
 		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(false);
-		when(voteJpaRepository.save(any(Vote.class))).thenReturn(vote);
 
 		// when
-		sut.vote(voter.getId(), candidate.getId());
+		sut.vote(1L, 1L);
 
 		// then
-		verify(candidateFindService).findById(candidate.getId());
-		verify(voteFindService).hasVotedBefore(voter.getId(), candidate.getId());
-		verify(voteJpaRepository).save(any(Vote.class));
+		verify(memberFindService).findActiveMember(1L);
+		verify(candidateFindService).findById(1L);
+		verify(voteFindService).hasVotedBefore(1L, 1L);
+		Assertions.assertThat(member.getJudgePoint()).isEqualTo(90);
 	}
 
 	@Test
-	@DisplayName("포인트가 부족하면 투표할 수 없다")
+	@DisplayName("회원이 보유한 포인트가 참여 포인트보다 부족하면 예외가 발생한다")
 	void test2() {
 		// given
 		Election election = TestFixture.getElection();
 
 		Candidate candidate = election.getCandidates().get(0);
 
-		Member voter = TestFixture.getMember();
-		voter.setJudgePoint(0);
+		Member member = TestFixture.getMember();
 
-		Vote vote = new Vote();
-		vote.setCandidate(candidate);
-		vote.setMember(voter);
-
+		when(memberFindService.findActiveMember(anyLong())).thenReturn(member);
 		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
+		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(false);
 
 		// then
-		Assertions.assertThatThrownBy(() -> sut.vote(voter.getId(), candidate.getId()))
+		Assertions.assertThatThrownBy(() -> sut.vote(1L, 1L))
 			.isInstanceOf(
-				IllegalStateException.class);
+				IllegalArgumentException.class);
 	}
 
 	@Test
-	@DisplayName("이미 투표했다면 다시 투표할 수 없다")
+	@DisplayName("이미 투표한 경우, 다시 투표하면 예외가 발생한다")
 	void test3() {
 		// given
-		Election election = TestFixture.getElection();
-
-		Candidate candidate = election.getCandidates().get(0);
-
-		Member voter = TestFixture.getMember();
-		voter.setJudgePoint(100);
-
-		Vote vote = new Vote();
-		vote.setCandidate(candidate);
-		vote.setMember(voter);
-
-		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(true);
 
 		// then
-		Assertions.assertThatThrownBy(() -> sut.vote(voter.getId(), candidate.getId()))
-			.isInstanceOf(
-				IllegalStateException.class);
+		Assertions.assertThatThrownBy(() -> sut.vote(1L, 1L))
+			.isInstanceOf(BusinessException.class);
 	}
 }

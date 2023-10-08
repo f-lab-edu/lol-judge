@@ -21,17 +21,17 @@ public sealed class LolTier permits LolTierUtil {
 
 	@Getter
 	public enum Color {
-		NONE(0),
-		IRON(1),
-		BRONZE(2),
-		SILVER(3),
-		GOLD(4),
-		PLATINUM(5),
-		EMERALD(6),
-		DIAMOND(7),
-		MASTER(8),
-		GRAND_MASTER(9),
-		CHALLENGER(10);
+		NONE(1),
+		IRON(2),
+		BRONZE(3),
+		SILVER(4),
+		GOLD(5),
+		PLATINUM(6),
+		EMERALD(7),
+		DIAMOND(8),
+		MASTER(9),
+		GRAND_MASTER(10),
+		CHALLENGER(11);
 
 		private final long score;
 

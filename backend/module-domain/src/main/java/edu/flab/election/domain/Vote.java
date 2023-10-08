@@ -32,11 +32,12 @@ public class Vote {
 	@JoinColumn(name = "candidate_id")
 	private Candidate candidate;
 
-	public long calcScore() {
-		return member.getGameAccount()
-			.getLolTier()
-			.getColor()
-			.getScore();
+	private long score;
+
+	public Vote(Member member, Candidate candidate) {
+		this.member = member;
+		this.candidate = candidate;
+		this.score = member.getGameAccount().getLolTier().getColor().getScore();
 	}
 
 	public boolean isGroupOfWinner() {
@@ -55,8 +56,10 @@ public class Vote {
 	public void setCandidate(Candidate candidate) {
 		if (this.candidate != null) {
 			this.candidate.getVotes().remove(this);
+			this.candidate.minusScore(this.score);
 		}
 		this.candidate = candidate;
+		this.candidate.plusScore(this.score);
 		candidate.getVotes().add(this);
 	}
 }

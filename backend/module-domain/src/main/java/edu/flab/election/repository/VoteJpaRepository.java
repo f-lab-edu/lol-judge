@@ -17,4 +17,6 @@ public interface VoteJpaRepository extends JpaRepository<Vote, Long> {
 	List<Vote> findAllByCandidateId(Long candidateId);
 
 	Optional<Vote> findByMemberIdAndCandidateId(Long memberId, Long candidateId);
+
+	boolean existsByMemberIdAndCandidateId(Long memberId, Long candidateId);
 }

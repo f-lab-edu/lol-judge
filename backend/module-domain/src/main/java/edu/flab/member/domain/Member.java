@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
+import edu.flab.election.config.VoteRule;
+import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.Vote;
 import edu.flab.member.domain.specification.JudgePointSpecification;
@@ -69,7 +71,7 @@ public class Member {
 	private List<Notification> notifications = new ArrayList<>();
 
 	@Default
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Vote> votes = new ArrayList<>();
 
 	@Default
@@ -84,6 +86,13 @@ public class Member {
 
 	@Default
 	private boolean authenticated = false;
+
+	public void vote(Candidate candidate) {
+		Vote vote = new Vote(this, candidate);
+		vote.setMember(this);
+		vote.setCandidate(candidate);
+		this.setJudgePoint(judgePoint - VoteRule.FEE);
+	}
 
 	public RankScore refreshRankScore() {
 		return rankScore = RankScore.calc(this);

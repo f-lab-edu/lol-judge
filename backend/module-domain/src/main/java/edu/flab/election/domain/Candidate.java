@@ -51,6 +51,8 @@ public class Candidate implements Comparable<Candidate> {
 	@Embedded
 	private Opinion opinion;
 
+	private long votedScore;
+
 	public Candidate(Opinion opinion) {
 		this.opinion = opinion;
 	}
@@ -59,16 +61,17 @@ public class Candidate implements Comparable<Candidate> {
 		this.votedStatus = votedStatus;
 	}
 
-	public long calcVotedScore() {
-		return this.votes
-			.stream()
-			.mapToLong(Vote::calcScore)
-			.sum();
+	public void plusScore(long score) {
+		this.votedScore += score;
+	}
+
+	public void minusScore(long score) {
+		this.votedScore -= score;
 	}
 
 	@Override
 	public int compareTo(Candidate other) {
-		return Long.compare(this.calcVotedScore(), other.calcVotedScore());
+		return Long.compare(this.votedScore, other.votedScore);
 	}
 
 	//== 연관관계 편의 메서드 ==//
