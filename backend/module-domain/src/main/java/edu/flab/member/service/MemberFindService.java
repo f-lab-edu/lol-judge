@@ -15,22 +15,22 @@ public class MemberFindService {
 	private final MemberJpaRepository memberJpaRepository;
 
 	public Member findActiveMember(Long id) {
-		return memberJpaRepository.findByIdAndDeleted(id, false)
+		return memberJpaRepository.findByIdAndDeletedAndAuthenticated(id, false, true)
 			.orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다" + "<id = " + id + ">"));
 	}
 
 	public Member findActiveMember(String email) {
-		return memberJpaRepository.findByEmailAndDeleted(email, false)
+		return memberJpaRepository.findByEmailAndDeletedAndAuthenticated(email, false, true)
 			.orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다" + "<email = " + email + ">"));
 	}
 
 	public Member findInactiveMember(Long id) {
-		return memberJpaRepository.findByIdAndDeleted(id, true)
+		return memberJpaRepository.findByIdAndDeletedAndAuthenticated(id, true, true)
 			.orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다" + "<id = " + id + ">"));
 	}
 
 	public Member findInactiveMember(String email) {
-		return memberJpaRepository.findByEmailAndDeleted(email, true)
+		return memberJpaRepository.findByEmailAndDeletedAndAuthenticated(email, true, true)
 			.orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다" + "<email = " + email + ">"));
 	}
 }

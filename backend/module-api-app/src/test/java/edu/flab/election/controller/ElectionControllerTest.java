@@ -1,8 +1,6 @@
 package edu.flab.election.controller;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,14 +28,13 @@ import edu.flab.election.domain.Opinion;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.service.ElectionFindService;
+import edu.flab.member.TestFixture;
 import edu.flab.member.api.RiotHttpApiClient;
-import edu.flab.member.controller.MemberController;
 import edu.flab.member.domain.Member;
 import edu.flab.member.dto.MemberLoginResponseDto;
-import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.dto.RiotApiLeagueEntryResponseDto;
 import edu.flab.member.dto.RiotApiSummonerInfoResponseDto;
-import edu.flab.member.service.MemberSignUpService;
+import edu.flab.member.repository.MemberJpaRepository;
 import edu.flab.web.config.LoginConstant;
 import edu.flab.web.response.SuccessResponse;
 import edu.flab.web.supoort.LoginArgumentResolver;
@@ -45,18 +42,13 @@ import edu.flab.web.supoort.LoginArgumentResolver;
 class ElectionControllerTest extends TestContainerIntegrationTest {
 
 	@Autowired
-	private MemberSignUpService memberSignUpService;
-
-	@Autowired
 	private ElectionController electionController;
 
 	@Autowired
-	private MemberController memberController;
+	private MemberJpaRepository memberJpaRepository;
 
 	@Autowired
 	private ElectionFindService electionFindService;
-
-	private final CountDownLatch countDownLatch = new CountDownLatch(2);
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -64,7 +56,7 @@ class ElectionControllerTest extends TestContainerIntegrationTest {
 
 	@BeforeEach
 	void setUpMockMvc() {
-		mock = MockMvcBuilders.standaloneSetup(memberController, electionController)
+		mock = MockMvcBuilders.standaloneSetup(electionController)
 			.setControllerAdvice(new GlobalExceptionHandler())
 			.setCustomArgumentResolvers(new LoginArgumentResolver())
 			.build();
@@ -74,19 +66,13 @@ class ElectionControllerTest extends TestContainerIntegrationTest {
 	@DisplayName("회원이 재판을 신청하면, 데이터베이스에 Election 레코드가 저장된다")
 	void test1() throws Exception {
 		// given
-		MemberSignUpDto writerSignUpDto = MemberSignUpDto.builder()
-			.email("host@example.com")
-			.password("aB#12345")
-			.summonerName("lolId1111")
-			.build();
-
-		Member writer = memberSignUpService.signUp(writerSignUpDto);
-
-		countDownLatch.await(1, TimeUnit.SECONDS); // MemberSignUpEvent 처리가 완료될 때 까지 대기
+		Member writer = TestFixture.getMember();
+		writer.setAuthenticated(true);
+		memberJpaRepository.save(writer);
 
 		MockHttpSession mockHttpSession = new MockHttpSession();
 		mockHttpSession.setAttribute(LoginConstant.LOGIN_SESSION_ATTRIBUTE,
-			new MemberLoginResponseDto(writer.getId(), writerSignUpDto.getSummonerName(), writer.getEmail()));
+			new MemberLoginResponseDto(writer.getId(), writer.getGameAccount().getSummonerName(), writer.getEmail()));
 
 		// when
 		ElectionRegisterRequestDto electionAddDto = ElectionRegisterRequestDto.builder()
