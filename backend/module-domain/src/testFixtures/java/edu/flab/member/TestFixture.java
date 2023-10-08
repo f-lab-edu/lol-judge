@@ -65,5 +65,9 @@ public class TestFixture {
 
 		return election;
 	}
+
+	public static Candidate getCandidate() {
+		return getElection().getCandidates().get(0);
+	}
 }
 
