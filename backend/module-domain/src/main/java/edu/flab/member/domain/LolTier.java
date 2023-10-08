@@ -40,8 +40,15 @@ public sealed class LolTier permits LolTierUtil {
 		}
 	}
 
+	@Getter
 	public enum Level {
-		NONE, I, II, III, IV
+		NONE(0), IV(1), III(2), II(3), I(4);
+
+		private final long score;
+
+		Level(long score) {
+			this.score = score;
+		}
 	}
 
 	@Enumerated(EnumType.STRING)
