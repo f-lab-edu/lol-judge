@@ -26,7 +26,7 @@ public class Mail {
 	private Long id;
 
 	@NotBlank
-	private String uuid;
+	private String authCode;
 
 	@NotNull
 	private OffsetDateTime endedAt;
@@ -35,8 +35,8 @@ public class Mail {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	public Mail(String uuid, OffsetDateTime endedAt) {
-		this.uuid = uuid;
+	public Mail(String authCode, OffsetDateTime endedAt) {
+		this.authCode = authCode;
 		this.endedAt = endedAt;
 	}
 

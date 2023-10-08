@@ -2,7 +2,6 @@ package edu.flab.member.eventlistener;
 
 import java.time.OffsetDateTime;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,6 +17,7 @@ import edu.flab.mail.repository.MailJpaRepository;
 import edu.flab.member.config.MailProperties;
 import edu.flab.member.domain.Member;
 import edu.flab.member.event.MemberSignUpEvent;
+import edu.flab.util.MailAuthCodeGenerator;
 import edu.flab.web.config.ServerAddressProperties;
 import edu.flab.web.response.ErrorCode;
 import jakarta.mail.MessagingException;
@@ -31,12 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationCodeMailService {
 	private final MailProperties mailProperties;
 	private final MailJpaRepository mailJpaRepository;
+	private final MailAuthCodeGenerator mailAuthCodeGenerator;
 	private final JavaMailSender javaMailSender;
 	private final ServerAddressProperties backendServer;
 
 	@Transactional
 	public void validateAuthenticationCode(String authenticationCode) {
-		Mail mail = mailJpaRepository.findByUuid(authenticationCode)
+		Mail mail = mailJpaRepository.findByAuthCode(authenticationCode)
 			.orElseThrow(() -> new NoSuchElementException("유효한 인증코드가 아닙니다"));
 
 		if (mail.getEndedAt().isBefore(OffsetDateTime.now())) {
@@ -50,15 +51,17 @@ public class AuthenticationCodeMailService {
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void sendAuthenticationCodeEmail(MemberSignUpEvent event) {
 		MimeMessage message = javaMailSender.createMimeMessage();
+		String authCode = mailAuthCodeGenerator.generateAuthCode();
 		String body = "";
 		try {
+			saveAuthCode(event.member(), authCode);
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true, "UTF-8");
 			mimeMessageHelper.setFrom(mailProperties.username());
 			mimeMessageHelper.setTo(event.member().getEmail());
 			mimeMessageHelper.setSubject("회원가입 인증 메일");
 			body += "<h1>회원가입 인증 메일<h1>";
 			body +=
-				"<p><a href=" + backendServer.fullAddress() + "/auth-agree/" + saveAuthCodeMail(event.member()) + ">";
+				"<p><a href=" + backendServer.fullAddress() + "/auth-agree/" + authCode + ">";
 			body += "동의하기";
 			body += "</a></p>";
 			mimeMessageHelper.setText(body, true);
@@ -69,11 +72,9 @@ public class AuthenticationCodeMailService {
 		}
 	}
 
-	private String saveAuthCodeMail(Member member) {
-		String uuid = UUID.randomUUID().toString();
-		Mail mail = new Mail(uuid, OffsetDateTime.now().plusMinutes(30));
+	private void saveAuthCode(Member member, String authCode) {
+		Mail mail = new Mail(authCode, OffsetDateTime.now().plusMinutes(30));
 		mail.setMember(member);
 		mailJpaRepository.save(mail);
-		return uuid;
 	}
 }
