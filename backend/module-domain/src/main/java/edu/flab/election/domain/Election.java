@@ -2,9 +2,10 @@ package edu.flab.election.domain;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -46,7 +47,7 @@ public class Election {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
@@ -88,11 +89,20 @@ public class Election {
 	}
 
 	public Optional<Candidate> getWinner() {
-		Candidate winner = candidates.stream().max(Comparator.naturalOrder()).orElseThrow();
+		List<Candidate> winners = candidates.stream()
+			.collect(Collectors.groupingBy(Candidate::getVotedScore))
+			.entrySet()
+			.stream()
+			.filter(e -> e.getKey() > 0)
+			.max(Map.Entry.comparingByKey())
+			.orElseThrow()
+			.getValue();
 
-		if (winner.getVotes().isEmpty()) {
+		if (winners.size() >= 2) { // 동점자가 존재하는 케이스
 			return Optional.empty();
 		}
+
+		Candidate winner = winners.get(0);
 
 		winner.setVotedStatus(VotedStatus.WIN);
 

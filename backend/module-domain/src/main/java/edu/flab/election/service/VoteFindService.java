@@ -24,6 +24,6 @@ public class VoteFindService {
 	}
 
 	public boolean hasVotedBefore(Long memberId, Long candidateId) {
-		return voteJpaRepository.findByMemberIdAndCandidateId(memberId, candidateId).isPresent();
+		return voteJpaRepository.existsByMemberIdAndCandidateId(memberId, candidateId);
 	}
 }
