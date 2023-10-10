@@ -54,8 +54,9 @@ public class Candidate implements Comparable<Candidate> {
 
 	private long votedScore;
 
-	public Candidate(Opinion opinion) {
+	public Candidate(Opinion opinion, VotedStatus votedStatus) {
 		this.opinion = opinion;
+		this.votedStatus = votedStatus;
 	}
 
 	public void setVotedStatus(VotedStatus votedStatus) {

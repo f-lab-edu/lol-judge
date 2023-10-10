@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
 import edu.flab.election.domain.ElectionStatus;
+import edu.flab.election.domain.VotedStatus;
 import edu.flab.election.dto.ElectionRegisterRequestDto;
 import edu.flab.election.dto.ElectionRegisterResponseDto;
 import edu.flab.election.repository.ElectionJpaRepository;
@@ -43,7 +44,7 @@ public class ElectionRegisterService {
 			.endedAt(OffsetDateTime.now().plusHours(dto.getProgressTime()))
 			.build();
 
-		dto.getOpinions().forEach(o -> election.addCandidate(new Candidate(o)));
+		dto.getOpinions().forEach(o -> election.addCandidate(new Candidate(o, VotedStatus.UNKNOWN)));
 		writer.addElection(election);
 
 		electionJpaRepository.save(election);
