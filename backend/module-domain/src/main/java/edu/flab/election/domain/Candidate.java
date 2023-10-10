@@ -45,6 +45,7 @@ public class Candidate implements Comparable<Candidate> {
 	private List<Vote> votes = new ArrayList<>();
 
 	@NotNull
+	@Default
 	@Enumerated(EnumType.STRING)
 	private VotedStatus votedStatus = VotedStatus.UNKNOWN;
 

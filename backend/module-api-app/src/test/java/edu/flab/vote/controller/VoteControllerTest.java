@@ -90,7 +90,9 @@ class VoteControllerTest extends TestContainerIntegrationTest {
 		mock.perform(MockMvcRequestBuilders.get("/vote/1")
 				.session(mockHttpSession)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(result -> Assertions.assertThat(result.getResolvedException() instanceof IllegalArgumentException).isTrue())
+			.andExpect(
+				result -> Assertions.assertThat(result.getResolvedException() instanceof IllegalArgumentException)
+					.isTrue())
 			.andDo(MockMvcResultHandlers.print());
 	}
 
@@ -121,7 +123,8 @@ class VoteControllerTest extends TestContainerIntegrationTest {
 		mock.perform(MockMvcRequestBuilders.get("/vote/1")
 				.session(mockHttpSession)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(result -> Assertions.assertThat(result.getResolvedException() instanceof BusinessException).isTrue())
+			.andExpect(
+				result -> Assertions.assertThat(result.getResolvedException() instanceof BusinessException).isTrue())
 			.andDo(MockMvcResultHandlers.print());
 	}
 }

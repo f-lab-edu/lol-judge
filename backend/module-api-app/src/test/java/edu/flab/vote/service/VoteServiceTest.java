@@ -1,5 +1,6 @@
 package edu.flab.vote.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.assertj.core.api.Assertions;
@@ -10,12 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import edu.flab.election.config.VoteRule;
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.domain.Election;
 import edu.flab.election.service.CandidateFindService;
 import edu.flab.election.service.VoteFindService;
 import edu.flab.exception.BusinessException;
 import edu.flab.member.TestFixture;
+import edu.flab.member.domain.JudgePointDetailType;
+import edu.flab.member.domain.JudgePointDetails;
 import edu.flab.member.domain.Member;
 import edu.flab.member.service.MemberFindService;
 
@@ -56,7 +60,10 @@ class VoteServiceTest {
 		verify(memberFindService).findActiveMember(1L);
 		verify(candidateFindService).findById(1L);
 		verify(voteFindService).hasVotedBefore(1L, 1L);
-		Assertions.assertThat(member.getJudgePoint()).isEqualTo(90);
+		assertThat(member.getJudgePoint()).isEqualTo(90);
+		assertThat(member.getJudgePointDetails().get(0))
+			.isEqualTo(new JudgePointDetails(JudgePointDetailType.VOTE,
+				VoteRule.FEE));
 	}
 
 	@Test
