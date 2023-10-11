@@ -56,11 +56,27 @@ export default function ElectionDetailPage() {
 
   return (
     <Container component="main" maxWidth="md">
-      <Typography component="h1" variant="h4" align="center">
-        {electionDetail.title}
-      </Typography>
-      <Typography>투표 종료 시간: {electionDetail.endedAt}</Typography>
-      <YouTube videoId={electionDetail.youtubeUrl} />
+      <Grid container sx={{ my: { xs: 1, md: 2 }}} className="border-y-2 border-gray-950">
+        <Grid item xs={6} md={6}>
+          <Typography component="h1" variant="h6" align="center">
+            {electionDetail.title}
+          </Typography>
+        </Grid>
+        <Grid item xs={3} md={3}>
+          <Typography component="h1" variant="h7" align="right">
+            작성자: {electionDetail.writer}
+          </Typography>
+        </Grid>
+        <Grid item xs={3} md={3}>
+          <Typography component="h1" variant="h7" align="right">
+            작성일: {electionDetail.createdAt}
+          </Typography>
+        </Grid>
+      </Grid>
+      <YouTube
+        videoId={electionDetail.youtubeUrl}
+        opts={{ height: 480, width: "100%" }}
+      />
       {electionDetail?.candidateDetails?.map((c) => (
         <Grid item key={c.candidateId} xs={12} md={4}>
           <Card>

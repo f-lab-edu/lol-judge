@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(exclude = {"member", "election"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JudgePointDetails {
+public class JudgePointHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -38,13 +38,13 @@ public class JudgePointDetails {
 	private Election election;
 
 	@Enumerated(EnumType.STRING)
-	private JudgePointDetailType type;
+	private JudgePointHistoryType type;
 
 	private long amount;
 
 	private OffsetDateTime createdAt;
 
-	public JudgePointDetails(JudgePointDetailType type, long amount) {
+	public JudgePointHistory(JudgePointHistoryType type, long amount) {
 		this.type = type;
 		this.amount = amount;
 	}
@@ -52,10 +52,10 @@ public class JudgePointDetails {
 	// 연관 관계 편의 메서드
 	public void setMember(Member member) {
 		if (this.member != null) {
-			this.member.getJudgePointDetails().remove(this);
+			this.member.getJudgePointHistory().remove(this);
 		}
 		this.member = member;
-		this.member.getJudgePointDetails().add(this);
+		this.member.getJudgePointHistory().add(this);
 	}
 
 	public void setElection(Election election) {

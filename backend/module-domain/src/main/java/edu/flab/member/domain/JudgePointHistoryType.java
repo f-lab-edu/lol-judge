@@ -1,5 +1,5 @@
 package edu.flab.member.domain;
 
-public enum JudgePointDetailType {
+public enum JudgePointHistoryType {
 	VOTE, AWARD
 }

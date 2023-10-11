@@ -1,6 +1,7 @@
 package edu.flab.member.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -11,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.flab.member.dto.MemberJudgePointHistoryDto;
 import edu.flab.member.dto.MemberLoginRequestDto;
 import edu.flab.member.dto.MemberLoginResponseDto;
 import edu.flab.member.dto.MemberSignUpDto;
 import edu.flab.member.eventlistener.AuthenticationCodeMailService;
 import edu.flab.member.service.MemberLoginService;
+import edu.flab.member.service.MemberPointHistoryService;
 import edu.flab.member.service.MemberSignUpService;
+import edu.flab.web.annotation.Login;
 import edu.flab.web.config.ServerAddressProperties;
 import edu.flab.web.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	private final MemberSignUpService memberSignUpService;
 	private final MemberLoginService memberLoginService;
+	private final MemberPointHistoryService memberPointHistoryService;
 	private final AuthenticationCodeMailService authenticationCodeMailService;
 	private final ServerAddressProperties frontendServer;
 
@@ -59,6 +64,11 @@ public class MemberController {
 	@GetMapping("/login")
 	public SuccessResponse<MemberLoginResponseDto> getLoginMember(HttpServletRequest request) {
 		return SuccessResponse.of(memberLoginService.getLoginMember(request));
+	}
+
+	@GetMapping("/pointHistory")
+	public SuccessResponse<List<MemberJudgePointHistoryDto>> getPointHistory(@Login MemberLoginResponseDto sessionMember) {
+		return SuccessResponse.of(memberPointHistoryService.getPointHistory(sessionMember.getMemberId()));
 	}
 
 	@GetMapping("/logout")

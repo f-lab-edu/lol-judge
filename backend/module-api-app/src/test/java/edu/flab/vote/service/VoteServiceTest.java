@@ -18,8 +18,8 @@ import edu.flab.election.service.CandidateFindService;
 import edu.flab.election.service.VoteFindService;
 import edu.flab.exception.BusinessException;
 import edu.flab.member.TestFixture;
-import edu.flab.member.domain.JudgePointDetailType;
-import edu.flab.member.domain.JudgePointDetails;
+import edu.flab.member.domain.JudgePointHistoryType;
+import edu.flab.member.domain.JudgePointHistory;
 import edu.flab.member.domain.Member;
 import edu.flab.member.service.MemberFindService;
 
@@ -61,8 +61,8 @@ class VoteServiceTest {
 		verify(candidateFindService).findById(1L);
 		verify(voteFindService).hasVotedBefore(1L, 1L);
 		assertThat(member.getJudgePoint()).isEqualTo(90);
-		assertThat(member.getJudgePointDetails().get(0))
-			.isEqualTo(new JudgePointDetails(JudgePointDetailType.VOTE,
+		assertThat(member.getJudgePointHistory().get(0))
+			.isEqualTo(new JudgePointHistory(JudgePointHistoryType.VOTE,
 				VoteRule.FEE));
 	}
 
