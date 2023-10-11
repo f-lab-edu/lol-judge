@@ -21,7 +21,7 @@ spring:
       on-profile: production
 
   rabbitmq:
-    host: ENC(FrRmCZH4tdXJTox+P5RGd8Yx/x7KqN9p)
+    host: ENC(GNMsZxO77IbGbc/7xt3UQwFK04cGdykY)
     port: 5672
     stream:
       username: ENC(ymyw+tMsrjh8pkQfee+SFw==)
