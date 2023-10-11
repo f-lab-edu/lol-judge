@@ -75,6 +75,10 @@ public class Member {
 	private List<Vote> votes = new ArrayList<>();
 
 	@Default
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<JudgePointHistory> judgePointHistory = new ArrayList<>();
+
+	@Default
 	@Embedded
 	private RankScore rankScore = RankScore.zero();
 
@@ -92,6 +96,10 @@ public class Member {
 		vote.setMember(this);
 		vote.setCandidate(candidate);
 		this.setJudgePoint(judgePoint - VoteRule.FEE);
+
+		JudgePointHistory details = new JudgePointHistory(JudgePointHistoryType.VOTE, VoteRule.FEE);
+		details.setMember(this);
+		details.setElection(candidate.getElection());
 	}
 
 	public RankScore refreshRankScore() {

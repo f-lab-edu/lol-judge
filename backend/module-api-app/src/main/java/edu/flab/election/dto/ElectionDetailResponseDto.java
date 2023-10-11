@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -30,9 +32,11 @@ public class ElectionDetailResponseDto {
 	private String writer;
 
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy", timezone = "Asia/Seoul")
 	private OffsetDateTime createdAt;
 
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy", timezone = "Asia/Seoul")
 	private OffsetDateTime endedAt;
 
 	private long totalVotedCount;

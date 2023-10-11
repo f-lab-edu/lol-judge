@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 public class LolTierSpecification {
 
 	private final Set<LolTier.Color> lolTierColors;
-	private final int lolTierMinLevel;
-	private final int lolTierMaxLevel;
+	private final LolTier.Level lolTierMinLevel;
+	private final LolTier.Level lolTierMaxLevel;
 	private final int lolTierMinPoint;
 	private final int lolTierMaxPoint;
 
@@ -24,7 +24,7 @@ public class LolTierSpecification {
 	}
 
 	private boolean isValidLevel(LolTier.Level level) {
-		return lolTierMinLevel <= level.ordinal() && level.ordinal() <= lolTierMaxLevel;
+		return level.compareTo(lolTierMinLevel) >= 0 && level.compareTo(lolTierMaxLevel) <= 0;
 	}
 
 	private boolean isValidPoint(int point) {

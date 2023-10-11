@@ -3,15 +3,19 @@ package edu.flab.vote.controller;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import edu.flab.GlobalExceptionHandler;
 import edu.flab.TestContainerIntegrationTest;
@@ -25,6 +29,10 @@ import edu.flab.member.repository.MemberJpaRepository;
 import edu.flab.web.config.LoginConstant;
 import edu.flab.web.supoort.LoginArgumentResolver;
 
+@Tag("integration")
+@ActiveProfiles("test")
+@Testcontainers
+@SpringBootTest
 class VoteControllerTest extends TestContainerIntegrationTest {
 
 	@Autowired
@@ -90,7 +98,9 @@ class VoteControllerTest extends TestContainerIntegrationTest {
 		mock.perform(MockMvcRequestBuilders.get("/vote/1")
 				.session(mockHttpSession)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(result -> Assertions.assertThat(result.getResolvedException() instanceof IllegalArgumentException).isTrue())
+			.andExpect(
+				result -> Assertions.assertThat(result.getResolvedException() instanceof IllegalArgumentException)
+					.isTrue())
 			.andDo(MockMvcResultHandlers.print());
 	}
 
@@ -121,7 +131,8 @@ class VoteControllerTest extends TestContainerIntegrationTest {
 		mock.perform(MockMvcRequestBuilders.get("/vote/1")
 				.session(mockHttpSession)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(result -> Assertions.assertThat(result.getResolvedException() instanceof BusinessException).isTrue())
+			.andExpect(
+				result -> Assertions.assertThat(result.getResolvedException() instanceof BusinessException).isTrue())
 			.andDo(MockMvcResultHandlers.print());
 	}
 }

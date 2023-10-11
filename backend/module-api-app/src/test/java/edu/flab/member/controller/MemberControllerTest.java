@@ -8,19 +8,23 @@ import java.util.concurrent.TimeUnit;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,6 +40,10 @@ import edu.flab.member.dto.RiotApiSummonerInfoResponseDto;
 import edu.flab.util.MailAuthCodeGenerator;
 import edu.flab.web.supoort.LoginArgumentResolver;
 
+@Tag("integration")
+@ActiveProfiles("test")
+@Testcontainers
+@SpringBootTest
 class MemberControllerTest extends TestContainerIntegrationTest {
 
 	@Autowired
