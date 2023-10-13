@@ -1,4 +1,10 @@
 subprojects {
+    // Gradle이 외부에서 주입되는 System Property를 전발받아 JVM에 제공한다.
+    // 하지만, 테스트 환경의 JVM이라면 그렇지 않으므로, 아래의 설정이 필요하다.
+    tasks.withType(Test).configureEach {
+        it.systemProperty 'jasypt.encryptor.password', System.getProperty('jasypt.encryptor.password')
+    }
+
     // 통합테스트를 포함하는 테스트
     plugins.withType(JavaPlugin).configureEach {
         tasks.register('integrationTest', Test) {
