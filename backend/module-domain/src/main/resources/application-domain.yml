@@ -43,9 +43,9 @@ spring:
     activate:
       on-profile: production
   datasource:
-    url: ENC(dzWegWTt1CekCaoYg0SyAscmzQRO9IJnFsLnVHcj4zS3h0qeXvKBjQYcOcnmY6/DxUZ0Zn15nVY==)
-    username: ENC(EQBBD+ZWgVjfrBSIGJPCEg==)
-    password: ENC(6A+EhXxAbOy4+FoLhKUS+g==)
+    url: ENC(H+o9yzsGPtI6pfnOcXUXzrvIZ3jVZ0HQvUvzRZVKcP2hb4/PBf6ISqZ1Sh08iCwvAU5VeBuXkvKg6kVwUnqPHw==)
+    username: ENC(j1yj/M8OgSDufwa57sMUOm4wViGN/qUO)
+    password: ENC(W2NqN448mcbV7jWVG1GqVg==)
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
