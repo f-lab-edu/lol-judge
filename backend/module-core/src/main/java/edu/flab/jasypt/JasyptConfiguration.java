@@ -20,6 +20,7 @@ public class JasyptConfiguration {
 		PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
 		SimplePBEConfig config = new SimplePBEConfig();
 		config.setPassword(System.getProperty("jasypt.encryptor.password"));
+		System.out.println("클라우드 서버 테스트" + config.getPassword());
 		config.setAlgorithm("PBEWithMD5AndDES");
 		config.setKeyObtentionIterations("1000");
 		config.setPoolSize("1");
