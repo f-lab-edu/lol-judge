@@ -12,4 +12,4 @@ ENV JASYPT_PASSWORD_ENV=$JASYPT_PASSWORD
 COPY ${APP_JAR_FILE_PATH} /
 
 # 컨테이너가 최종 실행할 명령어 정의: jar 파일 실행
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=production", "-Djasypt.encryptor.password=$JASYPT_PASSWORD_ENV", "/module-api-app.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=production", "-Djasypt.encryptor.password=$JASYPT_PASSWORD_ENV", "/module-api-app.jar"]
