@@ -28,6 +28,7 @@ public class JasyptConfiguration {
 		config.setIvGeneratorClassName("org.jasypt.iv.NoIvGenerator");
 		encryptor.setStringOutputType("base64");
 		encryptor.setConfig(config);
+		log.info("jasypt password = {}", config.getPassword());
 		return encryptor;
 	}
 }
