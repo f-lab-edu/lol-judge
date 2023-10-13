@@ -1,4 +1,4 @@
-package edu.flab.jasypt;
+package edu.flab;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableEncryptableProperties
 public class JasyptConfiguration {
@@ -16,7 +19,7 @@ public class JasyptConfiguration {
 	public StringEncryptor stringEncryptor() {
 		PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
 		SimplePBEConfig config = new SimplePBEConfig();
-		config.setPassword(System.getenv("JASYPT_PASSWORD"));
+		config.setPassword(System.getProperty("jasypt.encryptor.password"));
 		config.setAlgorithm("PBEWithMD5AndDES");
 		config.setKeyObtentionIterations("1000");
 		config.setPoolSize("1");
