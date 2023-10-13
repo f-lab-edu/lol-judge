@@ -43,7 +43,7 @@ spring:
     activate:
       on-profile: production
   datasource:
-    url: ENC(6ObKNBcaF6KGxLnMqp24a7mkV5fg3KrObOKjpFNb7bgISrGtYm4im8PVeOKrSMw8ilwsanhXNQc=)
+    url: ENC(dzWegWTt1CekCaoYg0SyAscmzQRO9IJnFsLnVHcj4zS3h0qeXvKBjQYcOcnmY6/DxUZ0Zn15nVY==)
     username: ENC(EQBBD+ZWgVjfrBSIGJPCEg==)
     password: ENC(6A+EhXxAbOy4+FoLhKUS+g==)
     driver-class-name: com.mysql.cj.jdbc.Driver
