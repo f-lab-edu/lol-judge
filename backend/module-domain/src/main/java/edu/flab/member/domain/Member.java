@@ -116,6 +116,10 @@ public class Member {
 		log.info("JudgePoint 업데이트 완료 <회원 이메일: {}> <변경 내역: {} → {}>", email, beforeUpdate, this.judgePoint);
 	}
 
+	public boolean hasJudgePointLowerThan(int value) {
+		return judgePoint < value;
+	}
+
 	public void setAuthenticated(boolean authenticated) {
 		this.authenticated = authenticated;
 	}

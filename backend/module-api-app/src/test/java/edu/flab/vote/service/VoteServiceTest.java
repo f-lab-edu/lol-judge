@@ -72,18 +72,14 @@ class VoteServiceTest {
 		// given
 		Election election = TestFixture.getElection();
 
-		Candidate candidate = election.getCandidates().get(0);
-
 		Member member = TestFixture.getMember();
 
 		when(memberFindService.findActiveMember(anyLong())).thenReturn(member);
-		when(candidateFindService.findById(anyLong())).thenReturn(candidate);
 		when(voteFindService.hasVotedBefore(anyLong(), anyLong())).thenReturn(false);
 
 		// then
 		Assertions.assertThatThrownBy(() -> sut.vote(1L, 1L))
-			.isInstanceOf(
-				IllegalArgumentException.class);
+			.isInstanceOf(BusinessException.class);
 	}
 
 	@Test

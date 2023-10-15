@@ -3,6 +3,7 @@ package edu.flab.vote.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.flab.election.config.VoteRule;
 import edu.flab.election.domain.Candidate;
 import edu.flab.election.service.CandidateFindService;
 import edu.flab.election.service.VoteFindService;
@@ -25,18 +26,24 @@ public class VoteService {
 	@Transactional
 	public void vote(Long voterMemberId, Long candidateId) {
 
-		validate(voterMemberId, candidateId);
-
-		Member voter = memberFindService.findActiveMember(voterMemberId);
+		Member voter = validate(voterMemberId, candidateId);
 
 		Candidate candidate = candidateFindService.findById(candidateId);
 
 		voter.vote(candidate);
 	}
 
-	private void validate(Long memberId, Long candidateId) {
+	private Member validate(Long memberId, Long candidateId) {
 		if (voteFindService.hasVotedBefore(memberId, candidateId)) {
 			throw new BusinessException(ErrorCode.ALREADY_VOTED);
 		}
+
+		Member voter = memberFindService.findActiveMember(memberId);
+
+		if (voter.hasJudgePointLowerThan(VoteRule.FEE)) {
+			throw new BusinessException(ErrorCode.POINT_NOT_ENOUGH);
+		}
+
+		return voter;
 	}
 }
