@@ -30,7 +30,7 @@ export default function ElectionDetailPage() {
         setElectionDetail(e);
         console.log(e);
       });
-  }, param);
+  }, [param]);
 
   const vote = (candidateId) => {
     const url = convertUrl(`/vote/${candidateId}`);
