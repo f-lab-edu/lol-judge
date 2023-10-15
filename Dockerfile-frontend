@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 # 작업 경로 설정하기
 WORKDIR /frontend_app
