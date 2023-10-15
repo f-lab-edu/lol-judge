@@ -34,3 +34,13 @@ spring:
 access:
   control:
     allow-origin: ENC(C7WHutmC+cxHA2wnqhEi5cxLeyhUiDTVnWymrJCZ1MzINHk5HwC54A==)
+
+my-server:
+  backend:
+    schme: ENC(QFEQfw20COAuKLm+UR7zIQ==)
+    host: ENC(rk+ixhn+BArGPVi8RoB/XZ4A1jvXFhgJ)
+    port: ENC(Iiksuw9BQtXzeuCZU/wv9A==)
+  frontend:
+    schme: ENC(0tvH1BwOgbQZr8C8qes68Q==)
+    host: ENC(pvw0z8Q4Fz4HVdqqU/C4MBYK10Rs0SHp)
+    port: ENC(hqyZWH2NcJdz3sNJHnh0fA==)

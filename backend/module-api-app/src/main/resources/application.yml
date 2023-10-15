@@ -9,8 +9,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 465
-    username: corojoon93@gmail.com
-    password: aebr ywlm vsod sapw
+    username: ENC(FcYXf5BHgHzpQPBxG7jZLDfhu/OuIhLREvov1mbcIQc=)
+    password: ENC(mcaGdPel0h2TQ7UAHGILs5RLeMp4WnmIqpMlqFaJTYs=)
     protocol: smtps
     properties:
       mail:
