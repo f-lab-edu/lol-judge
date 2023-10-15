@@ -1,8 +1,5 @@
 FROM node:16
 
-# 가져올 이미지를 정의
-FROM node:14
-
 # 작업 경로 설정하기
 WORKDIR /frontend_app
 
