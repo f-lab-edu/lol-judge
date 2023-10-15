@@ -15,4 +15,4 @@ COPY frontend/ .
 EXPOSE 3000
 
 # npm start 스크립트 실행
-CMD ["yarn", "start"]
+CMD ["yarn", "start:prod"]
