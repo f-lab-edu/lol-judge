@@ -19,12 +19,11 @@ export default function SignUpPage() {
 
   const signUp = (data) => {
     const url = convertUrl("/signUp");
-    console.log(url);
     axios
       .post(url, data)
       .catch((e) => {
         signUpForm.setError("root.serverError", { type: "400" });
-        const message = e.response.data.message;
+        const message = e.response?.data?.message;
         if (message === "Member Already Exists") {
           alert("이미 가입한 회원입니다");
         } else if(message === "Summoner not found") {
