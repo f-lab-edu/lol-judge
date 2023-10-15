@@ -19,6 +19,7 @@ export default function SignUpPage() {
 
   const signUp = (data) => {
     const url = convertUrl("/signUp");
+    console.log(url);
     axios
       .post(url, data)
       .catch((e) => {
