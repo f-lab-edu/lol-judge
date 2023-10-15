@@ -45,6 +45,14 @@ jobs:
       env:
         CI: false
 
+    - name: Login to NCP Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ secrets.NCP_CONTAINER_REGISTRY }}
+        username: ${{ secrets.NCP_ACCESS_KEY }}
+        password: ${{ secrets.NCP_SECRET_KEY }}
+
+
     # Build and push Docker image with Buildx (don't push on PR)
     # https://github.com/docker/build-push-action
     - name: Build and push Docker image
