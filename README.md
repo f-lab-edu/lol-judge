@@ -3,9 +3,17 @@
 - 리그오브레전드 인게임 논쟁 상황에 대해 토론, 투표하는 서비스
 - 프로젝트 링크: http://118.67.134.233:3000/
 
+### 회원가입
 <img src="doc/signup.gif" height="480" alt="signup">
 
-<br/>
+### 메일인증 및 로그인
+<img src="doc/login.gif" height="480" alt="login">
+
+### 재판 등록
+<img src="doc/election.gif" height="480" alt="election">
+
+### 투표
+<img src="doc/vote.gif" height="480" alt="vote">
 
 # 🛠️ 사용 기술
 

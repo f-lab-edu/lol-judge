@@ -33,7 +33,7 @@ export default function ElectionRegisterPage() {
       .then((payload) => {
         var message = "신청 실패! 관리자에게 문의해주세요";
         if (payload?.status === "success") {
-          message = "신청 완료! 상대방이 의견을 제출하면 재판이 시작됩니다";
+          message = "신청 완료!";
           navigate("/");
         }
         alert(message);
