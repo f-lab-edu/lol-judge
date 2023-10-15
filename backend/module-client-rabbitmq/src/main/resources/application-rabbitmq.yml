@@ -24,6 +24,6 @@ spring:
     host: ENC(tZKUFfG/TeFuAbOqAcTCU3DVV8dAHYu6)
     port: 5672
     stream:
-      username: ENC(5NAFBDDUhg+ntmDT5LivpA==)
-      password: ENC(NFrHDAiq4smC0IUZjFhS9g==)
+      username: ENC(459b7vftKFSOITZBCr+TRMYIQh8u0pv8)
+      password: ENC(x9Hb0DDUAlX0snBI1TDVFw==)
 
