@@ -9,6 +9,8 @@ COPY frontend/package.json .
 # 명령어 실행 (의존성 설치)
 RUN yarn install
 
+COPY frontend/ .
+
 # 3000번 포트 노출
 EXPOSE 3000
 
