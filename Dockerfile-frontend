@@ -9,9 +9,6 @@ COPY frontend/package.json .
 # 명령어 실행 (의존성 설치)
 RUN yarn install
 
-# 설치된 모든 파일을 도커 컨테이너의 작업디렉토리에 복사
-COPY . .
-
 # 3000번 포트 노출
 EXPOSE 3000
 
