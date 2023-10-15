@@ -36,4 +36,4 @@ jobs:
       run: yarn build
       working-directory: ${{ env.working-directory }}
       env:
-        process.env.CI : false
+        CI: false
