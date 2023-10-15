@@ -42,7 +42,7 @@
 
 # 🏗️ 시스템 구조
 
-![시스템 구조](doc/system_architecture.jpg)
+![시스템 구조](doc/system_architecture2.jpg)
 
 <br />
 
