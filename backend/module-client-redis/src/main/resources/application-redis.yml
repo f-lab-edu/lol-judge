@@ -18,4 +18,4 @@ spring:
   data:
     redis:
       port: 6379
-      host: localhost
+      host: ENC(iUIGzMckhc2u7ZkB9n9noegMyPFFpBwx)
