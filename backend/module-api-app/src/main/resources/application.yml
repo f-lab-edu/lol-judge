@@ -23,7 +23,7 @@ spring:
 
 riot:
   host: https://kr.api.riotgames.com
-  apiKey: RGAPI-8948584d-3586-46e0-9615-958b724f51f6
+  apiKey: ENC(coxOvJA0JxD+bhtxqH/hOTF6iRSASTXsmLnhG3Fbro54skdk52iTahnedWs7xOzAckSf6hrr/vc=)
 logging:
   level:
     org:
