@@ -52,6 +52,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: .
+        file: ./Dockerfile-frontend
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             
