@@ -7,7 +7,7 @@ FROM node:14
 WORKDIR /frontend_app
 
 # 작업경로에 package.json 파일을 복사
-COPY package.json .
+COPY frontend/package.json .
 
 # 명령어 실행 (의존성 설치)
 RUN yarn install
