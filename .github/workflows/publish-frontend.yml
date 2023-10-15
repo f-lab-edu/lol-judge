@@ -77,3 +77,22 @@ jobs:
       # This step uses the identity token to provision an ephemeral certificate
       # against the sigstore community Fulcio instance.
       run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+
+
+    # Run Dokcer container with image with using SSH remote control
+    # username and password is based on application server os's account.
+    # application web service's port is 8080.
+    - name: Run Container with SSH remote control
+      if: ${{ github.event_name != 'pull_request' }}
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_IP }}
+        username: ${{ secrets.HOST_USERNAME }}
+        password: ${{ secrets.HOST_PASSWORD }}
+        port: 22
+        script: |
+          docker login ${{ secrets.NCP_CONTAINER_REGISTRY }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
+          docker rm -f ${{ env.CONTAINER_NAME }}
+          docker rmi -f ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          docker run -d --name ${{ env.CONTAINER_NAME }} -p 8080:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}      
