@@ -70,12 +70,27 @@
     - [롤문철 닷컴 구현기 3탄 - 로그인 체크 (AOP vs 필터 vs 인터셉터)](https://cookie-dev.tistory.com/24)
 
 
+- 비동기 처리를 통한 모듈 간 의존성 낮추기
+    - [비동기 처리를 위한 RabbitMQ 알아보기](https://cookie-dev.tistory.com/37)
+
+
+- 분산 환경을 고려한 투표 기능 구현
+    - [코드 레벨 동시성 이슈 해결하기](https://cookie-dev.tistory.com/29)
+    - [DB 레벨 동시성 이슈 해결하기](https://cookie-dev.tistory.com/30) 
+
+
+- 실행계획 분석을 통한 SQL 성능 개선하기
+    - [순위 조회 쿼리 성능 개선하기](https://cookie-dev.tistory.com/31)
+
+
 - #50 CORS 정책 적용
     - [CORS를 알아보자](https://cookie-dev.tistory.com/36)
 
 
 - #63 MyBatis → JPA 마이그레이션
     - [스프링 세션 + JPA 환경에서 LazyInitializationException 발생](https://cookie-dev.tistory.com/35)
+
+
 
 <br/>
 
